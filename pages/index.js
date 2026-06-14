@@ -1,22 +1,19 @@
-import Head from 'next/head'
-import Header from '@components/Header'
-import Footer from '@components/Footer'
+@import url('https://googleapis.com');
 
-export default function Home() {
-  return (
-    <div>
-      <Head>
-        <title>Prehistooio</title>
-      </Head>
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #104E8B;
+  color: #FFFFFF;
+}
 
-      <main>
-        <Header title="Prehistooio" />
-        <p>
-          Made by Polentacze - Inspired by Deeeepio.
-        </p>
-      </main>
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
-      <Footer />
-    </div>
-  )
+* {
+  box-sizing: border-box;
 }
