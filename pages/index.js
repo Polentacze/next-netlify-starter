@@ -12,6 +12,7 @@ export default function Home() {
 
       <main>
         <Header title="Prehistooio" />
+        <link rel="icon" href="/logo.png" type="image/png" />
         <p>
           Made by Polentacze - Inspired by Deeeepio <code>pages/index.js</code>
         </p>
