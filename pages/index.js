@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="container">
       <Head>
-        <title>Made by Polentacze</title>
+        <title>Made by Polentacze-Inspired by Deeeepio</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
