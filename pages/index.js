@@ -1,3 +1,10 @@
+@import url('https://googleapis.com');
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Montserrat', serif; /* Add this line right here */
 import Head from 'next/head'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
