@@ -1,19 +1,25 @@
-@import url('https://googleapis.com');
+import Head from 'next/head'
+import Header from '@components/Header'
+import Footer from '@components/Footer'
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
-  background-color: #104E8B;
-  color: #FFFFFF;
-}
+export default function Home() {
+  return (
+    <div className="container">
+      <Head>
+        <title>Prehistooio</title>
+        </Head>
+      </Head>
+      </Head>
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+      <main>
+        <Header title="Prehistooio" />
+        <link rel="icon" type="image/png" href="https://netlify.app" />
+        <p>
+          Made by Polentacze - Inspired by Deeeepio <code>pages/index.js</code>
+        </p>
+      </main>
 
-* {
-  box-sizing: border-box;
+      <Footer />
+    </div>
+  )
 }
