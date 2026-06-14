@@ -1,5 +1,5 @@
-@import url('https://googleapis.com');
-
+import Head from 'next/head'
+import Header from '@components/Header'
 html,
 body {
   padding: 0;
