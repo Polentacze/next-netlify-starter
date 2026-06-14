@@ -7,7 +7,7 @@ export default function Home() {
     <div className="container">
       <Head>
         <title>Prehistooio</title>
-        </Head>
+      </Head>
       </Head>
 
       <main>
