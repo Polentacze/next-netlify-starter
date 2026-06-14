@@ -4,7 +4,10 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Montserrat', serif; /* Add this line right here */
+  font-family: 'Rye', serif;
+  background-color: #104E8B;
+  color: #FFFFFF;
+}
 import Head from 'next/head'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
