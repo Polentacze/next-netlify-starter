@@ -22,10 +22,11 @@ export default function Home() {
         <h1 style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>
           Prehistooio
         </h1>
+        
         <p style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '2rem' }}>
           Made by Polentacze - Inspired by Deeeepio
         </p>
-        Made by Polentacze - Inspired by Deeeepio
+        
         <img 
           src="/deep-prehistoo.png" 
           alt="Prehistoo Creature" 
@@ -33,7 +34,7 @@ export default function Home() {
         />
 
         <p style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6' }}>
-          
+          Made by Polentacze - Inspired by Deeeepio
         </p>
       </main>
     </div>
