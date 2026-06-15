@@ -171,7 +171,6 @@ export default function Home() {
                 onMouseEnter={() => setHoveredAnimal(slot.name)}
                 onMouseLeave={() => setHoveredAnimal("")}
                 onClick={() => {
-                  // If you have matching skins, clicking can equip them here!
                   alert("Selected: " + slot.name);
                 }}
               />
@@ -209,3 +208,4 @@ export default function Home() {
       </main>
     </div>
   )
+}
