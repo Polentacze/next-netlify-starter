@@ -16,29 +16,29 @@ export default function Home() {
       <Head>
         <title>Prehistooio</title>
         <link rel="icon" href="/icon.png?v=1" type="image/png" />
-        {/* This injects the font link directly into the page header */}
-        <link rel="preconnect" href="https://googleapis.com" />
-        <link rel="preconnect" href="https://gstatic.com" crossOrigin="anonymous" />
-        <link href="https://googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
       </Head>
 
-      {/* Every text tag below has the font family locked in directly */}
+      {/* This raw tag injects the stylesheet directly into the app body */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://googleapis.com');
+        .game-title { font-family: 'Press Start 2P', cursive !important; }
+        .game-sub { font-family: 'Press Start 2P', cursive !important; font-size: 0.8rem; opacity: 0.8; }
+      `}} />
+
       <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <h1 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+        <h1 className="game-title" style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>
           Prehistooio
         </h1>
         
-        <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: '1.1rem', opacity: '0.8', marginBottom: '2rem' }}>
+        <p className="game-sub" style={{ marginBottom: '2.5rem' }}>
           Battle with your prehistoric foes
         </p>
         
         <img 
           src="/deep-prehistoo.png" 
           alt="Prehistoo Creature" 
-          style={{ width: '120px', height: 'auto', marginBottom: '2rem' }} 
+          style={{ width: '150px', height: 'auto' }} 
         />
-
-      
       </main>
     </div>
   )
