@@ -10,7 +10,7 @@ export default function Home() {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      alignItems: 'center',
+      @import url('https://googleapis.com');
       backgroundColor: '#104E8B'
     }}>
       <Head>
@@ -18,12 +18,13 @@ export default function Home() {
         <link rel="icon" href="/icon.png?v=1" type="image/png" />
       </Head>
 
-      {/* This injects Montserrat directly so it bypasses all browser blocks */}
+       {/* This injects Montserrat directly so it bypasses all browser blocks */}
       <style dangerouslySetInnerHTML={{__html: `
         @import url('https://googleapis.com');
         .ocean-title { font-family: 'Montserrat', sans-serif !important; }
         .ocean-sub { font-family: 'Montserrat', sans-serif !important; }
       `}} />
+        
 
       <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>
