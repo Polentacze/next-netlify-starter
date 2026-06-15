@@ -18,7 +18,8 @@ export default function Home() {
         <link rel="icon" href="/icon.png?v=1" type="image/png" />
       </Head>
 
- <style dangerouslySetInnerHTML={{__html: `
+      {/* This injects the exact, full URL path for the Rye font */}
+      <style dangerouslySetInnerHTML={{__html: `
         @import url('https://googleapis.com');
         .ocean-title { font-family: 'Rye', serif !important; }
         .ocean-sub { font-family: 'Rye', serif !important; }
