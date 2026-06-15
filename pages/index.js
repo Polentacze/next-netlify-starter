@@ -18,10 +18,10 @@ export default function Home() {
         <link rel="icon" href="/icon.png?v=1" type="image/png" />
       </Head>
 
-      <style dangerouslySetInnerHTML={{__html: `
+ <style dangerouslySetInnerHTML={{__html: `
         @import url('https://googleapis.com');
-        .ocean-title { font-family: 'Rye', cursive !important; }
-        .ocean-sub { font-family: 'Rye', cursive !important; }
+        .ocean-title { font-family: 'Rye', serif !important; }
+        .ocean-sub { font-family: 'Rye', serif !important; }
       `}} />
 
       <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
