@@ -18,7 +18,7 @@ export default function Home() {
         <link rel="icon" href="/icon.png?v=1" type="image/png" />
       </Head>
 
-      <style dangerouslySetInnerHTML={{__html: `
+     <style dangerouslySetInnerHTML={{__html: `
         @import url('https://googleapis.com');
         .ocean-title { font-family: 'Black Ops One', cursive !important; }
         .ocean-sub { font-family: 'Black Ops One', cursive !important; }
