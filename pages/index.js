@@ -4,11 +4,18 @@ import { useState } from 'react'
 export default function Home() {
   const [currentSkin, setCurrentSkin] = useState('/deep-prehistoo.png')
   const [isWikiOpen, setIsWikiOpen] = useState(false)
+  const [hoveredAnimal, setHoveredAnimal] = useState("")
 
-  // This matches your actual uploaded file list perfectly for copy-pasting!
-  const animalNames = [
-    "CMegalodon", "Helicoprion", "Liopleurodon", "PliosaurusF", 
-    "Shastasaurus", "SqualicoraxK", "Stethacanthus", "Xiphiorhynchus"
+  // Exact grid coordinates mapping your 8 uploaded prehistoric species
+  const animalGridSlots = [
+    { name: "CMegalodon", top: "18%", left: "15%", width: "10%", height: "18%" },
+    { name: "Shastasaurus", top: "18%", left: "27%", width: "10%", height: "18%" },
+    { name: "PliosaurusF", top: "18%", left: "39%", width: "10%", height: "18%" },
+    { name: "Helicoprion", top: "18%", left: "51%", width: "10%", height: "18%" },
+    { name: "Xiphiorhynchus", top: "18%", left: "63%", width: "10%", height: "18%" },
+    { name: "Liopleurodon", top: "18%", left: "75%", width: "10%", height: "18%" },
+    { name: "Stethacanthus", top: "45%", left: "15%", width: "10%", height: "18%" },
+    { name: "SqualicoraxK", top: "45%", left: "27%", width: "10%", height: "18%" }
   ]
 
   return (
@@ -35,10 +42,10 @@ export default function Home() {
         .ocean-title { font-family: 'Rye', serif !important; }
         .ocean-sub { font-family: 'Rye', serif !important; }
         
-        /* Floating layout handler for your uploaded wiki-button image */
+        /* Positions your wiki button perfectly on the very right wall */
         .wiki-image-trigger {
           position: fixed;
-          right: 25px;
+          right: 0px; 
           top: 50%;
           transform: translateY(-50%);
           width: 220px;
@@ -46,28 +53,35 @@ export default function Home() {
           cursor: pointer;
           z-index: 100;
           transition: transform 0.2s ease;
-          filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
+          filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.3));
         }
         .wiki-image-trigger:hover {
           transform: translateY(-50%) scale(1.05);
         }
 
-        /* Large Grid Panel matching your blue asset proportions exactly */
-        .wiki-panel {
+        /* Full screen dimming backdrop - hidden completely on launch */
+        .wiki-modal-overlay {
           position: fixed;
-          top: 50%;
-          right: \${isWikiOpen ? '50%' : '-700px'};
-          transform: \${isWikiOpen ? 'translate(50%, -50%)' : 'translate(0, -50%)'}; 
-          width: 580px;
-          max-height: 90vh;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background-color: rgba(0, 0, 0, 0.6); 
+          display: \${isWikiOpen ? 'flex' : 'none'}; 
+          justify-content: center;
+          align-items: center;
+          z-index: 105;
+        }
+
+        /* Responsive popup dashboard framework container hosting Grid.png */
+        .wiki-panel {
+          width: 800px;
           background-color: #3b5ca8; 
           border: 6px solid #2a437a;  
           border-radius: 28px;       
           box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-          z-index: 105;
           padding: 2rem;
-          overflow-y: auto; /* Allows scrolling down if the screen is small */
+          position: relative;
         }
 
         .close-wiki-btn {
@@ -78,51 +92,53 @@ export default function Home() {
           border-radius: 8px;
           font-weight: bold;
           cursor: pointer;
-          float: right;
+          position: absolute;
+          top: 1.5rem;
+          right: 1.5rem;
+          z-index: 120;
         }
 
-        /* Image styling that allows zooming on your Grid graphic */
+        /* Layout canvas bounding box map */
+        .grid-image-container {
+          position: relative;
+          width: 100%;
+          margin-top: 1.5rem;
+        }
+
         .wiki-grid-graphic {
           width: 100%;
           height: auto;
           border-radius: 16px;
-          margin-top: 1rem;
-          margin-bottom: 1.5rem;
-          box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
-          transition: transform 0.3s ease;
-        }
-        
-        /* Zoom-in feature when clicking or holding click over the main grid graphic */
-        .wiki-grid-graphic:active {
-          transform: scale(1.3);
-          z-index: 110;
-          cursor: zoom-out;
+          display: block;
         }
 
-        /* Clean list layout for copying and pasting animal text */
-        .text-list-container {
+        /* Invisible overlay boxes matching your background slots precisely */
+        .invisible-slot-trigger {
+          position: absolute;
+          background-color: rgba(0, 255, 26, 0); /* Transparent */
+          cursor: pointer;
+          border-radius: 8px;
+          transition: background-color 0.2s;
+        }
+        .invisible-slot-trigger:hover {
+          background-color: rgba(0, 255, 26, 0.15); /* Slight green glow when hovering */
+          border: 2px solid #00FF1A;
+        }
+
+        .hud-name-banner {
+          margin-top: 1.5rem;
           background-color: #2a437a;
-          border-radius: 16px;
-          padding: 1.5rem;
-          text-align: left;
+          padding: 1rem;
+          border-radius: 12px;
+          min-height: 55px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           border: 2px solid rgba(255,255,255,0.1);
-        }
-
-        .animal-text-item {
-          display: inline-block;
-          background-color: #104E8B;
-          padding: 0.4rem 0.8rem;
-          margin: 0.3rem;
-          border-radius: 6px;
-          font-family: sans-serif;
-          font-size: 0.95rem;
-          border: 1px solid rgba(255,255,255,0.2);
-          user-select: all; /* Makes the entire name select automatically when clicked */
-          cursor: text;
         }
       `}} />
 
-      {/* Clickable Wiki Trigger Image Card */}
+      {/* Floating launch card sitting on the right edge */}
       <img 
         src="/wiki-button.png" 
         alt="Animal Wiki Button" 
@@ -130,36 +146,48 @@ export default function Home() {
         onClick={() => setIsWikiOpen(true)}
       />
 
-      {/* Sliding Wiki Index Board Display Panel */}
-      <div className="wiki-panel">
-        <button className="close-wiki-btn" onClick={() => setIsWikiOpen(false)}>Close ✕</button>
-        <h2 className="ocean-title" style={{ fontSize: '2rem', textAlign: 'left', margin: '0' }}>
-          Animal Wiki
-        </h2>
-        
-        {/* Renders your exact Grid.png graphic sheet directly */}
-        <img 
-          src="/Grid.png" 
-          alt="Animal Grid Layout" 
-          className="wiki-grid-graphic" 
-          title="Hold click to zoom in!"
-        />
-
-        {/* Copy-Paste Text Area at the bottom */}
-        <div className="text-list-container">
-          <h4 style={{ margin: '0 0 0.8rem 0', fontFamily: 'sans-serif', fontSize: '1.1rem', opacity: '0.9' }}>
-            Species Register (Click to Select Text):
-          </h4>
-          <div>
-            {animalNames.map((name, i) => (
-              <span key={i} className="animal-text-item">
-                {name}
-              </span>
+      {/* Full Screen Interactive Modal Viewport */}
+      <div className="wiki-modal-overlay" onClick={() => setIsWikiOpen(false)}>
+        <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
+          <button className="close-wiki-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
+          <h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>
+            Animal Wiki
+          </h2>
+          
+          <div className="grid-image-container">
+            <img src="/Grid.png" alt="Animal Grid Layout" className="wiki-grid-graphic" />
+            
+            {/* Hot-mapping custom click triggers directly over your Grid art slots */}
+            {animalGridSlots.map((slot, i) => (
+              <div
+                key={i}
+                className="invisible-slot-trigger"
+                style={{
+                  top: slot.top,
+                  left: slot.left,
+                  width: slot.width,
+                  height: slot.height
+                }}
+                onMouseEnter={() => setHoveredAnimal(slot.name)}
+                onMouseLeave={() => setHoveredAnimal("")}
+                onClick={() => {
+                  // If you have matching skins, clicking can equip them here!
+                  alert("Selected: " + slot.name);
+                }}
+              />
             ))}
+          </div>
+
+          {/* Clean status HUD at the bottom showing which creature box you are over */}
+          <div className="hud-name-banner">
+            <p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.2rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#ffffff' }}>
+              {hoveredAnimal ? hoveredAnimal : "Hover over a square slot to scan creature metadata"}
+            </p>
           </div>
         </div>
       </div>
 
+      {/* Main launch environment dashboard screen area */}
       <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>
           Prehistooio
@@ -181,4 +209,3 @@ export default function Home() {
       </main>
     </div>
   )
-}
