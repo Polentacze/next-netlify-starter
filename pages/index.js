@@ -6,16 +6,16 @@ export default function Home() {
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
 
-  // Exact grid coordinates mapping your 8 uploaded prehistoric species
+  // Precise layout coordinates mapping over your 8 custom squares drawn in Grid.png
   const animalGridSlots = [
-    { name: "CMegalodon", top: "18%", left: "15%", width: "10%", height: "18%" },
-    { name: "Shastasaurus", top: "18%", left: "27%", width: "10%", height: "18%" },
-    { name: "PliosaurusF", top: "18%", left: "39%", width: "10%", height: "18%" },
-    { name: "Helicoprion", top: "18%", left: "51%", width: "10%", height: "18%" },
-    { name: "Xiphiorhynchus", top: "18%", left: "63%", width: "10%", height: "18%" },
-    { name: "Liopleurodon", top: "18%", left: "75%", width: "10%", height: "18%" },
-    { name: "Stethacanthus", top: "45%", left: "15%", width: "10%", height: "18%" },
-    { name: "SqualicoraxK", top: "45%", left: "27%", width: "10%", height: "18%" }
+    { name: "CMegalodon", top: "14%", left: "5%", width: "13.5%", height: "35%" },
+    { name: "Shastasaurus", top: "14%", left: "20.5%", width: "13.5%", height: "35%" },
+    { name: "PliosaurusF", top: "14%", left: "36%", width: "13.5%", height: "35%" },
+    { name: "Helicoprion", top: "14%", left: "51.5%", width: "13.5%", height: "35%" },
+    { name: "Xiphiorhynchus", top: "14%", left: "67%", width: "13.5%", height: "35%" },
+    { name: "Liopleurodon", top: "14%", left: "82.5%", width: "13.5%", height: "35%" },
+    { name: "Stethacanthus", top: "54%", left: "5%", width: "13.5%", height: "35%" },
+    { name: "SqualicoraxK", top: "54%", left: "20.5%", width: "13.5%", height: "35%" }
   ]
 
   return (
@@ -42,7 +42,7 @@ export default function Home() {
         .ocean-title { font-family: 'Rye', serif !important; }
         .ocean-sub { font-family: 'Rye', serif !important; }
         
-        /* Positions your wiki button perfectly on the very right wall */
+        /* Forces your Explore Button Card to float on the right edge */
         .wiki-image-trigger {
           position: fixed;
           right: 0px; 
@@ -59,21 +59,7 @@ export default function Home() {
           transform: translateY(-50%) scale(1.05);
         }
 
-        /* Full screen dimming backdrop - hidden completely on launch */
-        .wiki-modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background-color: rgba(0, 0, 0, 0.6); 
-          display: \${isWikiOpen ? 'flex' : 'none'}; 
-          justify-content: center;
-          align-items: center;
-          z-index: 105;
-        }
-
-        /* Responsive popup dashboard framework container hosting Grid.png */
+        /* Large Grid Dashboard wrapper layout */
         .wiki-panel {
           width: 800px;
           background-color: #3b5ca8; 
@@ -98,7 +84,6 @@ export default function Home() {
           z-index: 120;
         }
 
-        /* Layout canvas bounding box map */
         .grid-image-container {
           position: relative;
           width: 100%;
@@ -112,17 +97,27 @@ export default function Home() {
           display: block;
         }
 
-        /* Invisible overlay boxes matching your background slots precisely */
-        .invisible-slot-trigger {
+        /* Hitbox slots over your Grid drawing */
+        .interactive-slot-box {
           position: absolute;
-          background-color: rgba(0, 255, 26, 0); /* Transparent */
           cursor: pointer;
-          border-radius: 8px;
-          transition: background-color 0.2s;
+          border-radius: 12px;
+          transition: all 0.2s;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 6px;
+          box-sizing: border-box;
         }
-        .invisible-slot-trigger:hover {
-          background-color: rgba(0, 255, 26, 0.15); /* Slight green glow when hovering */
-          border: 2px solid #00FF1A;
+        .interactive-slot-box:hover {
+          background-color: rgba(0, 255, 26, 0.15); 
+          outline: 3px solid #00FF1A;
+        }
+
+        .grid-sprite-img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
         }
 
         .hud-name-banner {
@@ -138,7 +133,7 @@ export default function Home() {
         }
       `}} />
 
-      {/* Floating launch card sitting on the right edge */}
+      {/* Explore Trigger Image Card */}
       <img 
         src="/wiki-button.png" 
         alt="Animal Wiki Button" 
@@ -146,8 +141,22 @@ export default function Home() {
         onClick={() => setIsWikiOpen(true)}
       />
 
-      {/* Full Screen Interactive Modal Viewport */}
-      <div className="wiki-modal-overlay" onClick={() => setIsWikiOpen(false)}>
+      {/* Full Screen Overlay Panel Layer */}
+      <div 
+        onClick={() => setIsWikiOpen(false)}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          display: isWikiOpen ? 'flex' : 'none', 
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 105
+        }}
+      >
         <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
           <button className="close-wiki-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
           <h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>
@@ -155,13 +164,14 @@ export default function Home() {
           </h2>
           
           <div className="grid-image-container">
+            {/* Renders your exact Grid image canvas */}
             <img src="/Grid.png" alt="Animal Grid Layout" className="wiki-grid-graphic" />
             
-            {/* Hot-mapping custom click triggers directly over your Grid art slots */}
+            {/* Overlay loops your graphics inside the squares */}
             {animalGridSlots.map((slot, i) => (
               <div
                 key={i}
-                className="invisible-slot-trigger"
+                className="interactive-slot-box"
                 style={{
                   top: slot.top,
                   left: slot.left,
@@ -170,14 +180,16 @@ export default function Home() {
                 }}
                 onMouseEnter={() => setHoveredAnimal(slot.name)}
                 onMouseLeave={() => setHoveredAnimal("")}
-                onClick={() => {
-                  alert("Selected: " + slot.name);
-                }}
-              />
+              >
+                <img 
+                  src={slot.image} 
+                  alt={slot.name} 
+                  className="grid-sprite-img" 
+                />
+              </div>
             ))}
           </div>
 
-          {/* Clean status HUD at the bottom showing which creature box you are over */}
           <div className="hud-name-banner">
             <p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.2rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#ffffff' }}>
               {hoveredAnimal ? hoveredAnimal : "Hover over a square slot to scan creature metadata"}
@@ -186,22 +198,18 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Main launch environment dashboard screen area */}
       <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>
           Prehistooio
         </h1>
-        
         <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '2.5rem' }}>
           Made by Polentacze - Inspired by Deeeepio
         </p>
-        
         <img 
           src={currentSkin} 
           alt="Prehistoo Creature" 
           style={{ width: '150px', height: 'auto', marginBottom: '2.5rem', borderRadius: '12px' }} 
         />
-
         <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6' }}>
           Fight your Prehistoric foes
         </p>
