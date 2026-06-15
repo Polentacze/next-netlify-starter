@@ -24,7 +24,7 @@ export default function Home() {
         </h1>
         
         <p style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '2rem' }}>
-          Made by Polentacze - Inspired by Deeeepio
+          Battle with your prehistoric foes
         </p>
         
         <img 
