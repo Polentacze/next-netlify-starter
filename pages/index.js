@@ -1,4 +1,4 @@
-mport Head from 'next/head'
+import Head from 'next/head'
 
 export default function Home() {
   return (
@@ -26,7 +26,6 @@ export default function Home() {
           Made by Polentacze - Inspired by Deeeepio
         </p>
         
-        {/* This brings your creature image right into the center */}
         <img 
           src="/deep-prehistoo.png" 
           alt="Prehistoo Creature" 
