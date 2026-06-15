@@ -33,6 +33,8 @@ export default function Home() {
           style={{ width: '120px', height: 'auto', marginBottom: '2rem' }} 
         />
 
+        <p style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6' }}>
+          Made by Polentacze - Inspired by Deeeepio
         </p>
       </main>
     </div>
