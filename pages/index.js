@@ -20,8 +20,8 @@ export default function Home() {
 
       <style dangerouslySetInnerHTML={{__html: `
         @import url('https://googleapis.com');
-        .ocean-title { font-family: 'Creepster', sans-serif !important; }
-        .ocean-sub { font-family: 'Creepster', sans-serif !important; }
+        .ocean-title { font-family: 'Creepster', cursive !important; }
+        .ocean-sub { font-family: 'Creepster', cursive !important; }
       `}} />
 
       <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
