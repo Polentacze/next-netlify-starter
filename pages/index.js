@@ -1,32 +1,63 @@
 import Head from 'next/head'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 export default function Home() {
   const [isWikiOpen, setIsWikiOpen] = useState(false)
+  const [hoveredAnimal, setHoveredAnimal] = useState("")
   const [username, setUsername] = useState("")
   const [isPlaying, setIsPlaying] = useState(false)
-  const [playerPosition, setPlayerPosition] = useState({ x: 300, y: 300 })
+  
+  // Mouse tracking position states
+  const [playerPosition, setPlayerPosition] = useState({ x: 400, y: 300 })
+  const mousePos = useRef({ x: 400, y: 300 })
+  const arenaRef = useRef(null)
 
+  // Calibrated coordinate layout tracking mapping columns cleanly over AnimalGrid.png
+  const animalGridSlots = [
+    { name: "Otodus megalodon", top: "16%", left: "13.5%", width: "10.5%", height: "28%" },
+    { name: "Shastasaurus pacificus", top: "16%", left: "24.7%", width: "10.5%", height: "28%" },
+    { name: "Pliosaurus funkei", top: "16%", left: "35.9%", width: "10.5%", height: "28%" },
+    { name: "Helicoprion bessonowi", top: "16%", left: "47.1%", width: "10.5%", height: "28%" },
+    { name: "Xiphiorhynchus kimblalocki", top: "16%", left: "58.3%", width: "10.5%", height: "28%" },
+    { name: "Liopleurodon ferox", top: "16%", left: "69.5%", width: "10.5%", height: "28%" },
+    { name: "Stethacanthus altonensis", top: "48%", left: "13.5%", width: "10.5%", height: "28%" },
+    { name: "Squalicorax pristodontus", top: "48%", left: "24.7%", width: "10.5%", height: "28%" }
+  ]
+
+  // Easing physics movement calculations tracking mouse pointer coordinates
   useEffect(() => {
     if (!isPlaying) return
 
-    const handleKeyDown = (e) => {
-      const step = 15
-      setPlayerPosition((prev) => {
-        let newX = prev.x
-        let newY = prev.y
-        
-        if (e.key === 'ArrowUp' || e.key === 'w') newY = Math.max(80, prev.y - step)
-        if (e.key === 'ArrowDown' || e.key === 's') newY = Math.min(520, prev.y + step)
-        if (e.key === 'ArrowLeft' || e.key === 'a') newX = Math.max(50, prev.x - step)
-        if (e.key === 'ArrowRight' || e.key === 'd') newX = Math.min(750, prev.x + step)
-        
-        return { x: newX, y: newY }
-      })
+    const handleMouseMove = (e) => {
+      if (!arenaRef.current) return
+      const rect = arenaRef.current.getBoundingClientRect()
+      let targetX = e.clientX - rect.left
+      let targetY = e.clientY - rect.top
+
+      mousePos.current = {
+        x: Math.max(40, Math.min(760, targetX)),
+        y: Math.max(60, Math.min(540, targetY))
+      }
     }
 
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    const gameLoop = setInterval(() => {
+      setPlayerPosition((prev) => {
+        const easeSpeed = 0.15 
+        const dx = mousePos.current.x - prev.x
+        const dy = mousePos.current.y - prev.y
+        
+        return {
+          x: prev.x + dx * easeSpeed,
+          y: prev.y + dy * easeSpeed
+        }
+      })
+    }, 1000 / 60) // 60 Frames-Per-Second screen refresh tracking passes
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      clearInterval(gameLoop)
+    }
   }, [isPlaying])
 
   return (
@@ -104,6 +135,34 @@ export default function Home() {
           display: block;
         }
 
+        /* Re-integrated transparent hitboxes mapping over your drawings */
+        .qol-slot-overlay {
+          position: absolute;
+          cursor: pointer;
+          border-radius: 14px;
+          transition: all 0.15s ease-in-out;
+          box-sizing: border-box;
+          border: 3px solid transparent;
+          background-color: transparent !important; 
+        }
+        .qol-slot-overlay:hover {
+          border-color: #00FF1A !important;
+          background-color: rgba(0, 255, 26, 0.08) !important;
+          box-shadow: 0 0 15px #00FF1A;
+        }
+
+        .species-hud-display {
+          margin-top: 1.5rem;
+          background-color: #2a437a;
+          padding: 1rem;
+          border-radius: 16px;
+          min-height: 60px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 3px solid rgba(255,255,255,0.15);
+        }
+
         .game-launch-form {
           display: flex;
           flex-direction: column;
@@ -145,7 +204,9 @@ export default function Home() {
           border: none;
           padding: 0;
           cursor: pointer;
-          width: 200px; 
+          width: 180px !important; 
+          height: auto !important;
+          max-width: 180px !important;
           transition: transform 0.2s ease;
           filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
         }
@@ -172,6 +233,7 @@ export default function Home() {
           position: relative;
           box-shadow: 0 20px 40px rgba(0,0,0,0.5);
           overflow: hidden;
+          cursor: crosshair;
         }
         .hud-overlay-text {
           position: absolute;
@@ -185,23 +247,29 @@ export default function Home() {
         .disconnect-btn {
           position: absolute;
           top: 15px;
-          right: 20px;
+          right: 15px;
           background-color: #ff4d4d;
-          border: none;
+          border: 2px solid white;
           color: white;
-          padding: 0.4rem 0.8rem;
+          padding: 0.5rem 1rem;
           font-weight: bold;
-          border-radius: 6px;
+          border-radius: 8px;
           cursor: pointer;
+          z-index: 200;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+          transition: background-color 0.2s;
+        }
+        .disconnect-btn:hover {
+          background-color: #cc0000;
         }
       `}} />
 
       {isPlaying ? (
-        <div className="arena-map-frame">
+        <div className="arena-map-frame" ref={arenaRef}>
           <div className="hud-overlay-text">
-            <strong>PREHISTOOIO SANDBOX SERVER v0.1</strong><br/>
+            <strong>PREHISTOOIO TESTING ARENA v0.2</strong><br/>
             Player Handle: {username || "Guest_Fish"}<br/>
-            Controls: Use <strong>W, A, S, D</strong> or <strong>Arrow Keys</strong> to swim
+            Controls: Move your <strong>Mouse Cursor</strong> to swim smoothly
           </div>
           
           <button className="disconnect-btn" onClick={() => setIsPlaying(false)}>
@@ -210,16 +278,16 @@ export default function Home() {
 
           <div style={{
             position: 'absolute',
-            top: playerPosition.y,
-            left: playerPosition.x,
-            transition: 'all 0.1s linear',
+            top: playerPosition.y - 45,
+            left: playerPosition.x - 45,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            width: '90px'
+            width: '90px',
+            pointerEvents: 'none'
           }}>
             <span style={{
-              backgroundColor: 'rgba(0,0,0,0.6)',
+              backgroundColor: 'rgba(0,0,0,0.7)',
               padding: '2px 8px',
               borderRadius: '4px',
               fontSize: '0.75rem',
@@ -256,43 +324,4 @@ export default function Home() {
           />
 
           <div 
-            onClick={() => setIsWikiOpen(false)}
-            style={{
-              position: 'fixed',
-              top: 0, left: 0, width: '100vw', height: '100vh',
-              backgroundColor: 'rgba(0, 0, 0, 0.6)',
-              display: isWikiOpen ? 'flex' : 'none', 
-              justifyContent: 'center', alignItems: 'center', zIndex: 105
-            }}
-          >
-            <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
-              <button className="close-wiki-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
-              <h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2>
-              <div className="grid-image-container">
-                <img src="/AnimalGrid.png" alt="Animal Grid Layout" className="wiki-grid-graphic" />
-              </div>
-            </div>
-          </div>
-
-          <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio</h1>
-            <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p>
-            
-            <img src="/prehistoric-skeleton.png" alt="Prehistoric Skeleton Model" style={{ width: '160px', height: 'auto', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} />
-            <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p>
-
-            <form className="game-launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}>
-              <div className="custom-input-wrapper">
-                <img src="/input-box.png" alt="Username Input Frame" className="input-bg-graphic" />
-                <input type="text" className="hidden-text-field" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} />
-              </div>
-              <button type="submit" className="custom-play-trigger-btn">
-                <img src="/play-button.png" alt="PLAY GAME" className="play-graphic-asset" />
-              </button>
-            </form>
-          </main>
-        </>
-      )}
-    </div>
-  )
-}
+onClick={() => setIsWikiOpen(false)}style={{position: 'fixed',top: 0, left: 0, width: '100vw', height: '100vh',backgroundColor: 'rgba(0, 0, 0, 0.6)',display: isWikiOpen ? 'flex' : 'none',justifyContent: 'center', alignItems: 'center', zIndex: 105}}><div className="wiki-panel" onClick={(e) => e.stopPropagation()}><button className="close-wiki-btn" onClick={() => setIsWikiOpen(false)}>Close X<h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki{/* Clean, error-free map callback loop rendering neon green overlays */}{animalGridSlots.map((slot, i) => (<divkey={i}className="qol-slot-overlay"style={{ top: slot.top, left: slot.left, width: slot.width, height: slot.height }}onMouseEnter={() => setHoveredAnimal(slot.name)}onMouseLeave={() => setHoveredAnimal("")}/>))}<p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#ffffff', fontStyle: hoveredAnimal ? 'italic' : 'normal' }}>{hoveredAnimal ? hoveredAnimal : "Hover over a creature square to analyze scientific metadata"}<main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}><h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio<p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio<img src="/prehistoric-skeleton.png" alt="Prehistoric Skeleton Model" style={{ width: '160px', height: 'auto', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} /><p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6', marginBottom: '0.5rem' }}>Fight your Prehistoric foes<form className="game-launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}><input type="text" className="hidden-text-field" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} /></>)})}
