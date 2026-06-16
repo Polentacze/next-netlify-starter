@@ -146,7 +146,7 @@ export default function Home() {
         .grid-img { width: 100%; display: block; border-radius: 16px; }
         .slot-over { position: absolute; cursor: pointer; border-radius: 14px; transition: all 0.15s; border: 3px solid transparent; }
         .slot-over:hover { border-color: #00FF1A !important; background: rgba(0, 255, 26, 0.08); box-shadow: 0 0 15px #00FF1A; }
-        .hud-banner { margin-top: 1.5rem; background: #2a437a; padding: 1rem; border-radius: 16px; min-height: 60px; display: flex; justify-content: center; alignItems: center; border: 3px solid rgba(255,255,255,0.15); }
+        .hud-banner { margin-top: 1.5rem; background: #2a437a; padding: 1rem; border-radius: 16px; min-height: 60px; display: flex; justifyContent: center; alignItems: center; border: 3px solid rgba(255,255,255,0.15); }
         .launch-form { display: flex; flexDirection: column; align-items: center; gap: 1.2rem; margin-top: 1rem; }
         .input-wrap { position: relative; width: 320px; }
         .play-btn { background: none; border: none; cursor: pointer; width: 180px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
@@ -166,7 +166,7 @@ export default function Home() {
         .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); z-index: 35; pointer-events: none; background: transparent !important; }
         .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); z-index: 33; pointer-events: none; background: transparent !important; }
       `}} />
-jsx      {isPlaying ? (
+      {isPlaying ? (
         <div className="arena-viewport" ref={viewRef}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
             <strong>PREHISTOOIO ARENA v0.7</strong><br />
@@ -191,17 +191,19 @@ jsx      {isPlaying ? (
           }}>
             <div className="gravel-seafloor-bed" />
 
-            {/* FIXED SIZE CODES: Stripped the pixel string addition loop to guarantee bug protection */}
-            {propsList.kelp.map((k, idx) => (
-              <img 
-                key={'k_' + idx}
-                src="/kelp.png"
-                alt="Sea Kelp"
-                className="scrolling-kelp-prop"
-                style={{ top: k.y, left: k.x, height: k.h }}
-                onError={(e) => { e.target.style.display = 'none' }}
-              />
-            ))}
+            {/* FIXED MAP CALLBACK: Safely structural closing brackets to pass JSX parsing gates */}
+            {propsList.kelp.map((k, idx) => {
+              return (
+                <img 
+                  key={'k_' + idx}
+                  src="/kelp.png"
+                  alt="Sea Kelp"
+                  className="scrolling-kelp-prop"
+                  style={{ top: k.y, left: k.x, height: k.h }}
+                  onError={(e) => { e.target.style.display = 'none' }}
+                />
+              )
+            })}
 
             {propsList.volcano && (
               <img 
@@ -211,7 +213,7 @@ jsx      {isPlaying ? (
                 style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }}
                 onError={(e) => { e.target.style.display = 'none' }}
               />
-            ))}
+            )}
 
             {propsList.bigRock && (
               <img 
@@ -221,7 +223,7 @@ jsx      {isPlaying ? (
                 style={{ top: propsList.bigRock.y, left: propsList.bigRock.x, width: propsList.bigRock.w }}
                 onError={(e) => { e.target.style.display = 'none' }}
               />
-            ))}
+            )}
 
             {foodPellets.map((pellet) => !pellet.isEaten && (
               <img 
