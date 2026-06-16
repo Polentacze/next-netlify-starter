@@ -11,6 +11,9 @@ export default function Home() {
   const mousePos = useRef({ x: 400, y: 300 })
   const arenaRef = useRef(null)
 
+  // 🔄 ROTATION OFFSET CONSTANT
+  const ROTATION_OFFSET = 180; 
+
   const slots = [
     { name: "Otodus megalodon", t: "16%", l: "13.5%" },
     { name: "Shastasaurus pacificus", t: "16%", l: "24.7%" },
@@ -28,8 +31,8 @@ export default function Home() {
       if (!arenaRef.current) return
       const rect = arenaRef.current.getBoundingClientRect()
       mousePos.current = {
-        x: Math.max(40, Math.min(760, e.clientX - rect.left)),
-        y: Math.max(40, Math.min(540, e.clientY - rect.top))
+        x: Math.max(50, Math.min(750, e.clientX - rect.left)),
+        y: Math.max(50, Math.min(550, e.clientY - rect.top))
       }
     }
     const gameLoop = setInterval(() => {
@@ -37,7 +40,7 @@ export default function Home() {
         const dx = mousePos.current.x - p.x
         const dy = mousePos.current.y - p.y
         setPlayerRotation(Math.atan2(dy, dx) * (180 / Math.PI))
-        return { x: p.x + dx * 0.12, y: p.y + dy * 0.12 }
+        return { x: p.x + dx * 0.10, y: p.y + dy * 0.10 }
       })
     }, 1000 / 60)
     window.addEventListener('mousemove', handleMouseMove)
@@ -72,7 +75,7 @@ export default function Home() {
         .field-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; background: transparent; border: none; outline: none; color: #333333; font-size: 1.1rem; text-align: center; font-weight: bold; }
         .arena-frame { width: 800px; height: 600px; background: #0b355e; border: 8px solid #2a437a; border-radius: 24px; position: relative; overflow: hidden; cursor: crosshair; }
         .leave-btn { position: absolute; top: 15px; right: 15px; background: #ff4d4d; border: 2px solid white; color: white; padding: 0.5rem 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; z-index: 200; }
-        .player-fish-sprite { width: 100%; height: auto; mix-blend-mode: multiply; display: block; }
+        .player-fish-sprite { width: 100%; height: auto; display: block; border-radius: 14px; }
       `}} />
 
       {isPlaying ? (
@@ -80,15 +83,17 @@ export default function Home() {
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.6, textAlign: 'left', zIndex: 10 }}>
             <strong>PREHISTOOIO ARENA v0.3</strong><br/>
             Handle: {username || "Guest"}<br/>
-            Move cursor to swim smoothly
+            Aim cursor to steer your species smoothly
           </div>
           <button className="leave-btn" onClick={() => setIsPlaying(false)}>Leave Map</button>
           
-          <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%) rotate(' + playerRotation + 'deg)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none', transition: 'transform 0.05s linear' }}>
-            <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', transform: 'rotate(' + (-playerRotation) + 'deg)' }}>
+          <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none' }}>
+            <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', whiteSpace: 'nowrap' }}>
               {username || "Guest"}
             </span>
-            <img src="/sacabambaspis.png" alt="Fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
+            <div style={{ width: '100%', transform: 'rotate(' + (playerRotation + ROTATION_OFFSET) + 'deg)', transition: 'transform 0.04s linear' }}>
+              <img src="/sacabambaspis.png" alt="Fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
+            </div>
           </div>
         </div>
       ) : (
