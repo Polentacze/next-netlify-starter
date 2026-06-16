@@ -7,16 +7,16 @@ export default function Home() {
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
 
-  // Precise coordinate positioning slots mapping over the items drawn inside AnimalGrid.png
+  // Finely adjusted coordinates to line up perfectly with your drawn card rows
   const animalGridSlots = [
-    { name: "Otodus megalodon", top: "18%", left: "19.5%", width: "10%", height: "28%" },
-    { name: "Shastasaurus pacificus", top: "18%", left: "30.5%", width: "10%", height: "28%" },
-    { name: "Pliosaurus funkei", top: "18%", left: "41.5%", width: "10%", height: "28%" },
-    { name: "Helicoprion bessonowi", top: "18%", left: "52.5%", width: "10%", height: "28%" },
-    { name: "Xiphiorhynchus kimblalocki", top: "18%", left: "63.5%", width: "10%", height: "28%" },
-    { name: "Liopleurodon ferox", top: "18%", left: "74.5%", width: "10%", height: "28%" },
-    { name: "Stethacanthus altonensis", top: "49%", left: "19.5%", width: "10%", height: "28%" },
-    { name: "Squalicorax pristodontus", top: "49%", left: "30.5%", width: "10%", height: "28%" }
+    { name: "Otodus megalodon", top: "16%", left: "9.5%", width: "13.5%", height: "28%" },
+    { name: "Shastasaurus pacificus", top: "16%", left: "24.5%", width: "13.5%", height: "28%" },
+    { name: "Pliosaurus funkei", top: "16%", left: "39.5%", width: "13.5%", height: "28%" },
+    { name: "Helicoprion bessonowi", top: "16%", left: "54.5%", width: "13.5%", height: "28%" },
+    { name: "Xiphiorhynchus kimblalocki", top: "16%", left: "69.5%", width: "13.5%", height: "28%" },
+    { name: "Liopleurodon ferox", top: "16%", left: "84.5%", width: "13.5%", height: "28%" },
+    { name: "Stethacanthus altonensis", top: "48%", left: "9.5%", width: "13.5%", height: "28%" },
+    { name: "Squalicorax pristodontus", top: "48%", left: "24.5%", width: "13.5%", height: "28%" }
   ]
 
   return (
