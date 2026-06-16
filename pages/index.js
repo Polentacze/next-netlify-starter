@@ -18,7 +18,7 @@ export default function Home() {
   const [chatMessages, setChatMessages] = useState([
     { user: "System", text: "Endless Food Matrix loaded. Gather clusters to rank up!" }
   ])
-    const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
+  const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
     { t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" },
     { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }
@@ -32,8 +32,9 @@ export default function Home() {
   }
 
   const getRandomCoord = () => ({
+    // FIXED: Keeps food spawning slightly above the new seafloor terrain boundary line
     x: Math.floor(Math.random() * 2800) + 100,
-    y: Math.floor(Math.random() * 1800) + 100
+    y: Math.floor(Math.random() * 1650) + 100
   })
 
   useEffect(() => {
@@ -41,7 +42,8 @@ export default function Home() {
     const pellets = []
     for (let c = 0; c < 8; c++) {
       const centerX = Math.floor(Math.random() * 2600) + 200
-      const centerY = Math.floor(Math.random() * 1600) + 200
+      // Places clusters naturally distributed through middle and deeper waters
+      const centerY = Math.floor(Math.random() * 1400) + 200
       for (let i = 0; i < 6; i++) {
         pellets.push({
           id: c + "_" + i,
@@ -79,8 +81,12 @@ export default function Home() {
         if (speedMultiplier > 0) {
           setPlayerRotation(angleRad * (180 / Math.PI) + 90)
         }
+        
         currentX = Math.max(50, Math.min(2950, p.x + dx))
-        currentY = Math.max(50, Math.min(1950, p.y + dy))
+        // 🧱 PHYSICAL BOUNDARY COLLISION CHECK
+        // Locks player height so you physically cannot swim lower than 1720px (the start of the gravel floor)
+        currentY = Math.max(50, Math.min(1720, p.y + dy))
+        
         return { x: currentX, y: currentY }
       })
 
@@ -140,30 +146,25 @@ export default function Home() {
         .arena-viewport { width: 800px; height: 600px; background: #0b355e; border: 8px solid #2a437a; border-radius: 24px; position: relative; overflow: hidden; cursor: crosshair; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         .infinite-ocean-world { position: absolute; width: 3000px; height: 2000px; background-color: #0b355e; background-image: linear-gradient(rgba(255, 255, 255, 0.04) 2px, transparent 2px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 2px, transparent 2px); background-size: 100px 100px; transition: transform 0.1s ease-out; }
         .leave-btn { position: absolute; top: 15px; right: 15px; background: #ff4d4d; border: 2px solid white; color: white; padding: 0.5rem 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; z-index: 200; }
-        
-        /* HARD RESET: Forces the player fish graphic background layer to be completely transparent */
-        .player-fish-sprite { 
-          width: 100%; 
-          height: auto; 
-          display: block; 
-          background-color: transparent !important; 
-          background: transparent !important;
-          mix-blend-mode: normal !important; /* Clears out the old blue block multiply logic */
-        }
-        
-        .custom-food-sprite-pellet { 
-          position: absolute; 
-          width: 20px !important; 
-          height: auto !important; 
-          transform: translate(-50%, -50%); 
-          background-color: transparent !important;
-          background: transparent !important;
-        }
+        .player-fish-sprite { width: 100%; height: auto; display: block; background: transparent !important; mix-blend-mode: normal !important; }
+        .custom-food-sprite-pellet { position: absolute; width: 20px !important; height: auto !important; transform: translate(-50%, -50%); background-color: transparent !important; background: transparent !important; }
         .chat-container-hud { position: absolute; bottom: 15px; left: 15px; width: 250px; height: 160px; background: rgba(42, 67, 122, 0.85); border: 3px solid #2a437a; border-radius: 12px; display: flex; flex-direction: column; padding: 8px; z-index: 150; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .chat-scroll-view { flex-grow: 1; overflow-y: auto; text-align: left; font-family: sans-serif; font-size: 0.8rem; margin-bottom: 6px; padding-right: 4px; }
         .chat-msg-row { margin-bottom: 4px; line-height: 1.3; word-break: break-word; }
         .chat-input-bar-inner { width: 100%; background-color: #104E8B; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 4px 8px; color: white; font-size: 0.8rem; outline: none; }
         .chat-input-bar-inner:focus { border-color: #00FF1A; }
+
+        /* NEW SEAFLOOR TERRAIN LAYER RULES */
+        .gravel-seafloor-bed {
+          position: absolute;
+          bottom: 0px;
+          left: 0px;
+          width: 3000px;
+          height: 250px; /* Gives the floor a prominent, chunky thickness */
+          background-color: #5C4033; /* Stylized deep brown mud/gravel tone */
+          border-top: 8px solid #3d2b22; /* Crisp dark crust rim boundary line */
+          box-shadow: inset 0 10px 20px rgba(0,0,0,0.4);
+        }
       `}} />
       {isPlaying ? (
         <div className="arena-viewport" ref={viewRef}>
@@ -188,6 +189,9 @@ export default function Home() {
           <div className="infinite-ocean-world" style={{
             transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)'
           }}>
+            {/* RENDERS THE STYLIZED MUD/GRAVEL LAYER CONTEXT AT THE ABSOLUTE BOTTOM */}
+            <div className="gravel-seafloor-bed" />
+
             {foodPellets.map((pellet) => !pellet.isEaten && (
               <img 
                 key={pellet.id}
@@ -198,7 +202,6 @@ export default function Home() {
               />
             ))}
 
-            {/* FIXED: Added explicit transparent background parameters to the moving target container box */}
             <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none', backgroundColor: 'transparent', background: 'transparent' }}>
               <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', whiteSpace: 'nowrap' }}>
                 {username || "Guest"}
