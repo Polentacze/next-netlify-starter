@@ -128,7 +128,7 @@ export default function Home() {
       clearInterval(gameLoop)
     }
   }, [isPlaying, playerPosition, playerRotation])
-  return (
+    return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head>
         <title>Prehistooio</title>
@@ -165,6 +165,7 @@ export default function Home() {
         .scrolling-kelp-prop { position: absolute; transform: translate(-50%, -100%); width: 38px; z-index: 25; pointer-events: none; background: transparent !important; }
         .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); z-index: 28; pointer-events: none; background: transparent !important; }
         .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); z-index: 27; pointer-events: none; background: transparent !important; }
+      `}} />
       {isPlaying ? (
         <div className="arena-viewport" ref={viewRef}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
@@ -213,7 +214,6 @@ export default function Home() {
               />
             )}
 
-            {/* PERFORMANCE CALIBRATION: Position fixed to exactly +25 to rest perfectly on the ground */}
             {propsList.bigRock && (
               <img 
                 src="/big-rock.png"
@@ -239,9 +239,9 @@ export default function Home() {
                 {username || "Guest"}
               </span>
               <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}>
-                {/* DYNAMIC TEXT SCANNER ROUTINE: Swaps the sprite if string value reads (GHOUL) */}
+                {/* UPGRADED STRING SCANNER ENGINE: Strips spaces and capitalizes everything so it never misses a match! */}
                 <img 
-                  src={username.toUpperCase().includes("(GHOUL)") ? "/ghoul.png" : "/sacabambaspis.png"} 
+                  src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : "/sacabambaspis.png"} 
                   alt="Player Creature" 
                   className="player-fish-sprite" 
                   onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
@@ -253,7 +253,7 @@ export default function Home() {
       ) : (
         <>
           <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
-          <img src="/public/wiki-button.png" alt="Wiki" className="wiki-img" onError={(e) => { e.target.src = "/wiki-button.png" }} onClick={() => setIsWikiOpen(true)} />
+          <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
           <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
             <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
