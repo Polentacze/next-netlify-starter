@@ -4,19 +4,6 @@ import { useState } from 'react'
 export default function Home() {
   const [currentSkin, setCurrentSkin] = useState('/deep-prehistoo.png')
   const [isWikiOpen, setIsWikiOpen] = useState(false)
-  const [hoveredAnimal, setHoveredAnimal] = useState("")
-
-  // Precise layout coordinates mapping over your 8 custom squares drawn in Grid.png
-  const animalGridSlots = [
-    { name: "CMegalodon", top: "14%", left: "5%", width: "13.5%", height: "35%" },
-    { name: "Shastasaurus", top: "14%", left: "20.5%", width: "13.5%", height: "35%" },
-    { name: "PliosaurusF", top: "14%", left: "36%", width: "13.5%", height: "35%" },
-    { name: "Helicoprion", top: "14%", left: "51.5%", width: "13.5%", height: "35%" },
-    { name: "Xiphiorhynchus", top: "14%", left: "67%", width: "13.5%", height: "35%" },
-    { name: "Liopleurodon", top: "14%", left: "82.5%", width: "13.5%", height: "35%" },
-    { name: "Stethacanthus", top: "54%", left: "5%", width: "13.5%", height: "35%" },
-    { name: "SqualicoraxK", top: "54%", left: "20.5%", width: "13.5%", height: "35%" }
-  ]
 
   return (
     <div style={{ 
@@ -42,7 +29,7 @@ export default function Home() {
         .ocean-title { font-family: 'Rye', serif !important; }
         .ocean-sub { font-family: 'Rye', serif !important; }
         
-        /* Forces your Explore Button Card to float on the right edge */
+        /* Positions your custom button card perfectly on the very right wall */
         .wiki-image-trigger {
           position: fixed;
           right: 0px; 
@@ -59,7 +46,7 @@ export default function Home() {
           transform: translateY(-50%) scale(1.05);
         }
 
-        /* Large Grid Dashboard wrapper layout */
+        /* Responsive popup container hosting your AnimalGrid artwork */
         .wiki-panel {
           width: 800px;
           background-color: #3b5ca8; 
@@ -96,44 +83,9 @@ export default function Home() {
           border-radius: 16px;
           display: block;
         }
-
-        /* Hitbox slots over your Grid drawing */
-        .interactive-slot-box {
-          position: absolute;
-          cursor: pointer;
-          border-radius: 12px;
-          transition: all 0.2s;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 6px;
-          box-sizing: border-box;
-        }
-        .interactive-slot-box:hover {
-          background-color: rgba(0, 255, 26, 0.15); 
-          outline: 3px solid #00FF1A;
-        }
-
-        .grid-sprite-img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-
-        .hud-name-banner {
-          margin-top: 1.5rem;
-          background-color: #2a437a;
-          padding: 1rem;
-          border-radius: 12px;
-          min-height: 55px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: 2px solid rgba(255,255,255,0.1);
-        }
       `}} />
 
-      {/* Explore Trigger Image Card */}
+      {/* Floating Explore trigger sitting on the right edge */}
       <img 
         src="/wiki-button.png" 
         alt="Animal Wiki Button" 
@@ -164,40 +116,13 @@ export default function Home() {
           </h2>
           
           <div className="grid-image-container">
-            {/* Renders your exact Grid image canvas */}
-            <img src="/Grid.png" alt="Animal Grid Layout" className="wiki-grid-graphic" />
-            
-            {/* Overlay loops your graphics inside the squares */}
-            {animalGridSlots.map((slot, i) => (
-              <div
-                key={i}
-                className="interactive-slot-box"
-                style={{
-                  top: slot.top,
-                  left: slot.left,
-                  width: slot.width,
-                  height: slot.height
-                }}
-                onMouseEnter={() => setHoveredAnimal(slot.name)}
-                onMouseLeave={() => setHoveredAnimal("")}
-              >
-                <img 
-                  src={slot.image} 
-                  alt={slot.name} 
-                  className="grid-sprite-img" 
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="hud-name-banner">
-            <p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.2rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#ffffff' }}>
-              {hoveredAnimal ? hoveredAnimal : "Hover over a square slot to scan creature metadata"}
-            </p>
+            {/* Swapped to your new filename AnimalGrid.png */}
+            <img src="/AnimalGrid.png" alt="Animal Grid Layout" className="wiki-grid-graphic" />
           </div>
         </div>
       </div>
 
+      {/* Main launch screen area */}
       <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>
           Prehistooio
