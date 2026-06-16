@@ -150,7 +150,6 @@ export default function Home() {
           display: block;
         }
 
-        /* CHANGED: Text font color locked to black and default text hidden until user types */
         .hidden-text-field {
           position: absolute;
           top: 50%;
@@ -160,7 +159,7 @@ export default function Home() {
           background: transparent;
           border: none;
           outline: none;
-          color: #333333 !important; /* Forces the typed text to look dark grey/black */
+          color: #333333 !important; 
           font-size: 1.1rem;
           font-family: sans-serif;
           text-align: center;
@@ -185,7 +184,26 @@ export default function Home() {
           height: auto;
           display: block;
         }
+
+        /* POSITION HANDLER FOR YOUR CUSTOM LEADERBOARD DRAWING */
+        .custom-leaderboard-graphic {
+          position: fixed;
+          left: 25px; /* Floats perfectly on the left wall to balance the wiki button */
+          top: 50%;
+          transform: translateY(-50%);
+          width: 240px; /* Adjust this width to scale your leaderboard card size */
+          height: auto;
+          z-index: 100;
+          filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.3));
+        }
       `}} />
+
+      {/* Renders your exact custom leaderboard artwork asset on the left edge */}
+      <img 
+        src="/leaderboard.png" 
+        alt="The Predator of Prehistoo" 
+        className="custom-leaderboard-graphic" 
+      />
 
       {/* Floating Explore trigger sitting on the right edge */}
       <img 
@@ -262,18 +280,14 @@ export default function Home() {
           }}
         />
 
-        {/* REINSTATED: Your official game sub-tagline positioned cleanly above your UI input box */}
         <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6', marginBottom: '0.5rem' }}>
           Fight your Prehistoric foes
         </p>
 
         {/* Pure Image-Driven Entry Form Area */}
         <form className="game-launch-form" onSubmit={handlePlayGame}>
-          
-          {/* Layer 1: The Input Box Drawing and hidden text area */}
           <div className="custom-input-wrapper">
             <img src="/input-box.png" alt="Username Input Frame" className="input-bg-graphic" />
-            {/* Note: placeholder text is removed here because your image asset already contains "Enter Nickname..." drawn into it! */}
             <input 
               type="text" 
               className="hidden-text-field" 
@@ -283,13 +297,4 @@ export default function Home() {
             />
           </div>
 
-          {/* Layer 2: Clickable Custom Play Button Graphic Drawing */}
           <button type="submit" className="custom-play-trigger-btn">
-            <img src="/play-button.png" alt="PLAY GAME" className="play-graphic-asset" />
-          </button>
-
-        </form>
-      </main>
-    </div>
-  )
-}
