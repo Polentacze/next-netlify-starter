@@ -6,15 +6,19 @@ export default function Home() {
   const [hoveredAnimal, setHoveredAnimal] = useState("")
   const [username, setUsername] = useState("")
   const [isPlaying, setIsPlaying] = useState(false)
-  const [playerPosition, setPlayerPosition] = useState({ x: 400, y: 300 })
+  
+  // World space tracking coordinates (Massive 3000x2000 map engine)
+  const [playerPosition, setPlayerPosition] = useState({ x: 1500, y: 1000 })
   const [playerRotation, setPlayerRotation] = useState(0)
-  const mousePos = useRef({ x: 400, y: 300 })
-  const arenaRef = useRef(null)
+  
+  // Real-time cursor coordinates relative to screen center
+  const mousePos = useRef({ x: 0, y: 0 })
+  const screenCenter = useRef({ x: 400, y: 300 })
 
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Welcome to the Prehistooio Testing Arena!" },
-    { user: "Apex_Meg", text: "Sacabambaspis looks so funny running around haha" }
+    { user: "System", text: "Welcome to the Prehistooio Infinite Trench Sandbox!" },
+    { user: "Apex_Meg", text: "Wow, the ocean feels absolutely massive now!" }
   ])
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
@@ -31,29 +35,50 @@ export default function Home() {
 
   useEffect(() => {
     if (!isPlaying) return
+
     const handleMouseMove = (e) => {
-      if (!arenaRef.current) return
-      const rect = arenaRef.current.getBoundingClientRect()
+      // Tracks cursor offset relative to the center of your gameplay viewport window
+      const rect = document.getElementById('game-viewport')?.getBoundingClientRect()
+      if (!rect) return
+      
+      screenCenter.current = { x: rect.width / 2, y: rect.height / 2 }
       mousePos.current = {
-        x: Math.max(40, Math.min(760, e.clientX - rect.left)),
-        y: Math.max(40, Math.min(540, e.clientY - rect.top))
+        x: e.clientX - rect.left - screenCenter.current.x,
+        y: e.clientY - rect.top - screenCenter.current.y
       }
     }
+
     const gameLoop = setInterval(() => {
       setPlayerPosition((p) => {
-        const dx = mousePos.current.x - p.x
-        const dy = mousePos.current.y - p.y
-        setPlayerRotation((Math.atan2(dy, dx) * (180 / Math.PI)) + 90)
-        return { x: p.x + dx * 0.12, y: p.y + dy * 0.12 }
+        // Calculate velocity direction based on vector angle relative to player center position
+        const angleRad = Math.atan2(mousePos.current.y, mousePos.current.x)
+        const distance = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
+        
+        // Speed dampening: don't move if the cursor is resting directly on top of the fish
+        const speedMultiplier = distance > 20 ? Math.min(distance * 0.05, 8) : 0
+        
+        const dx = Math.cos(angleRad) * speedMultiplier
+        const dy = Math.sin(angleRad) * speedMultiplier
+        
+        if (speedMultiplier > 0) {
+          setPlayerRotation(angleRad * (180 / Math.PI) + 90)
+        }
+
+        // Keep character securely boxed inside the huge 3000x2000 ocean border walls
+        return {
+          x: Math.max(50, Math.min(2950, p.x + dx)),
+          y: Math.max(50, Math.min(1950, p.y + dy))
+        }
       })
     }, 1000 / 60)
+
     window.addEventListener('mousemove', handleMouseMove)
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
       clearInterval(gameLoop)
     }
   }, [isPlaying])
-    return (
+  return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head>
         <title>Prehistooio</title>
@@ -76,19 +101,37 @@ export default function Home() {
         .input-wrap { position: relative; width: 320px; }
         .play-btn { background: none; border: none; cursor: pointer; width: 180px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
         .field-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; background: transparent; border: none; outline: none; color: #333333; font-size: 1.1rem; text-align: center; font-weight: bold; }
-        .arena-frame { width: 800px; height: 600px; background: #0b355e; border: 8px solid #2a437a; border-radius: 24px; position: relative; overflow: hidden; cursor: crosshair; }
+        
+        /* The Camera Viewport Frame */
+        .arena-viewport { width: 800px; height: 600px; background: #0b355e; border: 8px solid #2a437a; border-radius: 24px; position: relative; overflow: hidden; cursor: crosshair; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        
+        /* INFINITE MAP WORLD CONTEXT: The giant ocean background plane canvas */
+        .infinite-ocean-world {
+          position: absolute;
+          width: 3000px;
+          height: 2000px;
+          background-color: #0b355e;
+          background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.04) 2px, transparent 2px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.04) 2px, transparent 2px);
+          background-size: 100px 100px; /* Repeating grid box pattern lines */
+          transition: transform 0.1s ease-out;
+        }
+
         .leave-btn { position: absolute; top: 15px; right: 15px; background: #ff4d4d; border: 2px solid white; color: white; padding: 0.5rem 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; z-index: 200; }
         .player-fish-sprite { width: 100%; height: auto; display: block; background: transparent !important; }
-        .chat-container-hud { position: absolute; bottom: 15px; left: 15px; width: 250px; height: 160px; background-color: rgba(42, 67, 122, 0.85); border: 3px solid #2a437a; border-radius: 12px; display: flex; flex-direction: column; padding: 8px; z-index: 150; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .chat-container-hud { position: absolute; bottom: 15px; left: 15px; width: 250px; height: 160px; background: rgba(42, 67, 122, 0.85); border: 3px solid #2a437a; border-radius: 12px; display: flex; flex-direction: column; padding: 8px; z-index: 150; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .chat-scroll-view { flex-grow: 1; overflow-y: auto; text-align: left; font-family: sans-serif; font-size: 0.8rem; margin-bottom: 6px; padding-right: 4px; }
         .chat-msg-row { margin-bottom: 4px; line-height: 1.3; word-break: break-word; }
         .chat-input-bar-inner { width: 100%; background-color: #104E8B; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 4px 8px; color: white; font-size: 0.8rem; outline: none; }
         .chat-input-bar-inner:focus { border-color: #00FF1A; }
       `}} />
       {isPlaying ? (
-        <div className="arena-frame" ref={arenaRef}>
+        <div className="arena-viewport" id="game-viewport" ref={arenaRef}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.6, textAlign: 'left', zIndex: 10 }}>
-            <strong>PREHISTOOIO ARENA v0.4</strong><br />Move cursor to swim smoothly
+            <strong>PREHISTOOIO ENDLESS SERVER v0.5</strong><br />
+            Position Coordinates: X: {Math.round(playerPosition.x)} Y: {Math.round(playerPosition.y)}<br />
+            Steer mouse further away from center to swim faster!
           </div>
           <button className="leave-btn" onClick={() => setIsPlaying(false)}>Leave Map</button>
 
@@ -103,10 +146,27 @@ export default function Home() {
             </form>
           </div>
           
-          <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none' }}>
-            <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
-            <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear' }}>
-              <img src="/sacabambaspis.png" alt="Fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
+          {/* CAMERA MOVEMENT WRAPPER: Slides the map grid around the static player position focal lens center point */}
+          <div className="infinite-ocean-world" style={{
+            transform: `translate(${400 - playerPosition.x}px, ${300 - playerPosition.y}px)`
+          }}>
+            {/* The actual fish element is anchored relative to the shifting grid map plane coordinates layer */}
+            <div style={{ 
+              position: 'absolute', 
+              top: playerPosition.y, 
+              left: playerPosition.x, 
+              transform: 'translate(-50%, -50%)', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center', 
+              width: '90px'
+            }}>
+              <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', whiteSpace: 'nowrap' }}>
+                {username || "Guest"}
+              </span>
+              <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear' }}>
+                <img src="/sacabambaspis.png" alt="Fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
+              </div>
             </div>
           </div>
         </div>
