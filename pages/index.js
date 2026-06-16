@@ -306,12 +306,123 @@ export default function Home() {
         </div>
       ) : (
         <>
+               {isPlaying ? (
+        <div className="arena-viewport" ref={viewRef}>
+          <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
+            <strong>PREHISTOOIO ARENA v0.7</strong><br />
+            <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span><br />
+            Coordinates: X: {Math.round(playerPosition.x)} Y: {Math.round(playerPosition.y)}
+          </div>
+          
+          <button className="leave-btn" style={{ top: 'auto', bottom: '185px', right: '15px' }} onClick={() => { setIsPlaying(false); setScore(0); }}>Leave Map</button>
+
+          {/* DYNAMIC LEADERBOARD TEMPLATE LAYER INTERFACE */}
+          <div className="hud-leaderboard-frame-container">
+            <div style={{ position: 'relative', width: '100%' }}>
+              {/* FIXED: Linked directly to your new game-board.png file */}
+              <img src="/game-board.png" alt="Leaderboard Scale" className="leaderboard-template-asset-graphic" onError={(e) => { e.target.src = "/leaderboard.png" }} />
+              <div className="leaderboard-absolute-text-overlay-layer">
+                {leaderboard.map((player, rank) => {
+                  let rankColor = "#CCCCCC" 
+                  if (rank === 0) rankColor = "#7A5E00" 
+                  if (rank === 1) rankColor = "#444444" 
+                  if (rank === 2) rankColor = "#5C1D1D" 
+                  if (player.isMe) rankColor = "#00FF1A" 
+
+                  return (
+                    
+                      <span>{(rank + 1) + ". " + player.name}</span>
+                      <span>{player.score}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="chat-container-hud" onClick={(e) => e.stopPropagation()}>
+            <div className="chat-scroll-view">
+              {chatMessages.map((m, i) => (
+                <div key={i} className="chat-msg-row"><strong style={{ color: m.user === "System" ? "#00FF1A" : "#FFD700" }}>{m.user}:</strong> {m.text}</div>
+              ))}
+            </div>
+            <form onSubmit={handleSendChat}>
+              <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
+            </form>
+          </div>
+          
+          <div className="infinite-ocean-world" style={{
+            transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)'
+          }}>
+            <div className="gravel-seafloor-bed" />
+
+            {propsList.kelp.map((k, idx) => {
+              return (
+                <img 
+                  key={'k_' + idx}
+                  src="/kelp.png"
+                  alt="Sea Kelp"
+                  className="scrolling-kelp-prop"
+                  style={{ top: k.y, left: k.x, height: k.h }}
+                  onError={(e) => { e.target.style.display = 'none' }}
+                />
+              )
+            })}
+
+            {propsList.volcano && (
+              <img 
+                src="/volcano.png"
+                alt="Volcano Vent"
+                className="scrolling-volcano-prop"
+                style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }}
+                onError={(e) => { e.target.style.display = 'none' }}
+              />
+            )}
+
+            {propsList.bigRock && (
+              <img 
+                src="/big-rock.png"
+                alt="Big Rock"
+                className="scrolling-rock-prop"
+                style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }}
+                onError={(e) => { e.target.style.display = 'none' }}
+              />
+            )}
+
+            {foodPellets.map((pellet) => !pellet.isEaten && (
+              <img 
+                key={pellet.id}
+                src={pellet.src}
+                alt="Ocean Plankton"
+                className="custom-food-sprite-pellet"
+                style={{ top: pellet.y, left: pellet.x }}
+                onError={(e) => { e.target.src = "/food.png" }}
+              />
+            ))}
+
+            <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none', backgroundColor: 'transparent', background: 'transparent' }}>
+              <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', whiteSpace: 'nowrap' }}>
+                {username || "Guest"}
+              </span>
+              <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}>
+                <img 
+                  src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : "/sacabambaspis.png"} 
+                  alt="Player Creature" 
+                  className="player-fish-sprite" 
+                  onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
           <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
           <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
           <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
             <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
-              <button className="close-btn" onClick={() => setIsWikiOpen(true)}>Close X</button>
+              <button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
               <h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2>
               <div className="grid-container">
                 <img src="/AnimalGrid.png" alt="Grid" className="grid-img" />
@@ -340,6 +451,3 @@ export default function Home() {
           </main>
         </>
       )}
-    </div>
-  )
-}
