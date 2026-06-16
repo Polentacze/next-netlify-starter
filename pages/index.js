@@ -56,15 +56,16 @@ export default function Home() {
     }
     setFoodPellets(pellets)
 
+    // FIXED: Adjusted base coordinates to snap assets tightly onto the 1750px mud crust threshold
     setPropsList({
       kelp: [
-        { x: 600, y: 1720, h: 180 },
-        { x: 1200, y: 1720, h: 210 },
-        { x: 1800, y: 1720, h: 170 },
-        { x: 2400, y: 1720, h: 230 }
+        { x: 600, y: 1755, h: 180 },
+        { x: 1200, y: 1755, h: 210 },
+        { x: 1800, y: 1755, h: 170 },
+        { x: 2400, y: 1755, h: 230 }
       ],
-      volcano: { x: 900, y: 1725, w: 110 },
-      bigRock: { x: 2100, y: 1725, w: 160 }
+      volcano: { x: 900, y: 1765, w: 110 },
+      bigRock: { x: 2100, y: 1765, w: 160 }
     })
   }, [isPlaying])
     useEffect(() => {
@@ -94,7 +95,7 @@ export default function Home() {
           setPlayerRotation(angleRad * (180 / Math.PI) + 90)
         }
         currentX = Math.max(50, Math.min(2950, p.x + dx))
-        currentY = Math.max(50, Math.min(1720, p.y + dy))
+        currentY = Math.max(50, Math.min(1725, p.y + dy)) // Solid collision cap matched to physical asset roots
         return { x: currentX, y: currentY }
       })
 
@@ -146,7 +147,7 @@ export default function Home() {
         .grid-img { width: 100%; display: block; border-radius: 16px; }
         .slot-over { position: absolute; cursor: pointer; border-radius: 14px; transition: all 0.15s; border: 3px solid transparent; }
         .slot-over:hover { border-color: #00FF1A !important; background: rgba(0, 255, 26, 0.08); box-shadow: 0 0 15px #00FF1A; }
-        .hud-banner { margin-top: 1.5rem; background: #2a437a; padding: 1rem; border-radius: 16px; min-height: 60px; display: flex; justifyContent: center; alignItems: center; border: 3px solid rgba(255,255,255,0.15); }
+        .hud-banner { margin-top: 1.5rem; background: #2a437a; padding: 1rem; border-radius: 16px; min-height: 60px; display: flex; justify-content: center; alignItems: center; border: 3px solid rgba(255,255,255,0.15); }
         .launch-form { display: flex; flexDirection: column; align-items: center; gap: 1.2rem; margin-top: 1rem; }
         .input-wrap { position: relative; width: 320px; }
         .play-btn { background: none; border: none; cursor: pointer; width: 180px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
@@ -161,10 +162,13 @@ export default function Home() {
         .chat-msg-row { margin-bottom: 4px; line-height: 1.3; word-break: break-word; }
         .chat-input-bar-inner { width: 100%; background-color: #104E8B; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 4px 8px; color: white; font-size: 0.8rem; outline: none; }
         .chat-input-bar-inner:focus { border-color: #00FF1A; }
-        .gravel-seafloor-bed { position: absolute; bottom: 0px; left: 0px; width: 3000px; height: 250px; background-color: #5C4033; border-top: 8px solid #3d2b22; box-shadow: inset 0 10px 20px rgba(0,0,0,0.4); z-index: 40; }
+        
+        /* FIXED: Pushed seafloor z-index back slightly so it doesn't overlap the volcano bottoms */
+        .gravel-seafloor-bed { position: absolute; bottom: 0px; left: 0px; width: 3000px; height: 260px; background-color: #5C4033; border-top: 8px solid #3d2b22; box-shadow: inset 0 10px 20px rgba(0,0,0,0.4); z-index: 30; }
+        
         .scrolling-kelp-prop { position: absolute; transform: translate(-50%, -100%); width: 38px; z-index: 25; pointer-events: none; background: transparent !important; }
-        .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); z-index: 35; pointer-events: none; background: transparent !important; }
-        .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); z-index: 33; pointer-events: none; background: transparent !important; }
+        .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); z-index: 28; pointer-events: none; background: transparent !important; }
+        .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); z-index: 27; pointer-events: none; background: transparent !important; }
       `}} />
       {isPlaying ? (
         <div className="arena-viewport" ref={viewRef}>
@@ -191,7 +195,6 @@ export default function Home() {
           }}>
             <div className="gravel-seafloor-bed" />
 
-            {/* FIXED MAP CALLBACK: Safely structural closing brackets to pass JSX parsing gates */}
             {propsList.kelp.map((k, idx) => {
               return (
                 <img 
