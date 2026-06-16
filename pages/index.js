@@ -130,19 +130,17 @@ export default function Home() {
           border: 3px solid rgba(255,255,255,0.15);
         }
 
-        /* CONTAINER LAYOUT FOR YOUR CUSTOM DRAWINGS */
         .game-launch-form {
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 1.2rem;
-          margin-top: 1.5rem;
+          margin-top: 1rem;
         }
 
-        /* Wraps your input-box image and layers a real text box right over it */
         .custom-input-wrapper {
           position: relative;
-          width: 320px; /* Adjust this width to scale your input-box drawing */
+          width: 320px; 
           height: auto;
         }
 
@@ -152,35 +150,34 @@ export default function Home() {
           display: block;
         }
 
-        /* Completely transparent text bar sitting perfectly on top of your drawing */
+        /* CHANGED: Text font color locked to black and default text hidden until user types */
         .hidden-text-field {
           position: absolute;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 80%; /* Keeps text centered within your graphic edges */
+          width: 80%; 
           background: transparent;
           border: none;
           outline: none;
-          color: white;
+          color: #333333 !important; /* Forces the typed text to look dark grey/black */
           font-size: 1.1rem;
           font-family: sans-serif;
           text-align: center;
           font-weight: bold;
         }
 
-        /* Invisible clickable button wrapper over your play-button drawing */
         .custom-play-trigger-btn {
           background: none;
           border: none;
           padding: 0;
           cursor: pointer;
-          width: 200px; /* Adjust this width to scale your play-button drawing */
+          width: 200px; 
           transition: transform 0.2s ease;
           filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
         }
         .custom-play-trigger-btn:hover {
-          transform: scale(1.05); /* Adds a cool expanding pop when hovering! */
+          transform: scale(1.05); 
         }
         
         .play-graphic-asset {
@@ -265,16 +262,21 @@ export default function Home() {
           }}
         />
 
+        {/* REINSTATED: Your official game sub-tagline positioned cleanly above your UI input box */}
+        <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6', marginBottom: '0.5rem' }}>
+          Fight your Prehistoric foes
+        </p>
+
         {/* Pure Image-Driven Entry Form Area */}
         <form className="game-launch-form" onSubmit={handlePlayGame}>
           
           {/* Layer 1: The Input Box Drawing and hidden text area */}
           <div className="custom-input-wrapper">
             <img src="/input-box.png" alt="Username Input Frame" className="input-bg-graphic" />
+            {/* Note: placeholder text is removed here because your image asset already contains "Enter Nickname..." drawn into it! */}
             <input 
               type="text" 
               className="hidden-text-field" 
-              placeholder="Enter Nickname..." 
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               maxLength={14}
