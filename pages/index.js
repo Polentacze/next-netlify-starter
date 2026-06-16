@@ -5,10 +5,11 @@ export default function Home() {
   const [currentSkin, setCurrentSkin] = useState('/prehistoric-skeleton.png')
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
+  
+  // Game input tracking variables
+  const [username, setUsername] = useState("")
 
-  // Perfectly spaced grid coordinates to align directly over your drawings
-  const animalGridSlots = [
-  // Calibrated layout coordinates to lock onto your image columns
+  // Kept your wiki board coordinates safe for later
   const animalGridSlots = [
     { name: "Otodus megalodon", top: "16%", left: "13.5%", width: "10.5%", height: "28%" },
     { name: "Shastasaurus pacificus", top: "16%", left: "24.7%", width: "10.5%", height: "28%" },
@@ -19,6 +20,12 @@ export default function Home() {
     { name: "Stethacanthus altonensis", top: "48%", left: "13.5%", width: "10.5%", height: "28%" },
     { name: "Squalicorax pristodontus", top: "48%", left: "24.7%", width: "10.5%", height: "28%" }
   ]
+
+  const handlePlayGame = (e) => {
+    e.preventDefault()
+    alert(`Connecting as "${username || 'Prehistoo_Fish'}"... Entering the arena!`)
+  }
+
   return (
     <div style={{ 
       textAlign: 'center', 
@@ -96,7 +103,6 @@ export default function Home() {
           display: block;
         }
 
-        /* Wiped out the dark background completely to make it 100% transparent! */
         .qol-slot-overlay {
           position: absolute;
           cursor: pointer;
@@ -106,7 +112,6 @@ export default function Home() {
           border: 3px solid transparent;
           background-color: transparent !important; 
         }
-        
         .qol-slot-overlay:hover {
           border-color: #00FF1A !important;
           background-color: rgba(0, 255, 26, 0.08) !important;
@@ -124,8 +129,68 @@ export default function Home() {
           align-items: center;
           border: 3px solid rgba(255,255,255,0.15);
         }
+
+        /* CONTAINER LAYOUT FOR YOUR CUSTOM DRAWINGS */
+        .game-launch-form {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1.2rem;
+          margin-top: 1.5rem;
+        }
+
+        /* Wraps your input-box image and layers a real text box right over it */
+        .custom-input-wrapper {
+          position: relative;
+          width: 320px; /* Adjust this width to scale your input-box drawing */
+          height: auto;
+        }
+
+        .input-bg-graphic {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+
+        /* Completely transparent text bar sitting perfectly on top of your drawing */
+        .hidden-text-field {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 80%; /* Keeps text centered within your graphic edges */
+          background: transparent;
+          border: none;
+          outline: none;
+          color: white;
+          font-size: 1.1rem;
+          font-family: sans-serif;
+          text-align: center;
+          font-weight: bold;
+        }
+
+        /* Invisible clickable button wrapper over your play-button drawing */
+        .custom-play-trigger-btn {
+          background: none;
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          width: 200px; /* Adjust this width to scale your play-button drawing */
+          transition: transform 0.2s ease;
+          filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+        }
+        .custom-play-trigger-btn:hover {
+          transform: scale(1.05); /* Adds a cool expanding pop when hovering! */
+        }
+        
+        .play-graphic-asset {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
       `}} />
 
+      {/* Floating Explore trigger sitting on the right edge */}
       <img 
         src="/wiki-button.png" 
         alt="Animal Wiki Button" 
@@ -133,6 +198,7 @@ export default function Home() {
         onClick={() => setIsWikiOpen(true)}
       />
 
+      {/* Wiki Modal Backdrop Box */}
       <div 
         onClick={() => setIsWikiOpen(false)}
         style={{
@@ -181,26 +247,46 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Main Home Launch Screen View */}
       <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>
           Prehistooio
         </h1>
-        <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '2.5rem' }}>
+        <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>
           Made by Polentacze - Inspired by Deeeepio
         </p>
         
         <img 
           src={currentSkin} 
           alt="Prehistoric Skeleton Model" 
-          style={{ width: '160px', height: 'auto', marginBottom: '2.5rem', borderRadius: '12px' }} 
+          style={{ width: '160px', height: 'auto', marginBottom: '1.5rem', borderRadius: '12px' }} 
           onError={(e) => {
             e.target.src = "/deep-prehistoo.png";
           }}
         />
-        
-        <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6' }}>
-          Fight your Prehistoric foes
-        </p>
+
+        {/* Pure Image-Driven Entry Form Area */}
+        <form className="game-launch-form" onSubmit={handlePlayGame}>
+          
+          {/* Layer 1: The Input Box Drawing and hidden text area */}
+          <div className="custom-input-wrapper">
+            <img src="/input-box.png" alt="Username Input Frame" className="input-bg-graphic" />
+            <input 
+              type="text" 
+              className="hidden-text-field" 
+              placeholder="Enter Nickname..." 
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              maxLength={14}
+            />
+          </div>
+
+          {/* Layer 2: Clickable Custom Play Button Graphic Drawing */}
+          <button type="submit" className="custom-play-trigger-btn">
+            <img src="/play-button.png" alt="PLAY GAME" className="play-graphic-asset" />
+          </button>
+
+        </form>
       </main>
     </div>
   )
