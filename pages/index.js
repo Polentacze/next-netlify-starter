@@ -1,15 +1,13 @@
 import Head from 'next/head'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function Home() {
-  const [currentSkin, setCurrentSkin] = useState('/prehistoric-skeleton.png')
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
-  
-  // Game input tracking variables
   const [username, setUsername] = useState("")
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [playerPosition, setPlayerPosition] = useState({ x: 300, y: 300 })
 
-  // Kept your wiki board coordinates safe for later
   const animalGridSlots = [
     { name: "Otodus megalodon", top: "16%", left: "13.5%", width: "10.5%", height: "28%" },
     { name: "Shastasaurus pacificus", top: "16%", left: "24.7%", width: "10.5%", height: "28%" },
@@ -21,10 +19,27 @@ export default function Home() {
     { name: "Squalicorax pristodontus", top: "48%", left: "24.7%", width: "10.5%", height: "28%" }
   ]
 
-  const handlePlayGame = (e) => {
-    e.preventDefault()
-    alert(`Connecting as "${username || 'Prehistoo_Fish'}"... Entering the arena!`)
-  }
+  useEffect(() => {
+    if (!isPlaying) return
+
+    const handleKeyDown = (e) => {
+      const step = 15
+      setPlayerPosition((prev) => {
+        let newX = prev.x
+        let newY = prev.y
+        
+        if (e.key === 'ArrowUp' || e.key === 'w') newY = Math.max(80, prev.y - step)
+        if (e.key === 'ArrowDown' || e.key === 's') newY = Math.min(520, prev.y + step)
+        if (e.key === 'ArrowLeft' || e.key === 'a') newX = Math.max(50, prev.x - step)
+        if (e.key === 'ArrowRight' || e.key === 'd') newX = Math.min(750, prev.x + step)
+        
+        return { x: newX, y: newY }
+      })
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isPlaying])
 
   return (
     <div style={{ 
@@ -38,7 +53,8 @@ export default function Home() {
       alignItems: 'center',
       backgroundColor: '#104E8B',
       position: 'relative',
-      overflowX: 'hidden'
+      overflowX: 'hidden',
+      userSelect: 'none'
     }}>
       <Head>
         <title>Prehistooio</title>
@@ -61,9 +77,6 @@ export default function Home() {
           z-index: 100;
           transition: transform 0.2s ease;
           filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.3));
-        }
-        .wiki-image-trigger:hover {
-          transform: translateY(-50%) scale(1.05);
         }
 
         .wiki-panel {
@@ -178,14 +191,7 @@ export default function Home() {
         .custom-play-trigger-btn:hover {
           transform: scale(1.05); 
         }
-        
-        .play-graphic-asset {
-          width: 100%;
-          height: auto;
-          display: block;
-        }
 
-        /* POSITION HANDLER FOR YOUR CUSTOM LEADERBOARD DRAWING */
         .custom-leaderboard-graphic {
           position: fixed;
           left: 25px; 
@@ -194,114 +200,114 @@ export default function Home() {
           width: 240px; 
           height: auto;
           z-index: 100;
-          filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.3));
+        }
+
+        .arena-map-frame {
+          width: 800px;
+          height: 600px;
+          background-color: #0b355e; 
+          border: 8px solid #2a437a;
+          border-radius: 24px;
+          position: relative;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+          overflow: hidden;
+        }
+        .hud-overlay-text {
+          position: absolute;
+          top: 15px;
+          left: 20px;
+          font-family: sans-serif;
+          font-size: 0.9rem;
+          opacity: 0.6;
+          text-align: left;
+        }
+        .disconnect-btn {
+          position: absolute;
+          top: 15px;
+          right: 20px;
+          background-color: #ff4d4d;
+          border: none;
+          color: white;
+          padding: 0.4rem 0.8rem;
+          font-weight: bold;
+          border-radius: 6px;
+          cursor: pointer;
         }
       `}} />
 
-      {/* Renders your custom leaderboard artwork asset on the left edge */}
-      <img 
-        src="/leaderboard.png" 
-        alt="The Predator of Prehistoo" 
-        className="custom-leaderboard-graphic" 
-      />
-
-      {/* Floating Explore trigger sitting on the right edge */}
-      <img 
-        src="/wiki-button.png" 
-        alt="Animal Wiki Button" 
-        className="wiki-image-trigger" 
-        onClick={() => setIsWikiOpen(true)}
-      />
-
-      {/* Wiki Modal Backdrop Box */}
-      <div 
-        onClick={() => setIsWikiOpen(false)}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          backgroundColor: 'rgba(0, 0, 0, 0.6)',
-          display: isWikiOpen ? 'flex' : 'none', 
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 105
-        }}
-      >
-        <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
-          <button className="close-wiki-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
-          <h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>
-            Animal Wiki
-          </h2>
+      {isPlaying ? (
+        <div className="arena-map-frame">
+          <div className="hud-overlay-text">
+            <strong>PREHISTOOIO SANDBOX SERVER v0.1</strong><br/>
+            Player Handle: {username || "Guest_Fish"}<br/>
+            Controls: Use <strong>W, A, S, D</strong> or <strong>Arrow Keys</strong> to swim
+          </div>
           
-          <div className="grid-image-container">
-            <img src="/AnimalGrid.png" alt="Animal Grid Layout" className="wiki-grid-graphic" />
+          <button className="disconnect-btn" onClick={() => setIsPlaying(false)}>
+            Leave Map
+          </button>
+
+          <div style={{
+            position: 'absolute',
+            top: playerPosition.y,
+            left: playerPosition.x,
+            transition: 'all 0.1s linear',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '90px'
+          }}>
+            <span style={{
+              backgroundColor: 'rgba(0,0,0,0.6)',
+              padding: '2px 8px',
+              borderRadius: '4px',
+              fontSize: '0.75rem',
+              fontWeight: 'bold',
+              fontFamily: 'sans-serif',
+              marginBottom: '5px',
+              whiteSpace: 'nowrap',
+              border: '1px solid #00FF1A'
+            }}>
+              sacabambaspis ({username || "Guest"})
+            </span>
             
-            {animalGridSlots.map((slot, i) => (
-              <div
-                key={i}
-                className="qol-slot-overlay"
-                style={{
-                  top: slot.top,
-                  left: slot.left,
-                  width: slot.width,
-                  height: slot.height
-                }}
-                onMouseEnter={() => setHoveredAnimal(slot.name)}
-                onMouseLeave={() => setHoveredAnimal("")}
-              />
-            ))}
-          </div>
-
-          <div className="species-hud-display">
-            <p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#ffffff', fontStyle: hoveredAnimal ? 'italic' : 'normal' }}>
-              {hoveredAnimal ? hoveredAnimal : "Hover over a creature square to analyze scientific metadata"}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Home Launch Screen View */}
-      <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>
-          Prehistooio
-        </h1>
-        <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>
-          Made by Polentacze - Inspired by Deeeepio
-        </p>
-        
-        <img 
-          src={currentSkin} 
-          alt="Prehistoric Skeleton Model" 
-          style={{ width: '160px', height: 'auto', marginBottom: '1.5rem', borderRadius: '12px' }} 
-          onError={(e) => {
-            e.target.src = "/deep-prehistoo.png";
-          }}
-        />
-
-        <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6', marginBottom: '0.5rem' }}>
-          Fight your Prehistoric foes
-        </p>
-
-        {/* Pure Image-Driven Entry Form Area */}
-        <form className="game-launch-form" onSubmit={handlePlayGame}>
-          <div className="custom-input-wrapper">
-            <img src="/input-box.png" alt="Username Input Frame" className="input-bg-graphic" />
-            <input 
-              type="text" 
-              className="hidden-text-field" 
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              maxLength={14}
+            <img 
+              src="/sacabambaspis.png" 
+              alt="Sacabambaspis Test Model" 
+              style={{ width: '100%', height: 'auto' }}
+              onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }}
             />
           </div>
+        </div>
+      ) : (
+        <>
+          <img 
+            src="/leaderboard.png" 
+            alt="The Predator of Prehistoo" 
+            className="custom-leaderboard-graphic" 
+          />
 
-          <button type="submit" className="custom-play-trigger-btn">
-            <img src="/play-button.png" alt="PLAY GAME" className="play-graphic-asset" />
-          </button>
-        </form>
-      </main>
-    </div>
-  )
-}
+          <img 
+            src="/wiki-button.png" 
+            alt="Animal Wiki Button" 
+            className="wiki-image-trigger" 
+            onClick={() => setIsWikiOpen(true)}
+          />
+
+          <div 
+            onClick={() => setIsWikiOpen(false)}
+            style={{
+              position: 'fixed',
+              top: 0, left: 0, width: '100vw', height: '100vh',
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              display: isWikiOpen ? 'flex' : 'none', 
+              justifyContent: 'center', alignItems: 'center', zIndex: 105
+            }}
+          >
+            <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
+              <button className="close-wiki-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
+              <h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2>
+              <div className="grid-image-container">
+                <img src="/AnimalGrid.png" alt="Animal Grid Layout" className="wiki-grid-graphic" />
+                {animalGridSlots.map((slot, i) => (
+<div key={i} className="qol-slot-overlay" style={{ top: slot.top, left: slot.left, width: slot.width, height: slot.height }} onMouseEnter={() => setHoveredAnimal(slot.name)} onMouseLeave={() => setHoveredAnimal("")} />))}<p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#ffffff', fontStyle: hoveredAnimal ? 'italic' : 'normal' }}>{hoveredAnimal ? hoveredAnimal : "Hover over a creature square to analyze scientific metadata"}<main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}><h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio<p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio<img src="/prehistoric-skeleton.png" alt="Prehistoric Skeleton Model" style={{ width: '160px', height: 'auto', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} /><p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6', marginBottom: '0.5rem' }}>Fight your Prehistoric foes<form className="game-launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}><input type="text" className="hidden-text-field" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} /></>)})}
