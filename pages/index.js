@@ -20,7 +20,7 @@ export default function Home() {
   const [chatMessages, setChatMessages] = useState([
     { user: "System", text: "Endless Food Matrix loaded. Gather clusters to rank up!" }
   ])
-  const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
+    const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
     { t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" },
     { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }
@@ -56,7 +56,6 @@ export default function Home() {
     }
     setFoodPellets(pellets)
 
-    // FIXED: Pushed the big rock position to 1755px so it matches the volcano grounding perfectly
     setPropsList({
       kelp: [
         { x: 600, y: 1755, h: 180 },
@@ -68,7 +67,7 @@ export default function Home() {
       bigRock: { x: 2100, y: 1755, w: 160 }
     })
   }, [isPlaying])
-    useEffect(() => {
+  useEffect(() => {
     if (!isPlaying) return
 
     const handleMouseMove = (e) => {
@@ -165,15 +164,7 @@ export default function Home() {
         .gravel-seafloor-bed { position: absolute; bottom: 0px; left: 0px; width: 3000px; height: 260px; background-color: #5C4033; border-top: 8px solid #3d2b22; box-shadow: inset 0 10px 20px rgba(0,0,0,0.4); z-index: 30; }
         .scrolling-kelp-prop { position: absolute; transform: translate(-50%, -100%); width: 38px; z-index: 25; pointer-events: none; background: transparent !important; }
         .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); z-index: 28; pointer-events: none; background: transparent !important; }
-        
-        /* FIXED: Pushed layout origin down from top-left to bottom-anchor baseline */
-        .scrolling-rock-prop { 
-          position: absolute; 
-          transform: translate(-50%, -100%); 
-          z-index: 27; 
-          pointer-events: none; 
-          background: transparent !important; 
-        }
+        .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); z-index: 27; pointer-events: none; background: transparent !important; }
       `}} />
       {isPlaying ? (
         <div className="arena-viewport" ref={viewRef}>
@@ -223,13 +214,13 @@ export default function Home() {
               />
             )}
 
-            {/* FIXED: Applied bottom-alignment logic matching your top-anchored layout rules */}
+            {/* DECISIVE COMPENSATOR PIXELS: Pushes the big rock asset fully into the mud layer crust line */}
             {propsList.bigRock && (
               <img 
                 src="/big-rock.png"
                 alt="Big Rock"
                 className="scrolling-rock-prop"
-                style={{ top: propsList.bigRock.y + 15, left: propsList.bigRock.x, width: propsList.bigRock.w }}
+                style={{ top: propsList.bigRock.y + 55, left: propsList.bigRock.x, width: propsList.bigRock.w }}
                 onError={(e) => { e.target.style.display = 'none' }}
               />
             )}
