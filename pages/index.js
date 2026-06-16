@@ -6,20 +6,19 @@ export default function Home() {
   const [hoveredAnimal, setHoveredAnimal] = useState("")
   const [username, setUsername] = useState("")
   const [isPlaying, setIsPlaying] = useState(false)
-  
-  // Massive 3000x2000 ocean world space tracking coordinates
   const [playerPosition, setPlayerPosition] = useState({ x: 1500, y: 1000 })
   const [playerRotation, setPlayerRotation] = useState(0)
-  
   const mousePos = useRef({ x: 0, y: 0 })
   const viewRef = useRef(null)
 
+  const [score, setScore] = useState(0)
+  const [foodPellets, setFoodPellets] = useState([])
+
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Welcome to the Prehistooio Infinite Trench Sandbox!" },
-    { user: "Apex_Meg", text: "Wow, the ocean feels absolutely massive now!" }
+    { user: "System", text: "Endless Food Matrix loaded. Gather clusters to rank up!" }
   ])
-    const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
+  const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
     { t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" },
     { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }
@@ -32,28 +31,47 @@ export default function Home() {
     setChatInput("")
   }
 
+  const getRandomCoord = () => ({
+    x: Math.floor(Math.random() * 2800) + 100,
+    y: Math.floor(Math.random() * 1800) + 100
+  })
+
   useEffect(() => {
+    if (!isPlaying) return
+    const pellets = []
+    for (let c = 0; c < 8; c++) {
+      const centerX = Math.floor(Math.random() * 2600) + 200
+      const centerY = Math.floor(Math.random() * 1600) + 200
+      for (let i = 0; i < 6; i++) {
+        pellets.push({
+          id: c + "_" + i,
+          x: centerX + (Math.random() * 120 - 60),
+          y: centerY + (Math.random() * 120 - 60),
+          isEaten: false
+        })
+      }
+    }
+    setFoodPellets(pellets)
+  }, [isPlaying])
+    useEffect(() => {
     if (!isPlaying) return
 
     const handleMouseMove = (e) => {
       if (!viewRef.current) return
       const rect = viewRef.current.getBoundingClientRect()
-      
-      // Calculates mouse offset values relative to center coordinates safely
-      const midX = rect.width / 2
-      const midY = rect.height / 2
       mousePos.current = {
-        x: e.clientX - rect.left - midX,
-        y: e.clientY - rect.top - midY
+        x: e.clientX - rect.left - (rect.width / 2),
+        y: e.clientY - rect.top - (rect.height / 2)
       }
     }
 
     const gameLoop = setInterval(() => {
+      let currentX = playerPosition.x
+      let currentY = playerPosition.y
+
       setPlayerPosition((p) => {
         const angleRad = Math.atan2(mousePos.current.y, mousePos.current.x)
         const distance = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
-        
-        // Velocity acceleration mapping calculation
         const speedMultiplier = distance > 25 ? Math.min(distance * 0.05, 8) : 0
         const dx = Math.cos(angleRad) * speedMultiplier
         const dy = Math.sin(angleRad) * speedMultiplier
@@ -61,12 +79,33 @@ export default function Home() {
         if (speedMultiplier > 0) {
           setPlayerRotation(angleRad * (180 / Math.PI) + 90)
         }
-
-        return {
-          x: Math.max(50, Math.min(2950, p.x + dx)),
-          y: Math.max(50, Math.min(1950, p.y + dy))
-        }
+        currentX = Math.max(50, Math.min(2950, p.x + dx))
+        currentY = Math.max(50, Math.min(1950, p.y + dy))
+        return { x: currentX, y: currentY }
       })
+
+      setFoodPellets((prevPellets) =>
+        prevPellets.map((pellet) => {
+          if (pellet.isEaten) return pellet
+          const distanceToFood = Math.sqrt((currentX - pellet.x) ** 2 + (currentY - pellet.y) ** 2)
+          if (distanceToFood < 30) {
+            setScore((s) => s + 100)
+            setTimeout(() => {
+              setFoodPellets((currentPellets) =>
+                currentPellets.map((p) => {
+                  if (p.id === pellet.id) {
+                    const newLoc = getRandomCoord()
+                    return { ...p, x: newLoc.x, y: newLoc.y, isEaten: false }
+                  }
+                  return p
+                })
+              )
+            }, 4000)
+            return { ...pellet, isEaten: true }
+          }
+          return pellet
+        })
+      )
     }, 1000 / 60)
 
     window.addEventListener('mousemove', handleMouseMove)
@@ -74,7 +113,7 @@ export default function Home() {
       window.removeEventListener('mousemove', handleMouseMove)
       clearInterval(gameLoop)
     }
-  }, [isPlaying])
+  }, [isPlaying, playerPosition, playerRotation])
     return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head>
@@ -98,21 +137,8 @@ export default function Home() {
         .input-wrap { position: relative; width: 320px; }
         .play-btn { background: none; border: none; cursor: pointer; width: 180px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
         .field-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; background: transparent; border: none; outline: none; color: #333333; font-size: 1.1rem; text-align: center; font-weight: bold; }
-        
         .arena-viewport { width: 800px; height: 600px; background: #0b355e; border: 8px solid #2a437a; border-radius: 24px; position: relative; overflow: hidden; cursor: crosshair; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        
-        .infinite-ocean-world {
-          position: absolute;
-          width: 3000px;
-          height: 2000px;
-          background-color: #0b355e;
-          background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.04) 2px, transparent 2px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.04) 2px, transparent 2px);
-          background-size: 100px 100px;
-          transition: transform 0.1s ease-out;
-        }
-
+        .infinite-ocean-world { position: absolute; width: 3000px; height: 2000px; background-color: #0b355e; background-image: linear-gradient(rgba(255, 255, 255, 0.04) 2px, transparent 2px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 2px, transparent 2px); background-size: 100px 100px; transition: transform 0.1s ease-out; }
         .leave-btn { position: absolute; top: 15px; right: 15px; background: #ff4d4d; border: 2px solid white; color: white; padding: 0.5rem 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; z-index: 200; }
         .player-fish-sprite { width: 100%; height: auto; display: block; background: transparent !important; }
         .chat-container-hud { position: absolute; bottom: 15px; left: 15px; width: 250px; height: 160px; background: rgba(42, 67, 122, 0.85); border: 3px solid #2a437a; border-radius: 12px; display: flex; flex-direction: column; padding: 8px; z-index: 150; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
@@ -120,15 +146,16 @@ export default function Home() {
         .chat-msg-row { margin-bottom: 4px; line-height: 1.3; word-break: break-word; }
         .chat-input-bar-inner { width: 100%; background-color: #104E8B; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 4px 8px; color: white; font-size: 0.8rem; outline: none; }
         .chat-input-bar-inner:focus { border-color: #00FF1A; }
+        .custom-food-sprite-pellet { position: absolute; width: 14px; height: auto; transform: translate(-50%, -50%); filter: drop-shadow(0 0 4px rgba(0, 255, 26, 0.6)); }
       `}} />
       {isPlaying ? (
         <div className="arena-viewport" ref={viewRef}>
-          <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.6, textAlign: 'left', zIndex: 10 }}>
-            <strong>PREHISTOOIO ENDLESS SERVER v0.5</strong><br />
-            Position Coordinates: X: {Math.round(playerPosition.x)} Y: {Math.round(playerPosition.y)}<br />
-            Steer mouse further away from center to swim faster!
+          <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
+            <strong>PREHISTOOIO ARENA v0.6</strong><br />
+            <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span><br />
+            Position Coordinates: X: {Math.round(playerPosition.x)} Y: {Math.round(playerPosition.y)}
           </div>
-          <button className="leave-btn" onClick={() => setIsPlaying(false)}>Leave Map</button>
+          <button className="leave-btn" onClick={() => { setIsPlaying(false); setScore(0); }}>Leave Map</button>
 
           <div className="chat-container-hud" onClick={(e) => e.stopPropagation()}>
             <div className="chat-scroll-view">
@@ -144,16 +171,17 @@ export default function Home() {
           <div className="infinite-ocean-world" style={{
             transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)'
           }}>
-            <div style={{ 
-              position: 'absolute', 
-              top: playerPosition.y, 
-              left: playerPosition.x, 
-              transform: 'translate(-50%, -50%)', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center', 
-              width: '90px'
-            }}>
+            {foodPellets.map((pellet) => !pellet.isEaten && (
+              <img 
+                key={pellet.id}
+                src="/food.png"
+                alt="Plankton Pellet"
+                className="custom-food-sprite-pellet"
+                style={{ top: pellet.y, left: pellet.x }}
+              />
+            ))}
+
+            <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px' }}>
               <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', whiteSpace: 'nowrap' }}>
                 {username || "Guest"}
               </span>
