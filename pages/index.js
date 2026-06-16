@@ -147,7 +147,7 @@ export default function Home() {
         .slot-over { position: absolute; cursor: pointer; border-radius: 14px; transition: all 0.15s; border: 3px solid transparent; }
         .slot-over:hover { border-color: #00FF1A !important; background: rgba(0, 255, 26, 0.08); box-shadow: 0 0 15px #00FF1A; }
         .hud-banner { margin-top: 1.5rem; background: #2a437a; padding: 1rem; border-radius: 16px; min-height: 60px; display: flex; justifyContent: center; alignItems: center; border: 3px solid rgba(255,255,255,0.15); }
-        .launch-form { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; margin-top: 1rem; }
+        .launch-form { display: flex; flexDirection: column; align-items: center; gap: 1.2rem; margin-top: 1rem; }
         .input-wrap { position: relative; width: 320px; }
         .play-btn { background: none; border: none; cursor: pointer; width: 180px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
         .field-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; background: transparent; border: none; outline: none; color: #333333; font-size: 1.1rem; text-align: center; font-weight: bold; }
@@ -165,7 +165,6 @@ export default function Home() {
         .scrolling-kelp-prop { position: absolute; transform: translate(-50%, -100%); width: 38px; z-index: 25; pointer-events: none; background: transparent !important; }
         .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); z-index: 28; pointer-events: none; background: transparent !important; }
         .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); z-index: 27; pointer-events: none; background: transparent !important; }
-      `}} />
       {isPlaying ? (
         <div className="arena-viewport" ref={viewRef}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
@@ -214,7 +213,7 @@ export default function Home() {
               />
             )}
 
-            {/* PERFORMANCE TUNED CALIBRATION: Changed offset to exactly +25 to bring the rock up out of the mud */}
+            {/* PERFORMANCE CALIBRATION: Position fixed to exactly +25 to rest perfectly on the ground */}
             {propsList.bigRock && (
               <img 
                 src="/big-rock.png"
@@ -240,7 +239,13 @@ export default function Home() {
                 {username || "Guest"}
               </span>
               <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}>
-                <img src="/sacabambaspis.png" alt="Fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
+                {/* DYNAMIC TEXT SCANNER ROUTINE: Swaps the sprite if string value reads (GHOUL) */}
+                <img 
+                  src={username.toUpperCase().includes("(GHOUL)") ? "/ghoul.png" : "/sacabambaspis.png"} 
+                  alt="Player Creature" 
+                  className="player-fish-sprite" 
+                  onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+                />
               </div>
             </div>
           </div>
@@ -248,7 +253,7 @@ export default function Home() {
       ) : (
         <>
           <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
-          <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
+          <img src="/public/wiki-button.png" alt="Wiki" className="wiki-img" onError={(e) => { e.target.src = "/wiki-button.png" }} onClick={() => setIsWikiOpen(true)} />
 
           <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
             <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
@@ -274,7 +279,7 @@ export default function Home() {
             <form className="launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}>
               <div className="input-wrap">
                 <img src="/input-box.png" alt="Input" style={{ width: '100%' }} />
-                <input type="text" className="field-text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} />
+                <input type="text" className="field-text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} placeholder="Enter Name..." style={{ color: '#333' }} />
               </div>
               <button type="submit" className="play-btn"><img src="/play-button.png" alt="PLAY" style={{ width: '100%' }} /></button>
             </form>
