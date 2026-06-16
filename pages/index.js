@@ -14,11 +14,14 @@ export default function Home() {
   const [score, setScore] = useState(0)
   const [foodPellets, setFoodPellets] = useState([])
 
+  // UPDATED PROP INITIAL MEMORY MATRIX
+  const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
+
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
     { user: "System", text: "Endless Food Matrix loaded. Gather clusters to rank up!" }
   ])
-  const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
+    const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
     { t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" },
     { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }
@@ -32,17 +35,17 @@ export default function Home() {
   }
 
   const getRandomCoord = () => ({
-    // FIXED: Keeps food spawning slightly above the new seafloor terrain boundary line
     x: Math.floor(Math.random() * 2800) + 100,
     y: Math.floor(Math.random() * 1650) + 100
   })
 
   useEffect(() => {
     if (!isPlaying) return
+    
+    // 1. Generate Food Hotspot Clusters
     const pellets = []
     for (let c = 0; c < 8; c++) {
       const centerX = Math.floor(Math.random() * 2600) + 200
-      // Places clusters naturally distributed through middle and deeper waters
       const centerY = Math.floor(Math.random() * 1400) + 200
       for (let i = 0; i < 6; i++) {
         pellets.push({
@@ -54,6 +57,23 @@ export default function Home() {
       }
     }
     setFoodPellets(pellets)
+
+    // 2. FIXED SCENERY GENERATION
+    // Spaced out exactly 4 kelp locations horizontally across the massive 3000px map width bounds
+    const generatedKelp = [
+      { x: 600, y: 1720, height: 180 },
+      { x: 1200, y: 1720, height: 210 },
+      { x: 1800, y: 1720, height: 170 },
+      { x: 2400, y: 1720, height: 230 }
+    ]
+
+    // Places exactly ONE structural volcano element near the left-center sea bed
+    const singleVolcano = { x: 900, y: 1725, width: 110 }
+
+    // Places exactly ONE giant rock background monument element near the right-center sea bed
+    const singleBigRock = { x: 2100, y: 1725, width: 160 }
+
+    setPropsList({ kelp: generatedKelp, volcano: singleVolcano, bigRock: singleBigRock })
   }, [isPlaying])
     useEffect(() => {
     if (!isPlaying) return
@@ -81,12 +101,8 @@ export default function Home() {
         if (speedMultiplier > 0) {
           setPlayerRotation(angleRad * (180 / Math.PI) + 90)
         }
-        
         currentX = Math.max(50, Math.min(2950, p.x + dx))
-        // 🧱 PHYSICAL BOUNDARY COLLISION CHECK
-        // Locks player height so you physically cannot swim lower than 1720px (the start of the gravel floor)
         currentY = Math.max(50, Math.min(1720, p.y + dy))
-        
         return { x: currentX, y: currentY }
       })
 
@@ -153,23 +169,17 @@ export default function Home() {
         .chat-msg-row { margin-bottom: 4px; line-height: 1.3; word-break: break-word; }
         .chat-input-bar-inner { width: 100%; background-color: #104E8B; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 4px 8px; color: white; font-size: 0.8rem; outline: none; }
         .chat-input-bar-inner:focus { border-color: #00FF1A; }
+        .gravel-seafloor-bed { position: absolute; bottom: 0px; left: 0px; width: 3000px; height: 250px; background-color: #5C4033; border-top: 8px solid #3d2b22; box-shadow: inset 0 10px 20px rgba(0,0,0,0.4); z-index: 40; }
 
-        /* NEW SEAFLOOR TERRAIN LAYER RULES */
-        .gravel-seafloor-bed {
-          position: absolute;
-          bottom: 0px;
-          left: 0px;
-          width: 3000px;
-          height: 250px; /* Gives the floor a prominent, chunky thickness */
-          background-color: #5C4033; /* Stylized deep brown mud/gravel tone */
-          border-top: 8px solid #3d2b22; /* Crisp dark crust rim boundary line */
-          box-shadow: inset 0 10px 20px rgba(0,0,0,0.4);
-        }
+        /* SCROLLING PROPERTY CONTAINER CLASSIFICATIONS */
+        .scrolling-kelp-prop { position: absolute; transform: translate(-50%, -100%); width: 38px; z-index: 25; pointer-events: none; background: transparent !important; }
+        .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); z-index: 35; pointer-events: none; background: transparent !important; }
+        .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); z-index: 33; pointer-events: none; background: transparent !important; }
       `}} />
       {isPlaying ? (
         <div className="arena-viewport" ref={viewRef}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
-            <strong>PREHISTOOIO ARENA v0.6</strong><br />
+            <strong>PREHISTOOIO ARENA v0.7</strong><br />
             <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span><br />
             Position Coordinates: X: {Math.round(playerPosition.x)} Y: {Math.round(playerPosition.y)}
           </div>
@@ -189,8 +199,41 @@ export default function Home() {
           <div className="infinite-ocean-world" style={{
             transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)'
           }}>
-            {/* RENDERS THE STYLIZED MUD/GRAVEL LAYER CONTEXT AT THE ABSOLUTE BOTTOM */}
             <div className="gravel-seafloor-bed" />
+
+            {/* RENDER THE 4 HORIZONTALLY SPACED KELP STALKS */}
+            {propsList.kelp.map((k, idx) => (
+              <img 
+                key={'k_' + idx}
+                src="/kelp.png"
+                alt="Sea Kelp"
+                className="scrolling-kelp-prop"
+                style={{ top: k.y, left: k.x, height: k.height + 'px' }}
+                onError={(e) => { e.target.style.display = 'none' }}
+              />
+            ))}
+
+            {/* RENDER THE EXACTLY ONE VOLCANIC VENT MONUMENT */}
+            {propsList.volcano && (
+              <img 
+                src="/volcano.png"
+                alt="Volcano Vent"
+                className="scrolling-volcano-prop"
+                style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.width + 'px', height: 'auto' }}
+                onError={(e) => { e.target.style.display = 'none' }}
+              />
+            ))}
+
+            {/* RENDER THE EXACTLY ONE BIG ROCK FORMATION MONUMENT */}
+            {propsList.bigRock && (
+              <img 
+                src="/big-rock.png"
+                alt="Big Rock"
+                className="scrolling-rock-prop"
+                style={{ top: propsList.bigRock.y, left: propsList.bigRock.x, width: propsList.bigRock.width + 'px', height: 'auto' }}
+                onError={(e) => { e.target.style.display = 'none' }}
+              />
+            ))}
 
             {foodPellets.map((pellet) => !pellet.isEaten && (
               <img 
