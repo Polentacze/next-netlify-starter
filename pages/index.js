@@ -188,17 +188,17 @@ export default function Home() {
         /* POSITION HANDLER FOR YOUR CUSTOM LEADERBOARD DRAWING */
         .custom-leaderboard-graphic {
           position: fixed;
-          left: 25px; /* Floats perfectly on the left wall to balance the wiki button */
+          left: 25px; 
           top: 50%;
           transform: translateY(-50%);
-          width: 240px; /* Adjust this width to scale your leaderboard card size */
+          width: 240px; 
           height: auto;
           z-index: 100;
           filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.3));
         }
       `}} />
 
-      {/* Renders your exact custom leaderboard artwork asset on the left edge */}
+      {/* Renders your custom leaderboard artwork asset on the left edge */}
       <img 
         src="/leaderboard.png" 
         alt="The Predator of Prehistoo" 
@@ -298,3 +298,10 @@ export default function Home() {
           </div>
 
           <button type="submit" className="custom-play-trigger-btn">
+            <img src="/play-button.png" alt="PLAY GAME" className="play-graphic-asset" />
+          </button>
+        </form>
+      </main>
+    </div>
+  )
+}
