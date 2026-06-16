@@ -114,7 +114,7 @@ export default function Home() {
       clearInterval(gameLoop)
     }
   }, [isPlaying, playerPosition, playerRotation])
-  return (
+    return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head>
         <title>Prehistooio</title>
@@ -141,16 +141,16 @@ export default function Home() {
         .infinite-ocean-world { position: absolute; width: 3000px; height: 2000px; background-color: #0b355e; background-image: linear-gradient(rgba(255, 255, 255, 0.04) 2px, transparent 2px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 2px, transparent 2px); background-size: 100px 100px; transition: transform 0.1s ease-out; }
         .leave-btn { position: absolute; top: 15px; right: 15px; background: #ff4d4d; border: 2px solid white; color: white; padding: 0.5rem 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; z-index: 200; }
         
-        /* HARD RESET: Wipes out the background-color layers on sprites entirely */
+        /* HARD RESET: Forces the player fish graphic background layer to be completely transparent */
         .player-fish-sprite { 
           width: 100%; 
           height: auto; 
           display: block; 
           background-color: transparent !important; 
           background: transparent !important;
+          mix-blend-mode: normal !important; /* Clears out the old blue block multiply logic */
         }
         
-        /* FIXED: Increased width to 20px for a more prominent food size layout feel */
         .custom-food-sprite-pellet { 
           position: absolute; 
           width: 20px !important; 
@@ -198,11 +198,12 @@ export default function Home() {
               />
             ))}
 
-            <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none' }}>
+            {/* FIXED: Added explicit transparent background parameters to the moving target container box */}
+            <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none', backgroundColor: 'transparent', background: 'transparent' }}>
               <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', whiteSpace: 'nowrap' }}>
                 {username || "Guest"}
               </span>
-              <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear' }}>
+              <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}>
                 <img src="/sacabambaspis.png" alt="Fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
               </div>
             </div>
