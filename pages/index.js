@@ -8,16 +8,17 @@ export default function Home() {
 
   // Perfectly spaced grid coordinates to align directly over your drawings
   const animalGridSlots = [
-    { name: "Otodus megalodon", top: "16%", left: "12%", width: "13.5%", height: "28%" },
-    { name: "Shastasaurus pacificus", top: "16%", left: "26.2%", width: "13.5%", height: "28%" },
-    { name: "Pliosaurus funkei", top: "16%", left: "40.5%", width: "13.5%", height: "28%" },
-    { name: "Helicoprion bessonowi", top: "16%", left: "54.8%", width: "13.5%", height: "28%" },
-    { name: "Xiphiorhynchus kimblalocki", top: "16%", left: "69.1%", width: "13.5%", height: "28%" },
-    { name: "Liopleurodon ferox", top: "16%", left: "83.4%", width: "13.5%", height: "28%" },
-    { name: "Stethacanthus altonensis", top: "48%", left: "12%", width: "13.5%", height: "28%" },
-    { name: "Squalicorax pristodontus", top: "48%", left: "26.2%", width: "13.5%", height: "28%" }
+  // Calibrated layout coordinates to lock onto your image columns
+  const animalGridSlots = [
+    { name: "Otodus megalodon", top: "16%", left: "13.5%", width: "10.5%", height: "28%" },
+    { name: "Shastasaurus pacificus", top: "16%", left: "24.7%", width: "10.5%", height: "28%" },
+    { name: "Pliosaurus funkei", top: "16%", left: "35.9%", width: "10.5%", height: "28%" },
+    { name: "Helicoprion bessonowi", top: "16%", left: "47.1%", width: "10.5%", height: "28%" },
+    { name: "Xiphiorhynchus kimblalocki", top: "16%", left: "58.3%", width: "10.5%", height: "28%" },
+    { name: "Liopleurodon ferox", top: "16%", left: "69.5%", width: "10.5%", height: "28%" },
+    { name: "Stethacanthus altonensis", top: "48%", left: "13.5%", width: "10.5%", height: "28%" },
+    { name: "Squalicorax pristodontus", top: "48%", left: "24.7%", width: "10.5%", height: "28%" }
   ]
-
   return (
     <div style={{ 
       textAlign: 'center', 
