@@ -14,7 +14,6 @@ export default function Home() {
   const [score, setScore] = useState(0)
   const [foodPellets, setFoodPellets] = useState([])
 
-  // UPDATED PROP INITIAL MEMORY MATRIX
   const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
 
   const [chatInput, setChatInput] = useState("")
@@ -42,7 +41,6 @@ export default function Home() {
   useEffect(() => {
     if (!isPlaying) return
     
-    // 1. Generate Food Hotspot Clusters
     const pellets = []
     for (let c = 0; c < 8; c++) {
       const centerX = Math.floor(Math.random() * 2600) + 200
@@ -58,22 +56,16 @@ export default function Home() {
     }
     setFoodPellets(pellets)
 
-    // 2. FIXED SCENERY GENERATION
-    // Spaced out exactly 4 kelp locations horizontally across the massive 3000px map width bounds
-    const generatedKelp = [
-      { x: 600, y: 1720, height: 180 },
-      { x: 1200, y: 1720, height: 210 },
-      { x: 1800, y: 1720, height: 170 },
-      { x: 2400, y: 1720, height: 230 }
-    ]
-
-    // Places exactly ONE structural volcano element near the left-center sea bed
-    const singleVolcano = { x: 900, y: 1725, width: 110 }
-
-    // Places exactly ONE giant rock background monument element near the right-center sea bed
-    const singleBigRock = { x: 2100, y: 1725, width: 160 }
-
-    setPropsList({ kelp: generatedKelp, volcano: singleVolcano, bigRock: singleBigRock })
+    setPropsList({
+      kelp: [
+        { x: 600, y: 1720, h: 180 },
+        { x: 1200, y: 1720, h: 210 },
+        { x: 1800, y: 1720, h: 170 },
+        { x: 2400, y: 1720, h: 230 }
+      ],
+      volcano: { x: 900, y: 1725, w: 110 },
+      bigRock: { x: 2100, y: 1725, w: 160 }
+    })
   }, [isPlaying])
     useEffect(() => {
     if (!isPlaying) return
@@ -154,7 +146,7 @@ export default function Home() {
         .grid-img { width: 100%; display: block; border-radius: 16px; }
         .slot-over { position: absolute; cursor: pointer; border-radius: 14px; transition: all 0.15s; border: 3px solid transparent; }
         .slot-over:hover { border-color: #00FF1A !important; background: rgba(0, 255, 26, 0.08); box-shadow: 0 0 15px #00FF1A; }
-        .hud-banner { margin-top: 1.5rem; background: #2a437a; padding: 1rem; border-radius: 16px; min-height: 60px; display: flex; justifyContent: center; alignItems: center; border: 3px solid rgba(255,255,255,0.15); }
+        .hud-banner { margin-top: 1.5rem; background: #2a437a; padding: 1rem; border-radius: 16px; min-height: 60px; display: flex; justify-content: center; alignItems: center; border: 3px solid rgba(255,255,255,0.15); }
         .launch-form { display: flex; flexDirection: column; align-items: center; gap: 1.2rem; margin-top: 1rem; }
         .input-wrap { position: relative; width: 320px; }
         .play-btn { background: none; border: none; cursor: pointer; width: 180px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
@@ -163,20 +155,18 @@ export default function Home() {
         .infinite-ocean-world { position: absolute; width: 3000px; height: 2000px; background-color: #0b355e; background-image: linear-gradient(rgba(255, 255, 255, 0.04) 2px, transparent 2px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 2px, transparent 2px); background-size: 100px 100px; transition: transform 0.1s ease-out; }
         .leave-btn { position: absolute; top: 15px; right: 15px; background: #ff4d4d; border: 2px solid white; color: white; padding: 0.5rem 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; z-index: 200; }
         .player-fish-sprite { width: 100%; height: auto; display: block; background: transparent !important; mix-blend-mode: normal !important; }
-        .custom-food-sprite-pellet { position: absolute; width: 20px !important; height: auto !important; transform: translate(-50%, -50%); background-color: transparent !important; background: transparent !important; }
+        .custom-food-sprite-pellet { position: absolute; width: 20px; height: auto; transform: translate(-50%, -50%); background-color: transparent !important; background: transparent !important; }
         .chat-container-hud { position: absolute; bottom: 15px; left: 15px; width: 250px; height: 160px; background: rgba(42, 67, 122, 0.85); border: 3px solid #2a437a; border-radius: 12px; display: flex; flex-direction: column; padding: 8px; z-index: 150; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .chat-scroll-view { flex-grow: 1; overflow-y: auto; text-align: left; font-family: sans-serif; font-size: 0.8rem; margin-bottom: 6px; padding-right: 4px; }
         .chat-msg-row { margin-bottom: 4px; line-height: 1.3; word-break: break-word; }
         .chat-input-bar-inner { width: 100%; background-color: #104E8B; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 4px 8px; color: white; font-size: 0.8rem; outline: none; }
         .chat-input-bar-inner:focus { border-color: #00FF1A; }
         .gravel-seafloor-bed { position: absolute; bottom: 0px; left: 0px; width: 3000px; height: 250px; background-color: #5C4033; border-top: 8px solid #3d2b22; box-shadow: inset 0 10px 20px rgba(0,0,0,0.4); z-index: 40; }
-
-        /* SCROLLING PROPERTY CONTAINER CLASSIFICATIONS */
         .scrolling-kelp-prop { position: absolute; transform: translate(-50%, -100%); width: 38px; z-index: 25; pointer-events: none; background: transparent !important; }
         .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); z-index: 35; pointer-events: none; background: transparent !important; }
         .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); z-index: 33; pointer-events: none; background: transparent !important; }
       `}} />
-      {isPlaying ? (
+jsx      {isPlaying ? (
         <div className="arena-viewport" ref={viewRef}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
             <strong>PREHISTOOIO ARENA v0.7</strong><br />
@@ -201,36 +191,34 @@ export default function Home() {
           }}>
             <div className="gravel-seafloor-bed" />
 
-            {/* RENDER THE 4 HORIZONTALLY SPACED KELP STALKS */}
+            {/* FIXED SIZE CODES: Stripped the pixel string addition loop to guarantee bug protection */}
             {propsList.kelp.map((k, idx) => (
               <img 
                 key={'k_' + idx}
                 src="/kelp.png"
                 alt="Sea Kelp"
                 className="scrolling-kelp-prop"
-                style={{ top: k.y, left: k.x, height: k.height + 'px' }}
+                style={{ top: k.y, left: k.x, height: k.h }}
                 onError={(e) => { e.target.style.display = 'none' }}
               />
             ))}
 
-            {/* RENDER THE EXACTLY ONE VOLCANIC VENT MONUMENT */}
             {propsList.volcano && (
               <img 
                 src="/volcano.png"
                 alt="Volcano Vent"
                 className="scrolling-volcano-prop"
-                style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.width + 'px', height: 'auto' }}
+                style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }}
                 onError={(e) => { e.target.style.display = 'none' }}
               />
             ))}
 
-            {/* RENDER THE EXACTLY ONE BIG ROCK FORMATION MONUMENT */}
             {propsList.bigRock && (
               <img 
                 src="/big-rock.png"
                 alt="Big Rock"
                 className="scrolling-rock-prop"
-                style={{ top: propsList.bigRock.y, left: propsList.bigRock.x, width: propsList.bigRock.width + 'px', height: 'auto' }}
+                style={{ top: propsList.bigRock.y, left: propsList.bigRock.x, width: propsList.bigRock.w }}
                 onError={(e) => { e.target.style.display = 'none' }}
               />
             ))}
