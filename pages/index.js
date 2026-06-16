@@ -18,7 +18,7 @@ export default function Home() {
 
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Endless Food Matrix loaded. Gather clusters to rank up!" }
+    { user: "System", text: "Two-Tier Food Matrix loaded. Premium ocean food is now live!" }
   ])
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
@@ -42,18 +42,41 @@ export default function Home() {
     if (!isPlaying) return
     
     const pellets = []
+    
+    // 🍉 TYPE 1: Generate 8 clusters of standard food (6 dots per cluster)
     for (let c = 0; c < 8; c++) {
       const centerX = Math.floor(Math.random() * 2600) + 200
       const centerY = Math.floor(Math.random() * 1400) + 200
       for (let i = 0; i < 6; i++) {
         pellets.push({
-          id: c + "_" + i,
+          id: "standard_" + c + "_" + i,
           x: centerX + (Math.random() * 120 - 60),
           y: centerY + (Math.random() * 120 - 60),
-          isEaten: false
+          isEaten: false,
+          type: "standard",
+          value: 100,
+          src: "/food.png"
         })
       }
     }
+
+    // 🌊 TYPE 2: Generate 4 clusters of rare Ocean Food (4 dots per cluster)
+    for (let c = 0; c < 4; c++) {
+      const centerX = Math.floor(Math.random() * 2600) + 200
+      const centerY = Math.floor(Math.random() * 1400) + 200
+      for (let i = 0; i < 4; i++) {
+        pellets.push({
+          id: "premium_" + c + "_" + i,
+          x: centerX + (Math.random() * 120 - 60),
+          y: centerY + (Math.random() * 120 - 60),
+          isEaten: false,
+          type: "premium",
+          value: 120, // High-tier payout
+          src: "/ocean-food.png"
+        })
+      }
+    }
+
     setFoodPellets(pellets)
 
     setPropsList({
@@ -102,8 +125,11 @@ export default function Home() {
         prevPellets.map((pellet) => {
           if (pellet.isEaten) return pellet
           const distanceToFood = Math.sqrt((currentX - pellet.x) ** 2 + (currentY - pellet.y) ** 2)
+          
           if (distanceToFood < 30) {
-            setScore((s) => s + 100)
+            // DYNAMIC PAYOUT SYSTEM: Adds standard value or the premium 120 points value!
+            setScore((s) => s + pellet.value)
+            
             setTimeout(() => {
               setFoodPellets((currentPellets) =>
                 currentPellets.map((p) => {
@@ -147,7 +173,7 @@ export default function Home() {
         .slot-over { position: absolute; cursor: pointer; border-radius: 14px; transition: all 0.15s; border: 3px solid transparent; }
         .slot-over:hover { border-color: #00FF1A !important; background: rgba(0, 255, 26, 0.08); box-shadow: 0 0 15px #00FF1A; }
         .hud-banner { margin-top: 1.5rem; background: #2a437a; padding: 1rem; border-radius: 16px; min-height: 60px; display: flex; justifyContent: center; alignItems: center; border: 3px solid rgba(255,255,255,0.15); }
-        .launch-form { display: flex; flexDirection: column; align-items: center; gap: 1.2rem; margin-top: 1rem; }
+        .launch-form { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; margin-top: 1rem; }
         .input-wrap { position: relative; width: 320px; }
         .play-btn { background: none; border: none; cursor: pointer; width: 180px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
         .field-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; background: transparent; border: none; outline: none; color: #333333; font-size: 1.1rem; text-align: center; font-weight: bold; }
@@ -224,13 +250,15 @@ export default function Home() {
               />
             )}
 
+            {/* TWO-TIER SYSTEM: Dynamically loads pellet.src to swap between food.png and ocean-food.png instantly! */}
             {foodPellets.map((pellet) => !pellet.isEaten && (
               <img 
                 key={pellet.id}
-                src="/food.png"
-                alt="Plankton Pellet"
+                src={pellet.src}
+                alt="Ocean Plankton"
                 className="custom-food-sprite-pellet"
                 style={{ top: pellet.y, left: pellet.x }}
+                onError={(e) => { e.target.src = "/food.png" }}
               />
             ))}
 
@@ -239,7 +267,6 @@ export default function Home() {
                 {username || "Guest"}
               </span>
               <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}>
-                {/* UPGRADED STRING SCANNER ENGINE: Strips spaces and capitalizes everything so it never misses a match! */}
                 <img 
                   src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : "/sacabambaspis.png"} 
                   alt="Player Creature" 
