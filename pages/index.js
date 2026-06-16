@@ -7,13 +7,12 @@ export default function Home() {
   const [username, setUsername] = useState("")
   const [isPlaying, setIsPlaying] = useState(false)
   
-  // World space tracking coordinates (Massive 3000x2000 map engine)
+  // Massive 3000x2000 ocean world space tracking coordinates
   const [playerPosition, setPlayerPosition] = useState({ x: 1500, y: 1000 })
   const [playerRotation, setPlayerRotation] = useState(0)
   
-  // Real-time cursor coordinates relative to screen center
   const mousePos = useRef({ x: 0, y: 0 })
-  const screenCenter = useRef({ x: 400, y: 300 })
+  const viewRef = useRef(null)
 
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
@@ -37,26 +36,25 @@ export default function Home() {
     if (!isPlaying) return
 
     const handleMouseMove = (e) => {
-      // Tracks cursor offset relative to the center of your gameplay viewport window
-      const rect = document.getElementById('game-viewport')?.getBoundingClientRect()
-      if (!rect) return
+      if (!viewRef.current) return
+      const rect = viewRef.current.getBoundingClientRect()
       
-      screenCenter.current = { x: rect.width / 2, y: rect.height / 2 }
+      // Calculates mouse offset values relative to center coordinates safely
+      const midX = rect.width / 2
+      const midY = rect.height / 2
       mousePos.current = {
-        x: e.clientX - rect.left - screenCenter.current.x,
-        y: e.clientY - rect.top - screenCenter.current.y
+        x: e.clientX - rect.left - midX,
+        y: e.clientY - rect.top - midY
       }
     }
 
     const gameLoop = setInterval(() => {
       setPlayerPosition((p) => {
-        // Calculate velocity direction based on vector angle relative to player center position
         const angleRad = Math.atan2(mousePos.current.y, mousePos.current.x)
         const distance = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
         
-        // Speed dampening: don't move if the cursor is resting directly on top of the fish
-        const speedMultiplier = distance > 20 ? Math.min(distance * 0.05, 8) : 0
-        
+        // Velocity acceleration mapping calculation
+        const speedMultiplier = distance > 25 ? Math.min(distance * 0.05, 8) : 0
         const dx = Math.cos(angleRad) * speedMultiplier
         const dy = Math.sin(angleRad) * speedMultiplier
         
@@ -64,7 +62,6 @@ export default function Home() {
           setPlayerRotation(angleRad * (180 / Math.PI) + 90)
         }
 
-        // Keep character securely boxed inside the huge 3000x2000 ocean border walls
         return {
           x: Math.max(50, Math.min(2950, p.x + dx)),
           y: Math.max(50, Math.min(1950, p.y + dy))
@@ -78,7 +75,7 @@ export default function Home() {
       clearInterval(gameLoop)
     }
   }, [isPlaying])
-  return (
+    return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head>
         <title>Prehistooio</title>
@@ -102,10 +99,8 @@ export default function Home() {
         .play-btn { background: none; border: none; cursor: pointer; width: 180px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
         .field-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; background: transparent; border: none; outline: none; color: #333333; font-size: 1.1rem; text-align: center; font-weight: bold; }
         
-        /* The Camera Viewport Frame */
         .arena-viewport { width: 800px; height: 600px; background: #0b355e; border: 8px solid #2a437a; border-radius: 24px; position: relative; overflow: hidden; cursor: crosshair; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         
-        /* INFINITE MAP WORLD CONTEXT: The giant ocean background plane canvas */
         .infinite-ocean-world {
           position: absolute;
           width: 3000px;
@@ -114,7 +109,7 @@ export default function Home() {
           background-image: 
             linear-gradient(rgba(255, 255, 255, 0.04) 2px, transparent 2px),
             linear-gradient(90deg, rgba(255, 255, 255, 0.04) 2px, transparent 2px);
-          background-size: 100px 100px; /* Repeating grid box pattern lines */
+          background-size: 100px 100px;
           transition: transform 0.1s ease-out;
         }
 
@@ -127,7 +122,7 @@ export default function Home() {
         .chat-input-bar-inner:focus { border-color: #00FF1A; }
       `}} />
       {isPlaying ? (
-        <div className="arena-viewport" id="game-viewport" ref={arenaRef}>
+        <div className="arena-viewport" ref={viewRef}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.6, textAlign: 'left', zIndex: 10 }}>
             <strong>PREHISTOOIO ENDLESS SERVER v0.5</strong><br />
             Position Coordinates: X: {Math.round(playerPosition.x)} Y: {Math.round(playerPosition.y)}<br />
@@ -146,11 +141,9 @@ export default function Home() {
             </form>
           </div>
           
-          {/* CAMERA MOVEMENT WRAPPER: Slides the map grid around the static player position focal lens center point */}
           <div className="infinite-ocean-world" style={{
-            transform: `translate(${400 - playerPosition.x}px, ${300 - playerPosition.y}px)`
+            transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)'
           }}>
-            {/* The actual fish element is anchored relative to the shifting grid map plane coordinates layer */}
             <div style={{ 
               position: 'absolute', 
               top: playerPosition.y, 
