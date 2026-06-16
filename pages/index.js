@@ -2,21 +2,20 @@ import Head from 'next/head'
 import { useState } from 'react'
 
 export default function Home() {
-  // Swapped default preview asset target to point to your new prehistoric skeleton drawing
   const [currentSkin, setCurrentSkin] = useState('/prehistoric-skeleton.png')
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
 
-  // Finely adjusted coordinates to line up perfectly with your drawn card rows
+  // Perfectly spaced grid coordinates to align directly over your drawings
   const animalGridSlots = [
-    { name: "Otodus megalodon", top: "16%", left: "9.5%", width: "13.5%", height: "28%" },
-    { name: "Shastasaurus pacificus", top: "16%", left: "24.5%", width: "13.5%", height: "28%" },
-    { name: "Pliosaurus funkei", top: "16%", left: "39.5%", width: "13.5%", height: "28%" },
-    { name: "Helicoprion bessonowi", top: "16%", left: "54.5%", width: "13.5%", height: "28%" },
-    { name: "Xiphiorhynchus kimblalocki", top: "16%", left: "69.5%", width: "13.5%", height: "28%" },
-    { name: "Liopleurodon ferox", top: "16%", left: "84.5%", width: "13.5%", height: "28%" },
-    { name: "Stethacanthus altonensis", top: "48%", left: "9.5%", width: "13.5%", height: "28%" },
-    { name: "Squalicorax pristodontus", top: "48%", left: "24.5%", width: "13.5%", height: "28%" }
+    { name: "Otodus megalodon", top: "16%", left: "12%", width: "13.5%", height: "28%" },
+    { name: "Shastasaurus pacificus", top: "16%", left: "26.2%", width: "13.5%", height: "28%" },
+    { name: "Pliosaurus funkei", top: "16%", left: "40.5%", width: "13.5%", height: "28%" },
+    { name: "Helicoprion bessonowi", top: "16%", left: "54.8%", width: "13.5%", height: "28%" },
+    { name: "Xiphiorhynchus kimblalocki", top: "16%", left: "69.1%", width: "13.5%", height: "28%" },
+    { name: "Liopleurodon ferox", top: "16%", left: "83.4%", width: "13.5%", height: "28%" },
+    { name: "Stethacanthus altonensis", top: "48%", left: "12%", width: "13.5%", height: "28%" },
+    { name: "Squalicorax pristodontus", top: "48%", left: "26.2%", width: "13.5%", height: "28%" }
   ]
 
   return (
@@ -96,7 +95,7 @@ export default function Home() {
           display: block;
         }
 
-        /* Invisible overlay hitboxes positioned perfectly over your drawn cards */
+        /* Wiped out the dark background completely to make it 100% transparent! */
         .qol-slot-overlay {
           position: absolute;
           cursor: pointer;
@@ -104,16 +103,15 @@ export default function Home() {
           transition: all 0.15s ease-in-out;
           box-sizing: border-box;
           border: 3px solid transparent;
+          background-color: transparent !important; 
         }
         
-        /* Your requested glowing neon green highlight border effect */
         .qol-slot-overlay:hover {
           border-color: #00FF1A !important;
-          background-color: rgba(0, 255, 26, 0.08);
+          background-color: rgba(0, 255, 26, 0.08) !important;
           box-shadow: 0 0 15px #00FF1A;
         }
 
-        /* Scientific Name Banner layout display */
         .species-hud-display {
           margin-top: 1.5rem;
           background-color: #2a437a;
@@ -158,7 +156,6 @@ export default function Home() {
           <div className="grid-image-container">
             <img src="/AnimalGrid.png" alt="Animal Grid Layout" className="wiki-grid-graphic" />
             
-            {/* Generating hover-sensitive grid hitboxes right over your drawing slots */}
             {animalGridSlots.map((slot, i) => (
               <div
                 key={i}
@@ -175,7 +172,6 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Species Tracker HUD displaying the full scientific names below the grid */}
           <div className="species-hud-display">
             <p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#ffffff', fontStyle: hoveredAnimal ? 'italic' : 'normal' }}>
               {hoveredAnimal ? hoveredAnimal : "Hover over a creature square to analyze scientific metadata"}
@@ -192,13 +188,11 @@ export default function Home() {
           Made by Polentacze - Inspired by Deeeepio
         </p>
         
-        {/* Renders your custom skeleton picture asset inside the center focus slot */}
         <img 
           src={currentSkin} 
           alt="Prehistoric Skeleton Model" 
           style={{ width: '160px', height: 'auto', marginBottom: '2.5rem', borderRadius: '12px' }} 
           onError={(e) => {
-            // Safe fallback text if prehistoric-skeleton.png isn't fully uploaded yet
             e.target.src = "/deep-prehistoo.png";
           }}
         />
