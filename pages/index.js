@@ -1,12 +1,11 @@
 import Head from 'next/head'
 import { useState, useEffect, useRef } from 'react'
+
 export default function Home() {
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
   const [username, setUsername] = useState("")
   const [isPlaying, setIsPlaying] = useState(false)
-  
-  // Base coordinates initialized directly to the absolute map center
   const [playerPosition, setPlayerPosition] = useState({ x: 400, y: 300 })
   const [playerRotation, setPlayerRotation] = useState(0)
   const mousePos = useRef({ x: 400, y: 300 })
@@ -28,30 +27,19 @@ export default function Home() {
     const handleMouseMove = (e) => {
       if (!arenaRef.current) return
       const rect = arenaRef.current.getBoundingClientRect()
-      
-      // Strict mathematical boundary limits check tracking points
       mousePos.current = {
         x: Math.max(40, Math.min(760, e.clientX - rect.left)),
         y: Math.max(40, Math.min(540, e.clientY - rect.top))
       }
     }
-    
     const gameLoop = setInterval(() => {
       setPlayerPosition((p) => {
-        const easeSpeed = 0.12 // Gliding velocity speed matching standard .io vector fields
         const dx = mousePos.current.x - p.x
         const dy = mousePos.current.y - p.y
-        
-        // FIXED: Rotates character dynamically relative to position vector tracking changes
         setPlayerRotation(Math.atan2(dy, dx) * (180 / Math.PI))
-        
-        return { 
-          x: p.x + dx * easeSpeed, 
-          y: p.y + dy * easeSpeed 
-        }
+        return { x: p.x + dx * 0.12, y: p.y + dy * 0.12 }
       })
     }, 1000 / 60)
-    
     window.addEventListener('mousemove', handleMouseMove)
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
@@ -84,14 +72,7 @@ export default function Home() {
         .field-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; background: transparent; border: none; outline: none; color: #333333; font-size: 1.1rem; text-align: center; font-weight: bold; }
         .arena-frame { width: 800px; height: 600px; background: #0b355e; border: 8px solid #2a437a; border-radius: 24px; position: relative; overflow: hidden; cursor: crosshair; }
         .leave-btn { position: absolute; top: 15px; right: 15px; background: #ff4d4d; border: 2px solid white; color: white; padding: 0.5rem 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; z-index: 200; }
-        
-        /* PROTECTION FILTER: Blends background block parameters directly into ocean water layers */
-        .player-fish-sprite {
-          width: 100%;
-          height: auto;
-          mix-blend-mode: multiply; /* Masks white canvas borders instantly inside deep blue water backgrounds */
-          display: block;
-        }
+        .player-fish-sprite { width: 100%; height: auto; mix-blend-mode: multiply; display: block; }
       `}} />
 
       {isPlaying ? (
@@ -103,19 +84,7 @@ export default function Home() {
           </div>
           <button className="leave-btn" onClick={() => setIsPlaying(false)}>Leave Map</button>
           
-          {/* FIXED: True Center Coordinate Offset anchoring logic handlers */}
-          <div style={{ 
-            position: 'absolute', 
-            top: playerPosition.y, 
-            left: playerPosition.x, 
-            transform: 'translate(-50%, -50%) rotate(' + playerRotation + 'deg)', // Anchors transform calculation from exact character middle point
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            width: '90px', 
-            pointerEvents: 'none',
-            transition: 'transform 0.05s linear'
-          }}>
+          <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%) rotate(' + playerRotation + 'deg)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none', transition: 'transform 0.05s linear' }}>
             <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', transform: 'rotate(' + (-playerRotation) + 'deg)' }}>
               {username || "Guest"}
             </span>
@@ -158,9 +127,10 @@ export default function Home() {
               <button type="submit" className="play-btn">
                 <img src="/play-button.png" alt="PLAY" style={{ width: '100%' }} />
               </button>
-Use code with caution.
-  </>
-  )}
-
+            </form>
+          </main>
+        </>
+      )}
+    </div>
   )
-  )
+}
