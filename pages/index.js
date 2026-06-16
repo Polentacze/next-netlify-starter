@@ -7,12 +7,10 @@ export default function Home() {
   const [username, setUsername] = useState("")
   const [isPlaying, setIsPlaying] = useState(false)
   
-  // Mouse tracking position states
   const [playerPosition, setPlayerPosition] = useState({ x: 400, y: 300 })
   const mousePos = useRef({ x: 400, y: 300 })
   const arenaRef = useRef(null)
 
-  // Calibrated coordinate layout tracking mapping columns cleanly over AnimalGrid.png
   const animalGridSlots = [
     { name: "Otodus megalodon", top: "16%", left: "13.5%", width: "10.5%", height: "28%" },
     { name: "Shastasaurus pacificus", top: "16%", left: "24.7%", width: "10.5%", height: "28%" },
@@ -24,7 +22,6 @@ export default function Home() {
     { name: "Squalicorax pristodontus", top: "48%", left: "24.7%", width: "10.5%", height: "28%" }
   ]
 
-  // Easing physics movement calculations tracking mouse pointer coordinates
   useEffect(() => {
     if (!isPlaying) return
 
@@ -51,7 +48,7 @@ export default function Home() {
           y: prev.y + dy * easeSpeed
         }
       })
-    }, 1000 / 60) // 60 Frames-Per-Second screen refresh tracking passes
+    }, 1000 / 60)
 
     window.addEventListener('mousemove', handleMouseMove)
     return () => {
@@ -135,7 +132,6 @@ export default function Home() {
           display: block;
         }
 
-        /* Re-integrated transparent hitboxes mapping over your drawings */
         .qol-slot-overlay {
           position: absolute;
           cursor: pointer;
@@ -323,5 +319,12 @@ export default function Home() {
             onClick={() => setIsWikiOpen(true)}
           />
 
+          {/* FIXED: The missing space between onClick and style on this wrapper div is restored! */}
           <div 
-onClick={() => setIsWikiOpen(false)}style={{position: 'fixed',top: 0, left: 0, width: '100vw', height: '100vh',backgroundColor: 'rgba(0, 0, 0, 0.6)',display: isWikiOpen ? 'flex' : 'none',justifyContent: 'center', alignItems: 'center', zIndex: 105}}><div className="wiki-panel" onClick={(e) => e.stopPropagation()}><button className="close-wiki-btn" onClick={() => setIsWikiOpen(false)}>Close X<h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki{/* Clean, error-free map callback loop rendering neon green overlays */}{animalGridSlots.map((slot, i) => (<divkey={i}className="qol-slot-overlay"style={{ top: slot.top, left: slot.left, width: slot.width, height: slot.height }}onMouseEnter={() => setHoveredAnimal(slot.name)}onMouseLeave={() => setHoveredAnimal("")}/>))}<p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#ffffff', fontStyle: hoveredAnimal ? 'italic' : 'normal' }}>{hoveredAnimal ? hoveredAnimal : "Hover over a creature square to analyze scientific metadata"}<main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}><h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio<p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio<img src="/prehistoric-skeleton.png" alt="Prehistoric Skeleton Model" style={{ width: '160px', height: 'auto', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} /><p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6', marginBottom: '0.5rem' }}>Fight your Prehistoric foes<form className="game-launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}><input type="text" className="hidden-text-field" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} /></>)})}
+            onClick={() => setIsWikiOpen(false)} 
+            style={{
+              position: 'fixed',
+              top: 0, left: 0, width: '100vw', height: '100vh',
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              display: isWikiOpen ? 'flex' : 'none', 
+justifyContent: 'center', alignItems: 'center', zIndex: 105}}><div className="wiki-panel" onClick={(e) => e.stopPropagation()}><button className="close-wiki-btn" onClick={() => setIsWikiOpen(false)}>Close X<h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki{animalGridSlots.map((slot, i) => (<divkey={i}className="qol-slot-overlay"style={{ top: slot.top, left: slot.left, width: slot.width, height: slot.height }}onMouseEnter={() => setHoveredAnimal(slot.name)}onMouseLeave={() => setHoveredAnimal("")}/>))}<p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#ffffff', fontStyle: hoveredAnimal ? 'italic' : 'normal' }}>{hoveredAnimal ? hoveredAnimal : "Hover over a creature square to analyze scientific metadata"}<main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}><h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio<p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio<img src="/prehistoric-skeleton.png" alt="Prehistoric Skeleton Model" style={{ width: '160px', height: 'auto', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} /><p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', maxWidth: '600px', lineHeight: '1.6', marginBottom: '0.5rem' }}>Fight your Prehistoric foes<form className="game-launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}><input type="text" className="hidden-text-field" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} /></>)})}
