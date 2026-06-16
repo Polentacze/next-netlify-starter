@@ -67,7 +67,7 @@ export default function Home() {
       bigRock: { x: 2100, y: 1755, w: 160 }
     })
   }, [isPlaying])
-  useEffect(() => {
+    useEffect(() => {
     if (!isPlaying) return
 
     const handleMouseMove = (e) => {
@@ -128,7 +128,7 @@ export default function Home() {
       clearInterval(gameLoop)
     }
   }, [isPlaying, playerPosition, playerRotation])
-    return (
+  return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head>
         <title>Prehistooio</title>
@@ -214,13 +214,13 @@ export default function Home() {
               />
             )}
 
-            {/* DECISIVE COMPENSATOR PIXELS: Pushes the big rock asset fully into the mud layer crust line */}
+            {/* PERFORMANCE TUNED CALIBRATION: Changed offset to exactly +25 to bring the rock up out of the mud */}
             {propsList.bigRock && (
               <img 
                 src="/big-rock.png"
                 alt="Big Rock"
                 className="scrolling-rock-prop"
-                style={{ top: propsList.bigRock.y + 55, left: propsList.bigRock.x, width: propsList.bigRock.w }}
+                style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }}
                 onError={(e) => { e.target.style.display = 'none' }}
               />
             )}
