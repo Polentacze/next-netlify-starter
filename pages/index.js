@@ -19,16 +19,16 @@ export default function Home() {
   const [foodEatenCount, setFoodEatenCount] = useState(0) 
   const [isBoosting, setIsBoosting] = useState(false)
 
-  // 🧬 TIER 1 DYNAMIC EVOLUTION TREES
+  // 🧬 BALANCED TIER MATRIX: Upgraded Stethacanthus width to a prominent 115px hitbox
   const evoTiers = [
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
-    { name: "Stethacanthus altonensis", minScore: 4500, scale: 95, file: "/Stethacanthus-altonensis.png" }
+    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" }
   ]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
   const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
     const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Prehistooio Arena loaded. Complete Tier 1 path is active!", colorCode: "#00FF1A" }
+    { user: "System", text: "Prehistooio balanced! Swimming caps tuned down for weighty deep-sea physics.", colorCode: "#00FF1A" }
   ])
 
   const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
@@ -50,13 +50,13 @@ export default function Home() {
     setChatMessages((p) => [...p, { user: username || "Guest", text: chatInput, colorCode: messageColor }])
     setChatInput("")
   }
-    const getRandomCoord = () => ({ x: Math.floor(Math.random() * 2800) + 100, y: Math.floor(Math.random() * 1650) + 100 })
+  const getRandomCoord = () => ({ x: Math.floor(Math.random() * 2800) + 100, y: Math.floor(Math.random() * 1650) + 100 })
 
   const handleViewportClick = () => {
     if (boostBars < 1 || isBoosting) return
     setIsBoosting(true)
     setBoostBars(0) 
-    setTimeout(() => { setIsBoosting(false) }, 300)
+    setTimeout(() => { setIsBoosting(false) }, 320) // Balanced burst interval
   }
 
   useEffect(() => {
@@ -95,8 +95,11 @@ export default function Home() {
       let cx = playerPosition.x, cy = playerPosition.y
       setPlayerPosition((p) => {
         const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
-        let spd = dist > 25 ? Math.min(dist * 0.05, 8) : 0
-        if (isBoosting) spd = 28 
+        
+        // 🏁 WEIGHTED TUNED VELOCITY PHYSICS: Scaled standard speed ceiling from 8 down to a clean 4.8
+        let spd = dist > 25 ? Math.min(dist * 0.035, 4.8) : 0
+        if (isBoosting) spd = 18 // Modulated sudden dart propulsion threshold
+        
         const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
         if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
         cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy))
