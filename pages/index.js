@@ -15,25 +15,23 @@ export default function Home() {
   const [foodPellets, setFoodPellets] = useState([])
   const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
 
-  // EVOLUTION WINDOW & STATE MANAGEMENT TIERS
-  const [currentTierIndex, setCurrentTierIndex] = useState(0)
-  const [isEvoWindowOpen, setIsEvoWindowOpen] = useState(false)
-  const lastEvolvedMilestone = useRef(0)
+  // EVOLUTION LOOP MODES AND TIERS SYSTEM CONFIGURATION
+  const [currentTierIndex, setCurrentTierIndex] = useState(0) // Track which chain stage you are on
+  const [showEvoWindow, setShowEvoWindow] = useState(false)   // Controls the animal-evo popup tray view
 
-  // Explicit mapping array pointing directly to your case-sensitive file storage names
   const evolutionChain = [
-    { name: "Sacabambaspis", sprite: "/sacabambaspis.png", scale: 90 },
-    { name: "Stethacanthus altonensis", sprite: "/Stethacanthus-altonensis.png", scale: 100 },
-    { name: "Squalicorax pristodontus", sprite: "/Squalicorax-Pristodontus.png", scale: 112 },
-    { name: "Xiphiorhynchus kimblalocki", sprite: "/Xiphiorhynchus-kimblalocki.png", scale: 125 },
-    { name: "Liopleurodon Ferox", sprite: "/Liopleurodon-Ferox.png", scale: 140 },
-    { name: "Otodus Megalodon", sprite: "/Otodus-Megalodon.png", scale: 170 }
+    { name: "Sacabambaspis", scale: 80, sprite: "/sacabambaspis.png" },
+    { name: "Stethacanthus altonensis", scale: 95, sprite: "/Stethacanthus-altonensis.png" },
+    { name: "Squalicorax Pristodontus", scale: 110, sprite: "/Squalicorax-Pristodontus.png" },
+    { name: "Xiphiorhynchus kimblalocki", scale: 125, sprite: "/Xiphiorhynchus-kimblalocki.png" },
+    { name: "Liopleurodon Ferox", scale: 145, sprite: "/Liopleurodon-Ferox.png" }, // Bigger model hitbox
+    { name: "Otodus Megalodon", scale: 175, sprite: "/Otodus-Megalodon.png" }       // Premium top apex scale
   ]
 
   const [leaderboard, setLeaderboard] = useState([])
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Evolution & Local Leaderboard tracking profiles active!" }
+    { user: "System", text: "Evolution HUD Matrix Active! Each tier requires 2,500 score points." }
   ])
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
@@ -53,16 +51,18 @@ export default function Home() {
     y: Math.floor(Math.random() * 1650) + 100
   })
 
-  // CHECKPOINT MONITOR: Checks if you accumulated an extra 2500 points to show the card modal box
+  // REALTIME SCORE TRIGGER MILESTONE SCANNER
   useEffect(() => {
     if (!isPlaying) return
     
-    const targetMilestone = (lastEvolvedMilestone.current + 1) * 2500
-    if (score >= targetMilestone && lastEvolvedMilestone.current < evolutionChain.length - 1) {
-      lastEvolvedMilestone.current += 1
-      setIsEvoWindowOpen(true) // Freezes tracking to open the choice popup frame card container overlay
+    // Calculates what your tier index *should* be based on exactly 2,500 points intervals
+    const targetTierIndex = Math.min(Math.floor(score / 2500), evolutionChain.length - 1)
+    
+    // If you qualify for a higher animal tier and haven't chosen to evolve it yet, flash open the evo window popup panel!
+    if (targetTierIndex > currentTierIndex && !showEvoWindow) {
+      setShowEvoWindow(true)
     }
-  }, [score, isPlaying])
+  }, [score, isPlaying, currentTierIndex])
     useEffect(() => {
     if (!isPlaying) return
     
@@ -111,25 +111,25 @@ export default function Home() {
       bigRock: { x: 2100, y: 1755, w: 160 }
     })
   }, [isPlaying])
-    useEffect(() => {
+          useEffect(() => {
     if (!isPlaying) return
 
     let simulatedBots = [
-      { name: "Apex_Megalodon", score: 14200 },
+      { name: "Apex_Megalodon", score: 12500 },
       { name: "TrenchHunter", score: 9100 },
       { name: "Helico_Bite", score: 6500 },
       { name: "Liopleurodon", score: 4800 },
       { name: "Shasta_Surfer", score: 3400 },
       { name: "Pliosaurus_Rex", score: 2100 },
-      { name: "SwordFish_X", score: 1200 },
-      { name: "Stetha_Fin", score: 400 },
+      { name: "SwordFish_X", score: 1600 },
+      { name: "Stetha_Fin", score: 800 },
       { name: "Squalicorax", score: 200 }
     ]
 
     const updateLeaderboard = () => {
       simulatedBots = simulatedBots.map(bot => ({
         ...bot,
-        score: bot.score + (Math.random() > 0.7 ? 120 : 0)
+        score: bot.score + (Math.random() > 0.65 ? 100 : 0)
       }))
 
       const currentList = [
@@ -145,15 +145,12 @@ export default function Home() {
     const rankingClock = setInterval(updateLeaderboard, 2500)
     return () => clearInterval(rankingClock)
   }, [isPlaying, score, username])
-  useEffect(() => {
+    useEffect(() => {
     if (!isPlaying) return
 
     const handleMouseMove = (e) => {
       if (!viewRef.current) return
       const rect = viewRef.current.getBoundingClientRect()
-      // Freeze steering rotation physics changes when evolution selection prompt panel is resting open
-      if (isEvoWindowOpen) return
-
       mousePos.current = {
         x: e.clientX - rect.left - (rect.width / 2),
         y: e.clientY - rect.top - (rect.height / 2)
@@ -165,8 +162,6 @@ export default function Home() {
       let currentY = playerPosition.y
 
       setPlayerPosition((p) => {
-        if (isEvoWindowOpen) return p // Halts velocity momentum shifts during choice mode screens
-
         const angleRad = Math.atan2(mousePos.current.y, mousePos.current.x)
         const distance = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
         const speedMultiplier = distance > 25 ? Math.min(distance * 0.05, 8) : 0
@@ -210,7 +205,7 @@ export default function Home() {
       window.removeEventListener('mousemove', handleMouseMove)
       clearInterval(gameLoop)
     }
-  }, [isPlaying, playerPosition, playerRotation, isEvoWindowOpen])
+  }, [isPlaying, playerPosition, playerRotation])
     return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head>
@@ -222,13 +217,38 @@ export default function Home() {
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
             <strong>PREHISTOOIO ARENA v0.7</strong><br />
             <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span><br />
-            <span style={{ fontSize: '0.85rem', color: '#FFD700' }}>SPECIES: {evolutionChain[currentTierIndex].name}</span><br />
+            <span style={{ fontSize: '0.85rem', color: '#FFD700', textTransform: 'uppercase' }}>SPECIES: {evolutionChain[currentTierIndex].name}</span><br />
             Coordinates: X: {Math.round(playerPosition.x)} Y: {Math.round(playerPosition.y)}
           </div>
           
-          <button className="leave-btn" style={{ top: 'auto', bottom: '185px', right: '15px' }} onClick={() => { setIsPlaying(false); setScore(0); setCurrentTierIndex(0); lastEvolvedMilestone.current = 0; }}>Leave Map</button>
+          <button className="leave-btn" style={{ top: 'auto', bottom: '185px', right: '15px' }} onClick={() => { setIsPlaying(false); setScore(0); setCurrentTierIndex(0); setShowEvoWindow(false); }}>Leave Map</button>
 
-          {/* DYNAMIC LEADERBOARD TEMPLATE */}
+          {/* DYNAMIC INTERACTIVE CHOOSE EVOLUTION WINDOW PROPS BOX LAYER */}
+          {showEvoWindow && currentTierIndex < evolutionChain.length - 1 && (
+            <div className="hud-evolution-window-popup-tray">
+              <div style={{ position: 'relative', width: '100%' }}>
+                <img src="/animal-evo.png" alt="Evo Banner" style={{ width: '100%', display: 'block' }} />
+                
+                {/* INTERACTIVE CHOICE CORE TRIGGER HOVER OVERLAY BUTTON */}
+                <div 
+                  className="evo-card-image-anchor-btn" 
+                  title={"Click to Evolve into " + evolutionChain[currentTierIndex + 1].name}
+                  onClick={() => {
+                    setCurrentTierIndex(prev => prev + 1) // Advance to the next matched species tier index
+                    setShowEvoWindow(false)               // Slide away the notification tray until next milestone
+                  }}
+                >
+                  <img 
+                    src={evolutionChain[currentTierIndex + 1].sprite} 
+                    alt="Next Up Option" 
+                    className="evo-embedded-inner-preview-sprite" 
+                    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="hud-leaderboard-frame-container">
             <div style={{ position: 'relative', width: '100%' }}>
               <img src="/game-board.png" alt="Leaderboard Scale" className="leaderboard-template-asset-graphic" onError={(e) => { e.target.src = "/leaderboard.png" }} />
@@ -251,32 +271,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 🧬 DEEEEP.IO INTERACTIVE EVOLUTION SELECTION PANEL WINDOW */}
-          {isEvoWindowOpen && currentTierIndex < evolutionChain.length - 1 && (
-            <div className="evo-ui-center-alert-container" onClick={(e) => e.stopPropagation()}>
-              <div style={{ position: 'relative', width: '100%' }}>
-                <img src="/animal-evo.png" alt="Evolve Card" style={{ width: '100%', display: 'block' }} />
-                <button className="evo-skip-dismiss-cross-btn" onClick={() => setIsEvoWindowOpen(false)}>Skip X</button>
-                
-                {/* Center hit zone box: Clicking this triggers your mutation evolution transforms */}
-                <div className="evo-click-bubble-trigger" onClick={() => {
-                  setCurrentTierIndex((prev) => prev + 1)
-                  setIsEvoWindowOpen(false)
-                }}>
-                  <img 
-                    src={evolutionChain[currentTierIndex + 1].sprite} 
-                    alt="Next Species" 
-                    className="evo-inner-preview-graphic" 
-                    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }}
-                  />
-                  <div className="evo-prompt-title-subtext">
-                    Evolve to {evolutionChain[currentTierIndex + 1].name}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           <div className="chat-container-hud" onClick={(e) => e.stopPropagation()}>
             <div className="chat-scroll-view">
               {chatMessages.map((m, i) => (
@@ -295,23 +289,49 @@ export default function Home() {
 
             {propsList.kelp.map((k, idx) => {
               return (
-                <img key={'k_' + idx} src="/kelp.png" alt="Sea Kelp" className="scrolling-kelp-prop" style={{ top: k.y, left: k.x, height: k.h }} onError={(e) => { e.target.style.display = 'none' }} />
+                <img 
+                  key={'k_' + idx}
+                  src="/kelp.png"
+                  alt="Sea Kelp"
+                  className="scrolling-kelp-prop"
+                  style={{ top: k.y, left: k.x, height: k.h }}
+                  onError={(e) => { e.target.style.display = 'none' }}
+                />
               )
             })}
 
             {propsList.volcano && (
-              <img src="/volcano.png" alt="Volcano Vent" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />
+              <img 
+                src="/volcano.png"
+                alt="Volcano Vent"
+                className="scrolling-volcano-prop"
+                style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }}
+                onError={(e) => { e.target.style.display = 'none' }}
+              />
             )}
 
             {propsList.bigRock && (
-              <img src="/big-rock.png" alt="Big Rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />
+              <img 
+                src="/big-rock.png"
+                alt="Big Rock"
+                className="scrolling-rock-prop"
+                style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }}
+                onError={(e) => { e.target.style.display = 'none' }}
+              />
             )}
 
             {foodPellets.map((pellet) => !pellet.isEaten && (
-              <img key={pellet.id} src={pellet.src} alt="Ocean Plankton" className="custom-food-sprite-pellet" style={{ top: pellet.y, left: pellet.x }} onError={(e) => { e.target.src = "/food.png" }} />
+              <img 
+                key={pellet.id}
+                src={pellet.src}
+                alt="Ocean Plankton"
+                className="custom-food-sprite-pellet"
+                style={{ top: pellet.y, left: pellet.x }}
+                onError={(e) => { e.target.src = "/food.png" }}
+              />
             ))}
 
-            {/* DYNAMIC AVATAR TRACKER: Bound precisely to the live evolution chain matrix scales */}
+            {/* DYNAMIC PLAYER ELEMENT WINDOW: Responsive scale and case-matched sprite linking variables */}
             <div style={{ 
               position: 'absolute', 
               top: playerPosition.y, 
@@ -323,4 +343,26 @@ export default function Home() {
               width: evolutionChain[currentTierIndex].scale + 'px', 
               pointerEvents: 'none' 
             }}>
-              <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight:
+              <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', whiteSpace: 'nowrap' }}>
+                {username || "Guest"}
+              </span>
+              <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}>
+                <img 
+                  src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evolutionChain[currentTierIndex].sprite} 
+                  alt="Player Creature" 
+                  className="player-fish-sprite" 
+                  onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
+          <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
+
+          <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
+            <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
+              <button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
+              <h2 className="ocean-title"
