@@ -15,14 +15,13 @@ export default function Home() {
   const [foodPellets, setFoodPellets] = useState([])
   const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
 
-  // BOOST MANAGEMENT PARAMETERS
   const [boostBars, setBoostBars] = useState(3) 
   const [foodEatenCount, setFoodEatenCount] = useState(0) 
   const [isBoosting, setIsBoosting] = useState(false)
 
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Physics tracking completely restored! Tap inside the arena grid to boost." }
+    { user: "System", text: "Chat Color Matrix online! Type (RED), (BLUE), (GREEN), or (CYAN) to style your logs.", colorCode: "#00FF1A" }
   ])
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
@@ -30,10 +29,29 @@ export default function Home() {
     { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }
   ]
 
+  // DYNAMIC COLOR DICTIONARY ENGINE
+  const detectTextColor = (targetString) => {
+    const cleanStr = (targetString || "").toUpperCase()
+    if (cleanStr.includes("(RED)")) return "#ff4d4d"
+    if (cleanStr.includes("(BLUE)")) return "#3b82f6"
+    if (cleanStr.includes("(GREEN)")) return "#00FF1A"
+    if (cleanStr.includes("(CYAN)")) return "#00ffff"
+    return "#FFFFFF" // Standard white fallback text color
+  }
+
   const handleSendChat = (e) => {
     e.preventDefault()
     if (!chatInput.trim()) return
-    setChatMessages((p) => [...p, { user: username || "Guest", text: chatInput }])
+
+    // Scans both the text input string and your name tag to choose priority color layers
+    let messageColor = detectTextColor(chatInput)
+    if (messageColor === "#FFFFFF") messageColor = detectTextColor(username)
+
+    setChatMessages((p) => [...p, { 
+      user: username || "Guest", 
+      text: chatInput,
+      colorCode: messageColor
+    }])
     setChatInput("")
   }
 
@@ -42,12 +60,10 @@ export default function Home() {
     y: Math.floor(Math.random() * 1650) + 100
   })
 
-  // THE REPAIRED DIRECT ENGINE CLICK HANDLER
   const handleViewportClick = () => {
     if (boostBars < 1 || isBoosting) return
-    
     setIsBoosting(true)
-    setBoostBars(0) // Wipeout behavior clears all remaining energy to 0
+    setBoostBars(0) 
 
     setTimeout(() => {
       setIsBoosting(false)
@@ -118,7 +134,7 @@ export default function Home() {
         const distance = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
         
         let speedMultiplier = distance > 25 ? Math.min(distance * 0.05, 8) : 0
-        if (isBoosting) speedMultiplier = 28 // Propulsion thrust multiplier calculation
+        if (isBoosting) speedMultiplier = 28 
 
         const dx = Math.cos(angleRad) * speedMultiplier
         const dy = Math.sin(angleRad) * speedMultiplier
@@ -234,9 +250,7 @@ export default function Home() {
         }
       `}} />
       {isPlaying ? (
-        /* FIXED ENGINE MOUNT: Click detector bound safely right to the canvas viewport to prevent text selection blocks */
         <div className="arena-viewport" ref={viewRef} onMouseDown={handleViewportClick}>
-
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
             <strong>PREHISTOOIO ARENA v0.7</strong><br />
             <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span>
@@ -253,7 +267,12 @@ export default function Home() {
           <div className="chat-container-hud" style={{ zIndex: 150 }} onClick={(e) => e.stopPropagation()}>
             <div className="chat-scroll-view">
               {chatMessages.map((m, i) => (
-                <div key={i} className="chat-msg-row"><strong style={{ color: m.user === "System" ? "#00FF1A" : "#FFD700" }}>{m.user}:</strong> {m.text}</div>
+                /* FIXED TYPOGRAPHY MAP: Implements the active colorCode property directly onto message logs row formatting rules */
+                <div key={i} className="chat-msg-row" style={{ color: m.colorCode || '#FFFFFF' }}>
+                  <strong style={{ color: detectTextColor(m.user) !== '#FFFFFF' ? detectTextColor(m.user) : m.user === "System" ? "#00FF1A" : "#FFD700" }}>
+                    {m.user}:
+                  </strong>{" "}{m.text}
+                </div>
               ))}
             </div>
             <form onSubmit={handleSendChat}>
@@ -310,8 +329,20 @@ export default function Home() {
               />
             ))}
 
+            {/* FIXED NAME TAG COLOR ATTACHMENT RULE */}
             <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none', backgroundColor: 'transparent', background: 'transparent' }}>
-              <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', whiteSpace: 'nowrap' }}>
+              <span style={{ 
+                background: 'rgba(0,0,0,0.7)', 
+                padding: '2px 8px', 
+                borderRadius: '4px', 
+                fontSize: '0.75rem', 
+                fontWeight: 'bold', 
+                fontFamily: 'sans-serif', 
+                marginBottom: '8px', 
+                border: '1px solid ' + (detectTextColor(username) !== '#FFFFFF' ? detectTextColor(username) : '#00FF1A'), 
+                color: detectTextColor(username),
+                whiteSpace: 'nowrap' 
+              }}>
                 {username || "Guest"}
               </span>
               <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}>
