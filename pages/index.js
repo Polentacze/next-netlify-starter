@@ -13,12 +13,16 @@ export default function Home() {
 
   const [score, setScore] = useState(0)
   const [foodPellets, setFoodPellets] = useState([])
-
   const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
+
+  // 🚀 BOOST ENGINE STATE PARAMETERS
+  const [boostBars, setBoostBars] = useState(3) 
+  const [foodEatenCount, setFoodEatenCount] = useState(0) 
+  const [isBoosting, setIsBoosting] = useState(false)
 
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Two-Tier Food Matrix restored! Premium ocean food is now live." }
+    { user: "System", text: "Boost engine online! Gather 5 pellets to fill 1 bar. Tap to empty the meter and dash!" }
   ])
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
@@ -38,12 +42,21 @@ export default function Home() {
     y: Math.floor(Math.random() * 1650) + 100
   })
 
+  const handleViewportClick = () => {
+    if (boostBars < 1 || isBoosting) return
+
+    setIsBoosting(true)
+    setBoostBars(0) // WIPEOUT MECHANIC: Instantly dumps all bars to 0 on tap
+
+    setTimeout(() => {
+      setIsBoosting(false)
+    }, 300)
+  }
+
   useEffect(() => {
     if (!isPlaying) return
     
     const pellets = []
-    
-    // 🍇 TIER 1: Spawns 8 standard clusters (6 dots per group)
     for (let c = 0; c < 8; c++) {
       const centerX = Math.floor(Math.random() * 2600) + 200
       const centerY = Math.floor(Math.random() * 1400) + 200
@@ -58,8 +71,6 @@ export default function Home() {
         })
       }
     }
-
-    // 🌊 TIER 2: Spawns 4 premium clusters (4 dots per group)
     for (let c = 0; c < 4; c++) {
       const centerX = Math.floor(Math.random() * 2600) + 200
       const centerY = Math.floor(Math.random() * 1400) + 200
@@ -69,20 +80,89 @@ export default function Home() {
           x: centerX + (Math.random() * 120 - 60),
           y: centerY + (Math.random() * 120 - 60),
           isEaten: false,
-          value: 120, // Premium payout value
+          value: 120,
           src: "/ocean-food.png"
         })
       }
     }
-
     setFoodPellets(pellets)
 
     setPropsList({
       kelp: [
-        { x: 600, y: 1755, h: 180 },
-        { x: 1200, y: 1755, h: 210 },
-        { x: 1800, y: 1755, h: 170 },
-        { x: 2400, y: 1755, h: 230 }
+        { x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 },
+        { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }
+      ],
+      volcano: { x: 900, y: 1765, w: 110 },
+      bigRock: { x: 2100, y: 1755, w: 160 }
+    })
+  }, [isPlaying])
+    const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
+  const slotPositions = [
+    { t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" },
+    { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }
+  ]
+
+  const handleSendChat = (e) => {
+    e.preventDefault()
+    if (!chatInput.trim()) return
+    setChatMessages((p) => [...p, { user: username || "Guest", text: chatInput }])
+    setChatInput("")
+  }
+
+  const getRandomCoord = () => ({
+    x: Math.floor(Math.random() * 2800) + 100,
+    y: Math.floor(Math.random() * 1650) + 100
+  })
+
+  const handleViewportClick = () => {
+    if (boostBars < 1 || isBoosting) return
+
+    setIsBoosting(true)
+    setBoostBars(0) // WIPEOUT MECHANIC: Instantly dumps all bars to 0 on tap
+
+    setTimeout(() => {
+      setIsBoosting(false)
+    }, 300)
+  }
+
+  useEffect(() => {
+    if (!isPlaying) return
+    
+    const pellets = []
+    for (let c = 0; c < 8; c++) {
+      const centerX = Math.floor(Math.random() * 2600) + 200
+      const centerY = Math.floor(Math.random() * 1400) + 200
+      for (let i = 0; i < 6; i++) {
+        pellets.push({
+          id: "standard_" + c + "_" + i,
+          x: centerX + (Math.random() * 120 - 60),
+          y: centerY + (Math.random() * 120 - 60),
+          isEaten: false,
+          value: 100,
+          src: "/food.png"
+        })
+      }
+    }
+    for (let c = 0; c < 4; c++) {
+      const centerX = Math.floor(Math.random() * 2600) + 200
+      const centerY = Math.floor(Math.random() * 1400) + 200
+      for (let i = 0; i < 4; i++) {
+        pellets.push({
+          id: "premium_" + c + "_" + i,
+          x: centerX + (Math.random() * 120 - 60),
+          y: centerY + (Math.random() * 120 - 60),
+          isEaten: false,
+          value: 120,
+          src: "/ocean-food.png"
+        })
+      }
+    }
+    setFoodPellets(pellets)
+
+    setPropsList({
+      kelp: [
+        { x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 },
+        { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }
       ],
       volcano: { x: 900, y: 1765, w: 110 },
       bigRock: { x: 2100, y: 1755, w: 160 }
@@ -107,7 +187,10 @@ export default function Home() {
       setPlayerPosition((p) => {
         const angleRad = Math.atan2(mousePos.current.y, mousePos.current.x)
         const distance = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
-        const speedMultiplier = distance > 25 ? Math.min(distance * 0.05, 8) : 0
+        
+        let speedMultiplier = distance > 25 ? Math.min(distance * 0.05, 8) : 0
+        if (isBoosting) speedMultiplier = 28 // Hard forward propulsive thrust modifier
+
         const dx = Math.cos(angleRad) * speedMultiplier
         const dy = Math.sin(angleRad) * speedMultiplier
         
@@ -125,8 +208,16 @@ export default function Home() {
           const distanceToFood = Math.sqrt((currentX - pellet.x) ** 2 + (currentY - pellet.y) ** 2)
           
           if (distanceToFood < 30) {
-            // Adds the individual point reward based on what specific food type was gathered
             setScore((s) => s + pellet.value)
+
+            setFoodEatenCount((prevCount) => {
+              const nextCount = prevCount + 1
+              if (nextCount >= 5) {
+                setBoostBars((bars) => Math.min(3, bars + 1)) 
+                return 0 
+              }
+              return nextCount
+            })
             
             setTimeout(() => {
               setFoodPellets((currentPellets) =>
@@ -151,7 +242,7 @@ export default function Home() {
       window.removeEventListener('mousemove', handleMouseMove)
       clearInterval(gameLoop)
     }
-  }, [isPlaying, playerPosition, playerRotation])
+  }, [isPlaying, playerPosition, playerRotation, isBoosting, boostBars])
     return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head>
@@ -179,10 +270,7 @@ export default function Home() {
         .infinite-ocean-world { position: absolute; width: 3000px; height: 2000px; background-color: #0b355e; background-image: linear-gradient(rgba(255, 255, 255, 0.04) 2px, transparent 2px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 2px, transparent 2px); background-size: 100px 100px; transition: transform 0.1s ease-out; }
         .leave-btn { position: absolute; top: 15px; right: 15px; background: #ff4d4d; border: 2px solid white; color: white; padding: 0.5rem 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; z-index: 200; }
         .player-fish-sprite { width: 100%; height: auto; display: block; background: transparent !important; mix-blend-mode: normal !important; }
-        
-        /* CRISP TRANSPARENCY: Guarantees your custom food graphics scale cleanly without background box blocks */
         .custom-food-sprite-pellet { position: absolute; width: 20px !important; height: auto !important; transform: translate(-50%, -50%); background-color: transparent !important; background: transparent !important; }
-        
         .chat-container-hud { position: absolute; bottom: 15px; left: 15px; width: 250px; height: 160px; background: rgba(42, 67, 122, 0.85); border: 3px solid #2a437a; border-radius: 12px; display: flex; flex-direction: column; padding: 8px; z-index: 150; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .chat-scroll-view { flex-grow: 1; overflow-y: auto; text-align: left; font-family: sans-serif; font-size: 0.8rem; margin-bottom: 6px; padding-right: 4px; }
         .chat-msg-row { margin-bottom: 4px; line-height: 1.3; word-break: break-word; }
@@ -190,17 +278,39 @@ export default function Home() {
         .chat-input-bar-inner:focus { border-color: #00FF1A; }
         .gravel-seafloor-bed { position: absolute; bottom: 0px; left: 0px; width: 3000px; height: 260px; background-color: #5C4033; border-top: 8px solid #3d2b22; box-shadow: inset 0 10px 20px rgba(0,0,0,0.4); z-index: 30; }
         .scrolling-kelp-prop { position: absolute; transform: translate(-50%, -100%); width: 38px; z-index: 25; pointer-events: none; background: transparent !important; }
-        .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); z-index: 28; pointer-events: none; background: transparent !important; }
-        .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); z-index: 27; pointer-events: none; background: transparent !important; }
+        .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); width: 110px; z-index: 28; pointer-events: none; background: transparent !important; }
+        .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); width: 160px; z-index: 27; pointer-events: none; background: transparent !important; }
+
+        /* FIXED: Changed flex-direction to column to enforce top-down vertical stacking order */
+        .hud-boost-ammunition-deck {
+          display: flex;
+          flex-direction: column; 
+          gap: 4px;
+          margin-top: 8px;
+          width: 14px;
+        }
+        .individual-energy-slice {
+          width: 100%;
+          height: 24px; /* Flips dimensions so rectangles scale taller vertically */
+          border-radius: 2px;
+          border: 1px solid rgba(0,0,0,0.4);
+          transition: background-color 0.15s ease-out;
+        }
       `}} />
       {isPlaying ? (
-        <div className="arena-viewport" ref={viewRef}>
+        <div className="arena-viewport" ref={viewRef} onClick={handleViewportClick}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
             <strong>PREHISTOOIO ARENA v0.7</strong><br />
-            <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span><br />
-            Position Coordinates: X: {Math.round(playerPosition.x)} Y: {Math.round(playerPosition.y)}
+            <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span>
+            
+            {/* RENDERS METERS IN EXACT TOP-DOWN ORDER */}
+            <div className="hud-boost-ammunition-deck">
+              <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255,255,255,0.1)' }} />
+              <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255,255,255,0.1)' }} />
+              <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.1)' }} />
+            </div>
           </div>
-          <button className="leave-btn" onClick={() => { setIsPlaying(false); setScore(0); }}>Leave Map</button>
+          <button className="leave-btn" onClick={(e) => { e.stopPropagation(); setIsPlaying(false); setScore(0); }}>Leave Map</button>
 
           <div className="chat-container-hud" onClick={(e) => e.stopPropagation()}>
             <div className="chat-scroll-view">
@@ -251,11 +361,10 @@ export default function Home() {
               />
             )}
 
-            {/* DYNAMIC TWO-TIER FOOD RENDER: Automatically swaps pellet graphic styles case-sensitively */}
             {foodPellets.map((pellet) => !pellet.isEaten && (
               <img 
                 key={pellet.id}
-                src={pellet.src}
+                src={pellet.src || "/food.png"}
                 alt="Plankton Pellet"
                 className="custom-food-sprite-pellet"
                 style={{ top: pellet.y, left: pellet.x }}
