@@ -21,7 +21,7 @@ export default function Home() {
 
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Chat Color Matrix online! Type (RED), (BLUE), (GREEN), or (CYAN) to style your logs.", colorCode: "#00FF1A" }
+    { user: "System", text: "Lobby customized! Background easter egg sprites active.", colorCode: "#00FF1A" }
   ])
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
@@ -29,29 +29,21 @@ export default function Home() {
     { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }
   ]
 
-  // DYNAMIC COLOR DICTIONARY ENGINE
   const detectTextColor = (targetString) => {
     const cleanStr = (targetString || "").toUpperCase()
     if (cleanStr.includes("(RED)")) return "#ff4d4d"
     if (cleanStr.includes("(BLUE)")) return "#3b82f6"
     if (cleanStr.includes("(GREEN)")) return "#00FF1A"
     if (cleanStr.includes("(CYAN)")) return "#00ffff"
-    return "#FFFFFF" // Standard white fallback text color
+    return "#FFFFFF"
   }
 
   const handleSendChat = (e) => {
     e.preventDefault()
     if (!chatInput.trim()) return
-
-    // Scans both the text input string and your name tag to choose priority color layers
     let messageColor = detectTextColor(chatInput)
     if (messageColor === "#FFFFFF") messageColor = detectTextColor(username)
-
-    setChatMessages((p) => [...p, { 
-      user: username || "Guest", 
-      text: chatInput,
-      colorCode: messageColor
-    }])
+    setChatMessages((p) => [...p, { user: username || "Guest", text: chatInput, colorCode: messageColor }])
     setChatInput("")
   }
 
@@ -64,53 +56,30 @@ export default function Home() {
     if (boostBars < 1 || isBoosting) return
     setIsBoosting(true)
     setBoostBars(0) 
-
-    setTimeout(() => {
-      setIsBoosting(false)
-    }, 300)
+    setTimeout(() => { setIsBoosting(false) }, 300)
   }
 
   useEffect(() => {
     if (!isPlaying) return
-    
     const pellets = []
     for (let c = 0; c < 8; c++) {
       const centerX = Math.floor(Math.random() * 2600) + 200
       const centerY = Math.floor(Math.random() * 1400) + 200
       for (let i = 0; i < 6; i++) {
-        pellets.push({
-          id: "standard_" + c + "_" + i,
-          x: centerX + (Math.random() * 120 - 60),
-          y: centerY + (Math.random() * 120 - 60),
-          isEaten: false,
-          value: 100,
-          src: "/food.png"
-        })
+        pellets.push({ id: "standard_" + c + "_" + i, x: centerX + (Math.random() * 120 - 60), y: centerY + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" })
       }
     }
     for (let c = 0; c < 4; c++) {
       const centerX = Math.floor(Math.random() * 2600) + 200
       const centerY = Math.floor(Math.random() * 1400) + 200
       for (let i = 0; i < 4; i++) {
-        pellets.push({
-          id: "premium_" + c + "_" + i,
-          x: centerX + (Math.random() * 120 - 60),
-          y: centerY + (Math.random() * 120 - 60),
-          isEaten: false,
-          value: 120,
-          src: "/ocean-food.png"
-        })
+        pellets.push({ id: "premium_" + c + "_" + i, x: centerX + (Math.random() * 120 - 60), y: centerY + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" })
       }
     }
     setFoodPellets(pellets)
-
     setPropsList({
-      kelp: [
-        { x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 },
-        { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }
-      ],
-      volcano: { x: 900, y: 1765, w: 110 },
-      bigRock: { x: 2100, y: 1755, w: 160 }
+      kelp: [{ x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 }, { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }],
+      volcano: { x: 900, y: 1765, w: 110 }, bigRock: { x: 2100, y: 1755, w: 160 }
     })
   }, [isPlaying])
     useEffect(() => {
@@ -119,10 +88,7 @@ export default function Home() {
     const handleMouseMove = (e) => {
       if (!viewRef.current) return
       const rect = viewRef.current.getBoundingClientRect()
-      mousePos.current = {
-        x: e.clientX - rect.left - (rect.width / 2),
-        y: e.clientY - rect.top - (rect.height / 2)
-      }
+      mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) }
     }
 
     const gameLoop = setInterval(() => {
@@ -132,16 +98,11 @@ export default function Home() {
       setPlayerPosition((p) => {
         const angleRad = Math.atan2(mousePos.current.y, mousePos.current.x)
         const distance = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
-        
         let speedMultiplier = distance > 25 ? Math.min(distance * 0.05, 8) : 0
         if (isBoosting) speedMultiplier = 28 
-
         const dx = Math.cos(angleRad) * speedMultiplier
         const dy = Math.sin(angleRad) * speedMultiplier
-        
-        if (speedMultiplier > 0) {
-          setPlayerRotation(angleRad * (180 / Math.PI) + 90)
-        }
+        if (speedMultiplier > 0) { setPlayerRotation(angleRad * (180 / Math.PI) + 90) }
         currentX = Math.max(50, Math.min(2950, p.x + dx))
         currentY = Math.max(50, Math.min(1725, p.y + dy))
         return { x: currentX, y: currentY }
@@ -151,26 +112,17 @@ export default function Home() {
         prevPellets.map((pellet) => {
           if (pellet.isEaten) return pellet
           const distanceToFood = Math.sqrt((currentX - pellet.x) ** 2 + (currentY - pellet.y) ** 2)
-          
           if (distanceToFood < 30) {
             setScore((s) => s + pellet.value)
-
             setFoodEatenCount((prevCount) => {
               const nextCount = prevCount + 1
-              if (nextCount >= 5) {
-                setBoostBars((bars) => Math.min(3, bars + 1)) 
-                return 0 
-              }
+              if (nextCount >= 5) { setBoostBars((bars) => Math.min(3, bars + 1)); return 0 }
               return nextCount
             })
-            
             setTimeout(() => {
               setFoodPellets((currentPellets) =>
                 currentPellets.map((p) => {
-                  if (p.id === pellet.id) {
-                    const newLoc = getRandomCoord()
-                    return { ...p, x: newLoc.x, y: newLoc.y, isEaten: false }
-                  }
+                  if (p.id === pellet.id) { const newLoc = getRandomCoord(); return { ...p, x: newLoc.x, y: newLoc.y, isEaten: false } }
                   return p
                 })
               )
@@ -188,7 +140,7 @@ export default function Home() {
       clearInterval(gameLoop)
     }
   }, [isPlaying, playerPosition, playerRotation, isBoosting, boostBars])
-      return (
+    return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head>
         <title>Prehistooio</title>
@@ -207,7 +159,7 @@ export default function Home() {
         .slot-over { position: absolute; cursor: pointer; border-radius: 14px; transition: all 0.15s; border: 3px solid transparent !important; background-color: transparent !important; background: transparent !important; }
         .slot-over:hover { border-color: #00FF1A !important; background: rgba(0, 255, 26, 0.08) !important; box-shadow: 0 0 15px #00FF1A; }
         .hud-banner { margin-top: 1.5rem; background: #2a437a; padding: 1rem; border-radius: 16px; min-height: 60px; display: flex; justifyContent: center; alignItems: center; border: 3px solid rgba(255,255,255,0.15); }
-        .launch-form { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; margin-top: 1rem; }
+        .launch-form { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; margin-top: 1rem; z-index: 50; }
         .input-wrap { position: relative; width: 320px; }
         .play-btn { background: none; border: none; cursor: pointer; width: 180px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
         .field-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; background: transparent; border: none; outline: none; color: #333333; font-size: 1.1rem; text-align: center; font-weight: bold; }
@@ -223,21 +175,28 @@ export default function Home() {
         .chat-input-bar-inner:focus { border-color: #00FF1A; }
         .gravel-seafloor-bed { position: absolute; bottom: 0px; left: 0px; width: 3000px; height: 260px; background-color: #5C4033; border-top: 8px solid #3d2b22; box-shadow: inset 0 10px 20px rgba(0,0,0,0.4); z-index: 30; }
         
-        /* FIXED KELP ANCHOR: Forced layout translation baseline directly to bottom-center of the image dimensions */
-        .scrolling-kelp-prop { 
-          position: absolute; 
-          transform: translate(-50%, -100%); 
-          transform-origin: bottom center;
-          width: 38px; 
-          z-index: 25; 
-          pointer-events: none; 
-          background: transparent !important; 
-        }
+        .scrolling-kelp-prop { position: absolute; transform: translate(-50%, -100%); transform-origin: bottom center; width: 38px; z-index: 25; pointer-events: none; background: transparent !important; }
         .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); z-index: 28; pointer-events: none; background: transparent !important; }
         .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); z-index: 27; pointer-events: none; background: transparent !important; }
 
         .hud-boost-ammunition-deck { position: absolute; top: 85px; right: 20px; display: flex; flex-direction: column-reverse; gap: 6px; width: 18px; height: auto; background: rgba(0,0,0,0.4); padding: 6px 4px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); z-index: 190; }
         .individual-energy-slice { width: 100%; height: 32px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.6); transition: background-color 0.15s ease-out, box-shadow 0.15s; }
+
+        /* 🌤️ AMBIENT LOBBY EASTER EGG CSS ANIMATIONS */
+        @keyframes ambientFloatOne {
+          0% { transform: translateY(110vh) translateX(0px) rotate(0deg); opacity: 0; }
+          10% { opacity: 0.4; }
+          90% { opacity: 0.4; }
+          100% { transform: translateY(-20vh) translateX(70px) rotate(360deg); opacity: 0; }
+        }
+        @keyframes ambientFloatTwo {
+          0% { transform: translateY(110vh) translateX(0px) rotate(0deg); opacity: 0; }
+          15% { opacity: 0.3; }
+          85% { opacity: 0.3; }
+          100% { transform: translateY(-20vh) translateX(-50px) rotate(-180deg); opacity: 0; }
+        }
+        .lobby-critter-one { position: fixed; left: 12%; width: 55px; height: auto; pointer-events: none; z-index: 5; animation: ambientFloatOne 16s linear infinite; }
+        .lobby-critter-two { position: fixed; right: 15%; width: 45px; height: auto; pointer-events: none; z-index: 5; animation: ambientFloatTwo 22s linear infinite; }
       `}} />
       {isPlaying ? (
         <div className="arena-viewport" ref={viewRef} onMouseDown={handleViewportClick}>
@@ -245,7 +204,6 @@ export default function Home() {
             <strong>PREHISTOOIO ARENA v0.7</strong><br />
             <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span>
           </div>
-          
           <button className="leave-btn" style={{ right: '20px' }} onClick={(e) => { e.stopPropagation(); setIsPlaying(false); setScore(0); }}>Leave Map</button>
 
           <div className="hud-boost-ammunition-deck">
@@ -258,126 +216,51 @@ export default function Home() {
             <div className="chat-scroll-view">
               {chatMessages.map((m, i) => (
                 <div key={i} className="chat-msg-row" style={{ color: m.colorCode || '#FFFFFF' }}>
-                  <strong style={{ color: detectTextColor(m.user) !== '#FFFFFF' ? detectTextColor(m.user) : m.user === "System" ? "#00FF1A" : "#FFD700" }}>
-                    {m.user}:
-                  </strong>{" "}{m.text}
+                  <strong style={{ color: detectTextColor(m.user) !== '#FFFFFF' ? detectTextColor(m.user) : m.user === "System" ? "#00FF1A" : "#FFD700" }}>{m.user}:</strong>{" "}{m.text}
                 </div>
               ))}
             </div>
-            <form onSubmit={handleSendChat}>
-              <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
-            </form>
+            <form onSubmit={handleSendChat}><input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} /></form>
           </div>
           
-          <div className="infinite-ocean-world" style={{
-            transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)'
-          }}>
+          <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
-
-            {/* FINAL RESOLUTION TWEAK: Set coordinate parameter tightly to exactly 1775px */}
-            {propsList.kelp.map((k, idx) => {
-              return (
-                <img 
-                  key={'k_' + idx}
-                  src="/kelp.png"
-                  alt="Sea Kelp"
-                  className="scrolling-kelp-prop"
-                  style={{ top: 1775, left: k.x, height: k.h }}
-                  onError={(e) => { e.target.style.display = 'none' }}
-                />
-              )
-            })}
-
-            {propsList.volcano && (
-              <img 
-                src="/volcano.png"
-                alt="Volcano Vent"
-                className="scrolling-volcano-prop"
-                style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }}
-                onError={(e) => { e.target.style.display = 'none' }}
-              />
-            )}
-
-            {propsList.bigRock && (
-              <img 
-                src="/big-rock.png"
-                alt="Big Rock"
-                className="scrolling-rock-prop"
-                style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }}
-                onError={(e) => { e.target.style.display = 'none' }}
-              />
-            )}
-
-            {foodPellets.map((pellet) => !pellet.isEaten && (
-              <img 
-                key={pellet.id}
-                src={pellet.src || "/food.png"}
-                alt="Plankton Pellet"
-                className="custom-food-sprite-pellet"
-                style={{ top: pellet.y, left: pellet.x }}
-                onError={(e) => { e.target.src = "/food.png" }}
-              />
-            ))}
+            {propsList.kelp.map((k, idx) => <img key={'k_' + idx} src="/kelp.png" alt="Sea Kelp" className="scrolling-kelp-prop" style={{ top: 1775, left: k.x, height: k.h }} onError={(e) => { e.target.style.display = 'none' }} />)}
+            {propsList.volcano && <img src="/volcano.png" alt="Volcano Vent" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />}
+            {propsList.bigRock && <img src="/big-rock.png" alt="Big Rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
+            {foodPellets.map((pellet) => !pellet.isEaten && <img key={pellet.id} src={pellet.src || "/food.png"} alt="Plankton Pellet" className="custom-food-sprite-pellet" style={{ top: pellet.y, left: pellet.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
 
             <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none', backgroundColor: 'transparent', background: 'transparent' }}>
-              <span style={{ 
-                background: 'rgba(0,0,0,0.7)', 
-                padding: '2px 8px', 
-                borderRadius: '4px', 
-                fontSize: '0.75rem', 
-                fontWeight: 'bold', 
-                fontFamily: 'sans-serif', 
-                marginBottom: '8px', 
-                border: '1px solid ' + (detectTextColor(username) !== '#FFFFFF' ? detectTextColor(username) : '#00FF1A'), 
-                color: detectTextColor(username),
-                whiteSpace: 'nowrap' 
-              }}>
-                {username || "Guest"}
-              </span>
-              <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}>
-                <img 
-                  src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : "/sacabambaspis.png"} 
-                  alt="Player Creature" 
-                  className="player-fish-sprite" 
-                  onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
-                />
-              </div>
+              <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid ' + (detectTextColor(username) !== '#FFFFFF' ? detectTextColor(username) : '#00FF1A'), color: detectTextColor(username), whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
+              <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}><img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : "/sacabambaspis.png"} alt="Player Creature" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /></div>
             </div>
           </div>
         </div>
       ) : (
         <>
+          {/* LOBBY AMBIENT SPIRAL EASTER EGGS */}
+          <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="Easter Egg" />
+          <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="Easter Egg" />
+
           <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
           <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
           <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
-            <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
-              <button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
-              <h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2>
-              <div className="grid-container">
-                <img src="/AnimalGrid.png" alt="Grid" className="grid-img" />
-                {slots.map((s, i) => (
-                  <div key={i} className="slot-over" style={{ top: slotPositions[i].t, left: slotPositions[i].l, width: "10.5%", height: "28%" }} onMouseEnter={() => setHoveredAnimal(slots[i])} onMouseLeave={() => setHoveredAnimal("")} />
-                ))}
-              </div>
-              <div className="hud-banner">
-                <p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#fff' }}>{hoveredAnimal || "Hover over a creature to analyze metadata"}</p>
-              </div>
-            </div>
+            <div className="wiki-panel" onClick={(e) => e.stopPropagation()}><button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button><h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2><div className="grid-container"><img src="/AnimalGrid.png" alt="Grid" className="grid-img" />{slots.map((s, i) => <div key={i} className="slot-over" style={{ top: slotPositions[i].t, left: slotPositions[i].l, width: "10.5%", height: "28%" }} onMouseEnter={() => setHoveredAnimal(slots[i])} onMouseLeave={() => setHoveredAnimal("")} />)}</div><div className="hud-banner"><p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#fff' }}>{hoveredAnimal || "Hover over a creature to analyze metadata"}</p></div></div>
           </div>
 
-          <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
             <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio</h1>
             <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p>
             <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} />
             <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p>
             <form className="launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}>
-              <div className="input-wrap">
-                <img src="/input-box.png" alt="Input" style={{ width: '100%' }} />
-                <input type="text" className="field-text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} placeholder="Enter Name..." style={{ color: '#333' }} />
-              </div>
+              <div className="input-wrap"><img src="/input-box.png" alt="Input" style={{ width: '100%' }} /><input type="text" className="field-text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} placeholder="Enter Name..." style={{ color: '#333' }} /></div>
               <button type="submit" className="play-btn"><img src="/play-button.png" alt="PLAY" style={{ width: '100%' }} /></button>
             </form>
           </main>
         </>
       )}
+    </div>
+  )
+}
