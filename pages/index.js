@@ -188,7 +188,7 @@ export default function Home() {
       clearInterval(gameLoop)
     }
   }, [isPlaying, playerPosition, playerRotation, isBoosting, boostBars])
-    return (
+      return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head>
         <title>Prehistooio</title>
@@ -222,34 +222,24 @@ export default function Home() {
         .chat-input-bar-inner { width: 100%; background-color: #104E8B; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 4px 8px; color: white; font-size: 0.8rem; outline: none; }
         .chat-input-bar-inner:focus { border-color: #00FF1A; }
         .gravel-seafloor-bed { position: absolute; bottom: 0px; left: 0px; width: 3000px; height: 260px; background-color: #5C4033; border-top: 8px solid #3d2b22; box-shadow: inset 0 10px 20px rgba(0,0,0,0.4); z-index: 30; }
-        .scrolling-kelp-prop { position: absolute; transform: translate(-50%, -100%); width: 38px; z-index: 25; pointer-events: none; background: transparent !important; }
-        .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); width: 110px; z-index: 28; pointer-events: none; background: transparent !important; }
-        .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); width: 160px; z-index: 27; pointer-events: none; background: transparent !important; }
+        
+        /* FIXED KELP ANCHOR: Forced layout translation baseline directly to bottom-center of the image dimensions */
+        .scrolling-kelp-prop { 
+          position: absolute; 
+          transform: translate(-50%, -100%); 
+          transform-origin: bottom center;
+          width: 38px; 
+          z-index: 25; 
+          pointer-events: none; 
+          background: transparent !important; 
+        }
+        .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); z-index: 28; pointer-events: none; background: transparent !important; }
+        .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); z-index: 27; pointer-events: none; background: transparent !important; }
 
-        .hud-boost-ammunition-deck {
-          position: absolute;
-          top: 85px;
-          right: 20px;
-          display: flex;
-          flex-direction: column-reverse; 
-          gap: 6px;
-          width: 18px;
-          height: auto;
-          background: rgba(0,0,0,0.4);
-          padding: 6px 4px;
-          border-radius: 6px;
-          border: 1px solid rgba(255,255,255,0.15);
-          z-index: 190;
-        }
-        .individual-energy-slice {
-          width: 100%;
-          height: 32px; 
-          border-radius: 3px;
-          border: 1px solid rgba(0,0,0,0.6);
-          transition: background-color 0.15s ease-out, box-shadow 0.15s;
-        }
+        .hud-boost-ammunition-deck { position: absolute; top: 85px; right: 20px; display: flex; flex-direction: column-reverse; gap: 6px; width: 18px; height: auto; background: rgba(0,0,0,0.4); padding: 6px 4px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); z-index: 190; }
+        .individual-energy-slice { width: 100%; height: 32px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.6); transition: background-color 0.15s ease-out, box-shadow 0.15s; }
       `}} />
-      {isPlaying ? (
+            {isPlaying ? (
         <div className="arena-viewport" ref={viewRef} onMouseDown={handleViewportClick}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
             <strong>PREHISTOOIO ARENA v0.7</strong><br />
@@ -267,7 +257,6 @@ export default function Home() {
           <div className="chat-container-hud" style={{ zIndex: 150 }} onClick={(e) => e.stopPropagation()}>
             <div className="chat-scroll-view">
               {chatMessages.map((m, i) => (
-                /* FIXED TYPOGRAPHY MAP: Implements the active colorCode property directly onto message logs row formatting rules */
                 <div key={i} className="chat-msg-row" style={{ color: m.colorCode || '#FFFFFF' }}>
                   <strong style={{ color: detectTextColor(m.user) !== '#FFFFFF' ? detectTextColor(m.user) : m.user === "System" ? "#00FF1A" : "#FFD700" }}>
                     {m.user}:
@@ -285,6 +274,7 @@ export default function Home() {
           }}>
             <div className="gravel-seafloor-bed" />
 
+            {/* FIXED KELP POSITION BASELINE: Aligned vertically to match the 1765px mud layer baseline */}
             {propsList.kelp.map((k, idx) => {
               return (
                 <img 
@@ -292,7 +282,7 @@ export default function Home() {
                   src="/kelp.png"
                   alt="Sea Kelp"
                   className="scrolling-kelp-prop"
-                  style={{ top: k.y, left: k.x, height: k.h }}
+                  style={{ top: 1765, left: k.x, height: k.h }}
                   onError={(e) => { e.target.style.display = 'none' }}
                 />
               )
@@ -329,7 +319,6 @@ export default function Home() {
               />
             ))}
 
-            {/* FIXED NAME TAG COLOR ATTACHMENT RULE */}
             <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none', backgroundColor: 'transparent', background: 'transparent' }}>
               <span style={{ 
                 background: 'rgba(0,0,0,0.7)', 
