@@ -19,9 +19,15 @@ export default function Home() {
   const [foodEatenCount, setFoodEatenCount] = useState(0) 
   const [isBoosting, setIsBoosting] = useState(false)
 
+  // 🧬 SINGLE-STEP TIER 1 EVOLUTION MANAGEMENT ENGINE STATE
+  const [currentSpecies, setCurrentSpecies] = useState("Sacabambaspis")
+  const [currentHitboxScale, setCurrentHitboxScale] = useState(90)
+  const [currentAvatarSprite, setCurrentAvatarSprite] = useState("/sacabambaspis.png")
+  const [hasEvoTabAvailable, setHasEvoTabAvailable] = useState(false)
+
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Lobby customized! Background easter egg sprites active.", colorCode: "#00FF1A" }
+    { user: "System", text: "Evolution Engine calibrated! Secure 4,500 score points to transform.", colorCode: "#00FF1A" }
   ])
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
@@ -57,6 +63,16 @@ export default function Home() {
     setIsBoosting(true)
     setBoostBars(0) 
     setTimeout(() => { setIsBoosting(false) }, 300)
+  }
+
+  // ACTIVE TRIGGER CLICK ROUTINE FOR ANIMAL-EVO PANEL
+  const executeMetamorphosisLevelUp = (e) => {
+    e.stopPropagation() // Prevents triggering an accidental boost dash when clicking UI
+    setCurrentSpecies("Stethacanthus altonensis")
+    setCurrentHitboxScale(110) // Expanded physical spacing hitbox
+    setCurrentAvatarSprite("/Stethacanthus altonensis.png")
+    setHasEvoTabAvailable(false) // Clears prompt from display viewport
+    setChatMessages((p) => [...p, { user: "System", text: "🧬 Transformed successfully into Stethacanthus altonensis!", colorCode: "#00FF1A" }])
   }
 
   useEffect(() => {
@@ -112,13 +128,22 @@ export default function Home() {
         prevPellets.map((pellet) => {
           if (pellet.isEaten) return pellet
           const distanceToFood = Math.sqrt((currentX - pellet.x) ** 2 + (currentY - pellet.y) ** 2)
+          
           if (distanceToFood < 30) {
-            setScore((s) => s + pellet.value)
+            const nextScore = score + pellet.value
+            setScore(nextScore)
+
+            // 🧬 THRESHOLD MONITOR: Launches clickable popup if baseline limits cross 4,500 score points
+            if (nextScore >= 4500 && currentSpecies === "Sacabambaspis") {
+              setHasEvoTabAvailable(true)
+            }
+
             setFoodEatenCount((prevCount) => {
               const nextCount = prevCount + 1
               if (nextCount >= 5) { setBoostBars((bars) => Math.min(3, bars + 1)); return 0 }
               return nextCount
             })
+            
             setTimeout(() => {
               setFoodPellets((currentPellets) =>
                 currentPellets.map((p) => {
@@ -139,7 +164,7 @@ export default function Home() {
       window.removeEventListener('mousemove', handleMouseMove)
       clearInterval(gameLoop)
     }
-  }, [isPlaying, playerPosition, playerRotation, isBoosting, boostBars])
+  }, [isPlaying, playerPosition, playerRotation, isBoosting, boostBars, score, currentSpecies])
     return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head>
@@ -182,29 +207,61 @@ export default function Home() {
         .hud-boost-ammunition-deck { position: absolute; top: 85px; right: 20px; display: flex; flex-direction: column-reverse; gap: 6px; width: 18px; height: auto; background: rgba(0,0,0,0.4); padding: 6px 4px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); z-index: 190; }
         .individual-energy-slice { width: 100%; height: 32px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.6); transition: background-color 0.15s ease-out, box-shadow 0.15s; }
 
-        /* 🌤️ AMBIENT LOBBY EASTER EGG CSS ANIMATIONS */
-        @keyframes ambientFloatOne {
-          0% { transform: translateY(110vh) translateX(0px) rotate(0deg); opacity: 0; }
-          10% { opacity: 0.4; }
-          90% { opacity: 0.4; }
-          100% { transform: translateY(-20vh) translateX(70px) rotate(360deg); opacity: 0; }
-        }
-        @keyframes ambientFloatTwo {
-          0% { transform: translateY(110vh) translateX(0px) rotate(0deg); opacity: 0; }
-          15% { opacity: 0.3; }
-          85% { opacity: 0.3; }
-          100% { transform: translateY(-20vh) translateX(-50px) rotate(-180deg); opacity: 0; }
-        }
+        @keyframes ambientFloatOne { 0% { transform: translateY(110vh) translateX(0px) rotate(0deg); opacity: 0; } 10% { opacity: 0.4; } 90% { opacity: 0.4; } 100% { transform: translateY(-20vh) translateX(70px) rotate(360deg); opacity: 0; } }
+        @keyframes ambientFloatTwo { 0% { transform: translateY(110vh) translateX(0px) rotate(0deg); opacity: 0; } 15% { opacity: 0.3; } 85% { opacity: 0.3; } 100% { transform: translateY(-20vh) translateX(-50px) rotate(-180deg); opacity: 0; } }
         .lobby-critter-one { position: fixed; left: 12%; width: 55px; height: auto; pointer-events: none; z-index: 5; animation: ambientFloatOne 16s linear infinite; }
         .lobby-critter-two { position: fixed; right: 15%; width: 45px; height: auto; pointer-events: none; z-index: 5; animation: ambientFloatTwo 22s linear infinite; }
+
+        /* 🌤️ DEEEEP.IO STYLE CLICKABLE INTERACTIVE EVOLUTION OVERLAY PANEL CARD */
+        .evolution-prompt-clickable-hud-box {
+          position: absolute;
+          top: 15px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 135px;
+          height: 100px;
+          z-index: 220;
+          cursor: pointer;
+          pointer-events: auto;
+          transition: transform 0.1s ease-out;
+        }
+        .evolution-prompt-clickable-hud-box:hover {
+          transform: translateX(-50%) scale(1.04);
+          filter: drop-shadow(0 0 10px #00FF1A);
+        }
+        .evolution-preview-avatar-inside-hud {
+          position: absolute;
+          top: 46%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 48px;
+          height: auto;
+          z-index: 225;
+          pointer-events: none;
+        }
       `}} />
       {isPlaying ? (
         <div className="arena-viewport" ref={viewRef} onMouseDown={handleViewportClick}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
-            <strong>PREHISTOOIO ARENA v0.7</strong><br />
-            <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span>
+            <strong>PREHISTOOIO ARENA v1.0</strong><br />
+            <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span><br />
+            <span style={{ fontSize: '0.85rem', color: '#FFD700', textTransform: 'uppercase' }}>SPECIES: {evoTiers[activeTierIndex].name}</span>
           </div>
-          <button className="leave-btn" style={{ right: '20px' }} onClick={(e) => { e.stopPropagation(); setIsPlaying(false); setScore(0); }}>Leave Map</button>
+          
+          <button className="leave-btn" style={{ right: '20px' }} onClick={(e) => { e.stopPropagation(); setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); }}>Leave Map</button>
+
+          {/* DYNAMIC CLICKABLE ANIMAL-EVO HUD OVERLAY PANEL */}
+          {pendingEvolutionIndex !== null && (
+            <div className="evolution-prompt-clickable-hud-box" onClick={() => {
+              setActiveTierIndex(pendingEvolutionIndex)
+              setPendingEvolutionIndex(null)
+              setChatMessages(p => [...p, { user: "System", text: `🧬 Transformed successfully into ${evoTiers[pendingEvolutionIndex].name}! Hitbox expanded.`, colorCode: "#00FF1A" }])
+            }}>
+              <img src="/animal-evo.png" alt="Evolve Background Frame" className="leaderboard-template-asset-graphic" />
+              <img src={evoTiers[pendingEvolutionIndex].file} alt="Evo Target Preview" className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
+              <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
+            </div>
+          )}
 
           <div className="hud-boost-ammunition-deck">
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
@@ -230,18 +287,24 @@ export default function Home() {
             {propsList.bigRock && <img src="/big-rock.png" alt="Big Rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {foodPellets.map((pellet) => !pellet.isEaten && <img key={pellet.id} src={pellet.src || "/food.png"} alt="Plankton Pellet" className="custom-food-sprite-pellet" style={{ top: pellet.y, left: pellet.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
 
-            <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '90px', pointerEvents: 'none', backgroundColor: 'transparent', background: 'transparent' }}>
+            {/* ADJUSTABLE TIER HITBOX CONTAINER */}
+            <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: evoTiers[activeTierIndex].scale + 'px', pointerEvents: 'none', backgroundColor: 'transparent', background: 'transparent' }}>
               <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid ' + (detectTextColor(username) !== '#FFFFFF' ? detectTextColor(username) : '#00FF1A'), color: detectTextColor(username), whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
-              <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}><img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : "/sacabambaspis.png"} alt="Player Creature" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /></div>
+              <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}>
+                <img 
+                  src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex].file} 
+                  alt="Player Creature" 
+                  className="player-fish-sprite" 
+                  onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+                />
+              </div>
             </div>
           </div>
         </div>
       ) : (
         <>
-          {/* LOBBY AMBIENT SPIRAL EASTER EGGS */}
           <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="Easter Egg" />
           <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="Easter Egg" />
-
           <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
           <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
