@@ -18,7 +18,7 @@ export default function Home() {
 
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Endless Food Matrix loaded. Gather clusters to rank up!" }
+    { user: "System", text: "Two-Tier Food Matrix restored! Premium ocean food is now live." }
   ])
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
@@ -42,18 +42,39 @@ export default function Home() {
     if (!isPlaying) return
     
     const pellets = []
+    
+    // 🍇 TIER 1: Spawns 8 standard clusters (6 dots per group)
     for (let c = 0; c < 8; c++) {
       const centerX = Math.floor(Math.random() * 2600) + 200
       const centerY = Math.floor(Math.random() * 1400) + 200
       for (let i = 0; i < 6; i++) {
         pellets.push({
-          id: c + "_" + i,
+          id: "standard_" + c + "_" + i,
           x: centerX + (Math.random() * 120 - 60),
           y: centerY + (Math.random() * 120 - 60),
-          isEaten: false
+          isEaten: false,
+          value: 100,
+          src: "/food.png"
         })
       }
     }
+
+    // 🌊 TIER 2: Spawns 4 premium clusters (4 dots per group)
+    for (let c = 0; c < 4; c++) {
+      const centerX = Math.floor(Math.random() * 2600) + 200
+      const centerY = Math.floor(Math.random() * 1400) + 200
+      for (let i = 0; i < 4; i++) {
+        pellets.push({
+          id: "premium_" + c + "_" + i,
+          x: centerX + (Math.random() * 120 - 60),
+          y: centerY + (Math.random() * 120 - 60),
+          isEaten: false,
+          value: 120, // Premium payout value
+          src: "/ocean-food.png"
+        })
+      }
+    }
+
     setFoodPellets(pellets)
 
     setPropsList({
@@ -67,7 +88,7 @@ export default function Home() {
       bigRock: { x: 2100, y: 1755, w: 160 }
     })
   }, [isPlaying])
-  useEffect(() => {
+    useEffect(() => {
     if (!isPlaying) return
 
     const handleMouseMove = (e) => {
@@ -102,8 +123,11 @@ export default function Home() {
         prevPellets.map((pellet) => {
           if (pellet.isEaten) return pellet
           const distanceToFood = Math.sqrt((currentX - pellet.x) ** 2 + (currentY - pellet.y) ** 2)
+          
           if (distanceToFood < 30) {
-            setScore((s) => s + 100)
+            // Adds the individual point reward based on what specific food type was gathered
+            setScore((s) => s + pellet.value)
+            
             setTimeout(() => {
               setFoodPellets((currentPellets) =>
                 currentPellets.map((p) => {
@@ -155,7 +179,10 @@ export default function Home() {
         .infinite-ocean-world { position: absolute; width: 3000px; height: 2000px; background-color: #0b355e; background-image: linear-gradient(rgba(255, 255, 255, 0.04) 2px, transparent 2px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 2px, transparent 2px); background-size: 100px 100px; transition: transform 0.1s ease-out; }
         .leave-btn { position: absolute; top: 15px; right: 15px; background: #ff4d4d; border: 2px solid white; color: white; padding: 0.5rem 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; z-index: 200; }
         .player-fish-sprite { width: 100%; height: auto; display: block; background: transparent !important; mix-blend-mode: normal !important; }
+        
+        /* CRISP TRANSPARENCY: Guarantees your custom food graphics scale cleanly without background box blocks */
         .custom-food-sprite-pellet { position: absolute; width: 20px !important; height: auto !important; transform: translate(-50%, -50%); background-color: transparent !important; background: transparent !important; }
+        
         .chat-container-hud { position: absolute; bottom: 15px; left: 15px; width: 250px; height: 160px; background: rgba(42, 67, 122, 0.85); border: 3px solid #2a437a; border-radius: 12px; display: flex; flex-direction: column; padding: 8px; z-index: 150; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .chat-scroll-view { flex-grow: 1; overflow-y: auto; text-align: left; font-family: sans-serif; font-size: 0.8rem; margin-bottom: 6px; padding-right: 4px; }
         .chat-msg-row { margin-bottom: 4px; line-height: 1.3; word-break: break-word; }
@@ -224,13 +251,15 @@ export default function Home() {
               />
             )}
 
+            {/* DYNAMIC TWO-TIER FOOD RENDER: Automatically swaps pellet graphic styles case-sensitively */}
             {foodPellets.map((pellet) => !pellet.isEaten && (
               <img 
                 key={pellet.id}
-                src="/food.png"
+                src={pellet.src}
                 alt="Plankton Pellet"
                 className="custom-food-sprite-pellet"
                 style={{ top: pellet.y, left: pellet.x }}
+                onError={(e) => { e.target.src = "/food.png" }}
               />
             ))}
 
