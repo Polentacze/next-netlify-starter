@@ -16,7 +16,7 @@ export default function Home() {
   const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
   const [leaderboard, setLeaderboard] = useState([])
 
-  // 🐳 6-TIER EVOLUTION DATA TABLE WITH PRECISE HIGHER HITBOX SCALES
+  // 🐳 6-TIER EVOLUTION CONFIGURATION DATA TABLE
   const evoTiers = [
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
     { name: "Stethacanthus altonensis", minScore: 4500, scale: 95, file: "/Stethacanthus altonensis.png" },
@@ -30,7 +30,7 @@ export default function Home() {
   const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
 
   const [chatInput, setChatInput] = useState("")
-  const [chatMessages, setChatMessages] = useState([{ user: "System", text: "Evolution HUD restored. 4500 points (45 pellets) required per tier upgrade!" }])
+  const [chatMessages, setChatMessages] = useState([{ user: "System", text: "Evolution HUD calibrated. 4500 points (45 pellets) required per tier upgrade!" }])
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
@@ -57,7 +57,7 @@ export default function Home() {
     setFoodPellets(pellets)
     setPropsList({ kelp: [{ x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 }, { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }], volcano: { x: 900, y: 1765, w: 110 }, bigRock: { x: 2100, y: 1755, w: 160 } })
   }, [isPlaying])
-    useEffect(() => {
+  useEffect(() => {
     if (!isPlaying) return
     const nextIndex = activeTierIndex + 1
     if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) {
@@ -116,7 +116,7 @@ export default function Home() {
     return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head><title>Prehistooio</title><link rel="icon" href="/icon.png?v=1" type="image/png" /></Head>
-      {isPlaying ? (
+            {isPlaying ? (
         <div className="arena-viewport" ref={viewRef}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
             <strong>PREHISTOOIO ARENA v1.0</strong><br />
@@ -134,7 +134,7 @@ export default function Home() {
               setChatMessages(p => [...p, { user: "System", text: `🧬 Transformed successfully into ${evoTiers[pendingEvolutionIndex].name}! Hitbox expanded.` }])
             }}>
               <img src="/animal-evo.png" alt="Evolve Background Frame" className="leaderboard-template-asset-graphic" />
-              <img src={evoTiers[pendingEvolutionIndex].file} alt="Evo Target Preview" className="evolution-preview-avatar-inside-hud" />
+              <img src={evoTiers[pendingEvolutionIndex].file} alt="Evo Target Preview" className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
               <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
             </div>
           )}
@@ -144,8 +144,10 @@ export default function Home() {
               <img src="/game-board.png" alt="Leaderboard Layout Asset" className="leaderboard-template-asset-graphic" onError={(e) => { e.target.src = "/leaderboard.png" }} />
               <div className="leaderboard-absolute-text-overlay-layer">
                 {leaderboard.map((p, r) => (
+                  /* FIXED: Wrapped custom typography text nodes inside a secure parent <div> container row to pass JSX validation rules */
                   
-                    <span>{(r + 1) + ". " + p.name}</span><span>{p.score}</span>
+                    <span>{(r + 1) + ". " + p.name}</span>
+                    <span>{p.score}</span>
                   </div>
                 ))}
               </div>
@@ -156,7 +158,9 @@ export default function Home() {
             <div className="chat-scroll-view">
               {chatMessages.map((m, i) => <div key={i} className="chat-msg-row"><strong style={{ color: m.user === "System" ? "#00FF1A" : "#FFD700" }}>{m.user}:</strong> {m.text}</div>)}
             </div>
-            <form onSubmit={handleSendChat}><input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} /></form>
+            <form onSubmit={handleSendChat}>
+              <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
+            </form>
           </div>
           
           <div className="infinite-ocean-world" style={{ transform: `translate(${400 - playerPosition.x}px, ${300 - playerPosition.y}px)` }}>
@@ -166,10 +170,9 @@ export default function Home() {
             {propsList.bigRock && <img src="/big-rock.png" alt="Rock Prop Monument" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src} alt="Plankton" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
 
-            {/* BACK TO TRANSPARENT AND ADJUSTED DYNAMIC HITBOX SPECIES VIEWER */}
-            <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: evoTiers[activeTierIndex].scale + 'px', pointerEvents: 'none', backgroundColor: 'transparent', background: 'transparent' }}>
+            <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: evoTiers[activeTierIndex].scale + 'px', pointerEvents: 'none' }}>
               <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
-              <div style={{ width: '100%', transform: `rotate(${playerRotation}deg)`, transition: 'transform 0.04s linear', backgroundColor: 'transparent', background: 'transparent' }}>
+              <div style={{ width: '100%', transform: `rotate(${playerRotation}deg)`, transition: 'transform 0.04s linear' }}>
                 <img 
                   src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex].file} 
                   alt="Prehistoric Species Avatar" 
@@ -198,4 +201,3 @@ export default function Home() {
     </div>
   )
 }
-  
