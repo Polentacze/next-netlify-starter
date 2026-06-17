@@ -1,5 +1,4 @@
-import Head from 'next/head'
-import { useState, useEffect, useRef } from 'react'
+, useEffect, useRef } from 'react'
 
 export default function Home() {
   const [isWikiOpen, setIsWikiOpen] = useState(false)
@@ -14,11 +13,12 @@ export default function Home() {
   const [score, setScore] = useState(0)
   const [foodPellets, setFoodPellets] = useState([])
   const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
-    // 🚀 METERS, GAME MODES & SYSTEM STATES
+
+  // 🚀 METERS, GAME MODES & SYSTEM STATES
   const [boostBars, setBoostBars] = useState(3) 
   const [foodEatenCount, setFoodEatenCount] = useState(0) 
   const [isBoosting, setIsBoosting] = useState(false)
-  const [gameMode, setGameMode] = useState("normal") // Tracks "normal" vs "siege" map profiles
+  const [gameMode, setGameMode] = useState("normal") // Fixes the crash by tracking active map profiles
 
   // 🧬 TIER 1 DYNAMIC EVOLUTION TREES
   const evoTiers = [
@@ -27,13 +27,11 @@ export default function Home() {
   ]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
   const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
-    // ⚡ STETHACANTHUS CHARGE ABILITY SYSTEMS
   const [isAbilityActive, setIsAbilityActive] = useState(false)
-  const [abilityUsesLeft, setAbilityUsesLeft] = useState(0)
 
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Prehistooio online! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" }
+    { user: "System", text: "Prehistooio Arena loaded. Press E to use your custom lunge ability!", colorCode: "#00FF1A" }
   ])
 
   const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
