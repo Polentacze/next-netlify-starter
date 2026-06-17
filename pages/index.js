@@ -15,14 +15,14 @@ export default function Home() {
   const [foodPellets, setFoodPellets] = useState([])
   const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
 
-  // BOOST AMMUNITION STATE CHIPS
+  // BOOST MANAGEMENT PARAMETERS
   const [boostBars, setBoostBars] = useState(3) 
   const [foodEatenCount, setFoodEatenCount] = useState(0) 
   const [isBoosting, setIsBoosting] = useState(false)
 
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Boost bars updated! Vertically stacked on the right. Click anywhere to dash!" }
+    { user: "System", text: "Physics tracking completely restored! Tap inside the arena grid to boost." }
   ])
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [
@@ -42,12 +42,12 @@ export default function Home() {
     y: Math.floor(Math.random() * 1650) + 100
   })
 
-  // FIXED PROPULSION SYSTEM: Triggered cleanly by click mask target
-  const handleViewportClick = (e) => {
+  // THE REPAIRED DIRECT ENGINE CLICK HANDLER
+  const handleViewportClick = () => {
     if (boostBars < 1 || isBoosting) return
     
     setIsBoosting(true)
-    setBoostBars(0) // WIPEOUT MECHANIC: Instantly dumps all bars to 0 on tap
+    setBoostBars(0) // Wipeout behavior clears all remaining energy to 0
 
     setTimeout(() => {
       setIsBoosting(false)
@@ -118,7 +118,7 @@ export default function Home() {
         const distance = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
         
         let speedMultiplier = distance > 25 ? Math.min(distance * 0.05, 8) : 0
-        if (isBoosting) speedMultiplier = 28 // Propulsion speed velocity boost modifier
+        if (isBoosting) speedMultiplier = 28 // Propulsion thrust multiplier calculation
 
         const dx = Math.cos(angleRad) * speedMultiplier
         const dy = Math.sin(angleRad) * speedMultiplier
@@ -210,13 +210,12 @@ export default function Home() {
         .scrolling-volcano-prop { position: absolute; transform: translate(-50%, -100%); width: 110px; z-index: 28; pointer-events: none; background: transparent !important; }
         .scrolling-rock-prop { position: absolute; transform: translate(-50%, -100%); width: 160px; z-index: 27; pointer-events: none; background: transparent !important; }
 
-        /* FIXED RIGHT HUD CONTAINER: Locks the green vertical rectangles on the right side */
         .hud-boost-ammunition-deck {
           position: absolute;
           top: 85px;
           right: 20px;
           display: flex;
-          flex-direction: column-reverse; /* Stacks 1st bar on the bottom, 3rd on top */
+          flex-direction: column-reverse; 
           gap: 6px;
           width: 18px;
           height: auto;
@@ -228,24 +227,15 @@ export default function Home() {
         }
         .individual-energy-slice {
           width: 100%;
-          height: 32px; /* Prominent vertical rectangle size scaling */
+          height: 32px; 
           border-radius: 3px;
           border: 1px solid rgba(0,0,0,0.6);
           transition: background-color 0.15s ease-out, box-shadow 0.15s;
         }
-        
-        /* FULL TRANSPARENT INTERACTIVE ZONE CLICK MASK */
-        .viewport-click-capture-curtain-layer {
-          position: absolute;
-          top: 0px; left: 0px; width: 100%; height: 100%;
-          z-index: 80;
-          cursor: crosshair;
-        }
       `}} />
       {isPlaying ? (
-        <div className="arena-viewport" ref={viewRef}>
-          {/* HIGH-POWERED ACTION CAPTURE MASK: Fixes Chromebook click capture detection */}
-          <div className="viewport-click-capture-curtain-layer" onMouseDown={handleViewportClick} />
+        /* FIXED ENGINE MOUNT: Click detector bound safely right to the canvas viewport to prevent text selection blocks */
+        <div className="arena-viewport" ref={viewRef} onMouseDown={handleViewportClick}>
 
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
             <strong>PREHISTOOIO ARENA v0.7</strong><br />
@@ -254,7 +244,6 @@ export default function Home() {
           
           <button className="leave-btn" style={{ right: '20px' }} onClick={(e) => { e.stopPropagation(); setIsPlaying(false); setScore(0); }}>Leave Map</button>
 
-          {/* DYNAMIC VERTICAL RIGHT HUD OVERLAY CODES */}
           <div className="hud-boost-ammunition-deck">
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 2 ? '0 0 8px #00FF1A' : 'none' }} />
