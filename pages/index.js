@@ -57,7 +57,7 @@ export default function Home() {
     setFoodPellets(pellets)
     setPropsList({ kelp: [{ x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 }, { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }], volcano: { x: 900, y: 1765, w: 110 }, bigRock: { x: 2100, y: 1755, w: 160 } })
   }, [isPlaying])
-    useEffect(() => {
+  useEffect(() => {
     if (!isPlaying) return
     const nextIndex = activeTierIndex + 1
     if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) {
@@ -144,8 +144,10 @@ export default function Home() {
               <img src="/game-board.png" alt="Leaderboard Layout Asset" className="leaderboard-template-asset-graphic" onError={(e) => { e.target.src = "/leaderboard.png" }} />
               <div className="leaderboard-absolute-text-overlay-layer">
                 {leaderboard.map((p, r) => (
+                  /* FIXED: Wrapped custom typography text nodes inside a secure parent <div> container row to pass JSX validation rules */
                   
-                    <span>{(r + 1) + ". " + p.name}</span><span>{p.score}</span>
+                    <span>{(r + 1) + ". " + p.name}</span>
+                    <span>{p.score}</span>
                   </div>
                 ))}
               </div>
@@ -156,7 +158,9 @@ export default function Home() {
             <div className="chat-scroll-view">
               {chatMessages.map((m, i) => <div key={i} className="chat-msg-row"><strong style={{ color: m.user === "System" ? "#00FF1A" : "#FFD700" }}>{m.user}:</strong> {m.text}</div>)}
             </div>
-            <form onSubmit={handleSendChat}><input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} /></form>
+            <form onSubmit={handleSendChat}>
+              <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
+            </form>
           </div>
           
           <div className="infinite-ocean-world" style={{ transform: `translate(${400 - playerPosition.x}px, ${300 - playerPosition.y}px)` }}>
@@ -166,12 +170,11 @@ export default function Home() {
             {propsList.bigRock && <img src="/big-rock.png" alt="Rock Prop Monument" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src} alt="Plankton" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
 
-            {/* DYNAMIC PLAYER CONTAINER HITBOX ENGINE LOOP */}
             <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: evoTiers[activeTierIndex].scale + 'px', pointerEvents: 'none' }}>
               <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid #00FF1A', whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
               <div style={{ width: '100%', transform: `rotate(${playerRotation}deg)`, transition: 'transform 0.04s linear' }}>
                 <img 
-                  src={username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex].file} 
+                  src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex].file} 
                   alt="Prehistoric Species Avatar" 
                   className="player-fish-sprite" 
                   onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
