@@ -239,7 +239,7 @@ export default function Home() {
         .hud-boost-ammunition-deck { position: absolute; top: 85px; right: 20px; display: flex; flex-direction: column-reverse; gap: 6px; width: 18px; height: auto; background: rgba(0,0,0,0.4); padding: 6px 4px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); z-index: 190; }
         .individual-energy-slice { width: 100%; height: 32px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.6); transition: background-color 0.15s ease-out, box-shadow 0.15s; }
       `}} />
-            {isPlaying ? (
+      {isPlaying ? (
         <div className="arena-viewport" ref={viewRef} onMouseDown={handleViewportClick}>
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
             <strong>PREHISTOOIO ARENA v0.7</strong><br />
@@ -274,7 +274,7 @@ export default function Home() {
           }}>
             <div className="gravel-seafloor-bed" />
 
-            {/* FIXED KELP POSITION BASELINE: Aligned vertically to match the 1765px mud layer baseline */}
+            {/* FINAL RESOLUTION TWEAK: Set coordinate parameter tightly to exactly 1775px */}
             {propsList.kelp.map((k, idx) => {
               return (
                 <img 
@@ -282,7 +282,7 @@ export default function Home() {
                   src="/kelp.png"
                   alt="Sea Kelp"
                   className="scrolling-kelp-prop"
-                  style={{ top: 1765, left: k.x, height: k.h }}
+                  style={{ top: 1775, left: k.x, height: k.h }}
                   onError={(e) => { e.target.style.display = 'none' }}
                 />
               )
@@ -381,6 +381,3 @@ export default function Home() {
           </main>
         </>
       )}
-    </div>
-  )
-}
