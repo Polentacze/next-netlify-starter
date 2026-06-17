@@ -1,4 +1,5 @@
-, useEffect, useRef } from 'react'
+import Head from 'next/head'
+import { useState, useEffect, useRef } from 'react'
 
 export default function Home() {
   const [isWikiOpen, setIsWikiOpen] = useState(false)
@@ -18,7 +19,7 @@ export default function Home() {
   const [boostBars, setBoostBars] = useState(3) 
   const [foodEatenCount, setFoodEatenCount] = useState(0) 
   const [isBoosting, setIsBoosting] = useState(false)
-  const [gameMode, setGameMode] = useState("normal") // Fixes the crash by tracking active map profiles
+  const [gameMode, setGameMode] = useState("normal") // Fixed! Re-anchors missing state definition strings securely // Fixes the crash by tracking active map profiles
 
   // 🧬 TIER 1 DYNAMIC EVOLUTION TREES
   const evoTiers = [
