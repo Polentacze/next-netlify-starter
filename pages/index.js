@@ -156,7 +156,18 @@ export default function Home() {
       setFoodPellets((prev) => prev.map((f) => { 
         if (f.isEaten) return f 
         if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) { 
-          setScore((s) => s + f.value) 
+          // 🚀 CRITICAL FIX: Intercept the absolute next score value immediately!
+          const nextScore = score + f.value
+          setScore(nextScore) 
+
+          // 🧬 EVOLUTION TRIGGERS IMMEDATELY ON THE FRESH VALUE!
+          const nextIndex = activeTierIndex + 1 
+          if (nextIndex < evoTiers.length && nextScore >= evoTiers[nextIndex].minScore) { 
+            if (pendingEvolutionIndex !== nextIndex) {
+              setPendingEvolutionIndex(nextIndex) 
+            } 
+          }
+
           setFoodEatenCount((pr) => { 
             const nxt = pr + 1; 
             if (nxt >= 5) { 
@@ -186,7 +197,7 @@ export default function Home() {
       window.removeEventListener('keydown', handleKeyDown); 
       clearInterval(tick) 
     } 
-  }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex, evoTiers])
+  }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex, evoTiers, score, pendingEvolutionIndex])
 
   return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
