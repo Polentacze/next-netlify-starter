@@ -88,13 +88,18 @@ export default function Home() {
     })
   }, [isPlaying])
 
-  useEffect(() => {
-    if (!isPlaying) return
-    const nextIndex = activeTierIndex + 1
-    if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) {
-      if (pendingEvolutionIndex !== nextIndex) setPendingEvolutionIndex(nextIndex)
-    }
-  }, [score, activeTierIndex, isPlaying])
+  // 🧬 UPDATE THIS SPECIFIC LOOP INSIDE YOUR CODE:
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const nextIndex = activeTierIndex + 1 
+    
+    // Check if there is another tier available and if the score meets its milestone
+    if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) { 
+      if (pendingEvolutionIndex !== nextIndex) {
+        setPendingEvolutionIndex(nextIndex) 
+      }
+    } 
+  }, [score, activeTierIndex, isPlaying, evoTiers]) // 🌟 Added evoTiers here so it scans the new Dunkleosteus threshold!
     useEffect(() => {
     if (!isPlaying) return
     const handleKeyDown = (e) => {
