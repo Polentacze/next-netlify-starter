@@ -22,7 +22,7 @@ export default function Home() {
   const evoTiers = [ 
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
     { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
-    { name: "Dunkleosteus", minScore: 5000, scale: 150, file: "/dunkleosteus.png" }
+    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // 🧬 4500 + 5000 points to evolve!
   ] 
 
   const [activeTierIndex, setActiveTierIndex] = useState(0) 
@@ -82,7 +82,7 @@ export default function Home() {
       for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
     } 
     setFoodPellets(pellets) 
-    // 🌍 KELP ANCHOR RECALIBRATION: Locks properties exactly to the 1740px mud ceiling surface line
+    // 🌱 PROPS RECALIBRATION: Hard-anchored directly to the mud floor line
     setPropsList({ 
       kelp: [{ x: 600, y: 1740, h: 180 }, { x: 1200, y: 1740, h: 210 }, { x: 1800, y: 1740, h: 170 }, { x: 2400, y: 1740, h: 230 }], 
       volcano: { x: 900, y: 1740, w: 110 }, 
@@ -93,8 +93,7 @@ export default function Home() {
   useEffect(() => { 
     if (!isPlaying) return 
     const nextIndex = activeTierIndex + 1 
-    // 🧬 Fixed dependency tracking bug here
-    if (nextIndex < 3 && score >= (nextIndex === 1 ? 4500 : 5000)) { 
+    if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) { 
       if (pendingEvolutionIndex !== nextIndex) setPendingEvolutionIndex(nextIndex) 
     } 
   }, [score, activeTierIndex, isPlaying])
@@ -197,8 +196,9 @@ export default function Home() {
             
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)} 
 
+            {/* 🛡️ Protected width and image lookup parameters prevent invisible render flaws */}
             <div style={{ width: `${evoTiers[activeTierIndex]?.scale || 80}px`, position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}> 
-              <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file || "/sacabambaspis.png"} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
+              <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : (evoTiers[activeTierIndex]?.file || "/sacabambaspis.png")} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
               {isAbilityActive && activeTierIndex === 1 && ( 
                 <img src="/steth-ability.png" alt="Speed Surge Active" style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
               )} 
