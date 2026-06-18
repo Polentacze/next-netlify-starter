@@ -100,54 +100,93 @@ export default function Home() {
       }
     } 
   }, [score, activeTierIndex, isPlaying, evoTiers]) // 🌟 Added evoTiers here so it scans the new Dunkleosteus threshold!
-    useEffect(() => {
-    if (!isPlaying) return
-    const handleKeyDown = (e) => {
-      if (document.activeElement.tagName === "INPUT") return
-      if (e.key.toLowerCase() === 'e') {
-        if (boostBars < 2 || isAbilityActive || activeTierIndex !== 1) return
-        setIsAbilityActive(true)
-        setAbilityBoostsUsed(0)
-      }
-    }
-    const mm = (e) => {
-      if (!viewRef.current) return
-      const rect = viewRef.current.getBoundingClientRect()
-      mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) }
-    }
-          const tick = setInterval(() => {
-      let cx = playerPosition.x, cy = playerPosition.y
-      setPlayerPosition((p) => {
-        const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
-        let maxSpeed = 4.8
-        if (isAbilityActive) maxSpeed = 9.6
-        let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
-        if (isBoosting) spd = isAbilityActive ? 24 : 18
-        const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
-        if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
-        cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy))
-        return { x: cx, y: cy }
-      })
-                  setFoodPellets((prev) => prev.map((f) => {
-        if (f.isEaten) return f
-        if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
-          setScore((s) => s + f.value)
-          setFoodEatenCount((pr) => { const nxt = pr + 1; if (nxt >= 5) { setBoostBars((b) => Math.min(3, b + 1)); return 0 }; return nxt })
-          setTimeout(() => {
-            setFoodPellets((cur) => cur.map((p) => {
-              if (p.id === f.id) { const loc = getRandomCoord(); return { ...p, x: loc.x, y: loc.y, isEaten: false } }
-              return p
-            }))
-          }, 4000)
-          return { ...f, isEaten: true }
-        }
-        return f
-      }))
-    }, 1000 / 60)
-          window.addEventListener('mousemove', mm)
-    window.addEventListener('keydown', handleKeyDown)
-    return () => { window.removeEventListener('mousemove', mm); window.removeEventListener('keydown', handleKeyDown); clearInterval(tick) }
-  }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex])
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const pellets = [] 
+    for (let c = 0; c < 8; c++) { 
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+      for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" }) 
+    } 
+    for (let c = 0; c < 4; c++) { 
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+      for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
+    } 
+    setFoodPellets(pellets) 
+    setPropsList({ kelp: [{ x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 }, { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }], volcano: { x: 900, y: 1765, w: 110 }, bigRock: { x: 2100, y: 1755, w: 160 } }) 
+  }, [isPlaying]) 
+
+  // 🧬 FIXED HOOK 1: Evolution checker tracks your list array perfectly
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const nextIndex = activeTierIndex + 1 
+    if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) { 
+      if (pendingEvolutionIndex !== nextIndex) setPendingEvolutionIndex(nextIndex) 
+    } 
+  }, [score, activeTierIndex, isPlaying, evoTiers]) 
+
+  // 🕹️ FIXED HOOK 2: Primary game engine loops completely clear out all tracking data issues
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const handleKeyDown = (e) => { 
+      if (document.activeElement.tagName === "INPUT") return 
+      if (e.key.toLowerCase() === 'e') { 
+        if (boostBars < 2 || isAbilityActive || activeTierIndex !== 1) return 
+        setIsAbilityActive(true) 
+        setAbilityBoostsUsed(0) 
+      } 
+    } 
+    const mm = (e) => { 
+      if (!viewRef.current) return 
+      const rect = viewRef.current.getBoundingClientRect() 
+      mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) } 
+    } 
+    const tick = setInterval(() => { 
+      let cx = playerPosition.x, cy = playerPosition.y 
+      setPlayerPosition((p) => { 
+        const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2) 
+        let maxSpeed = 4.8 
+        if (isAbilityActive) maxSpeed = 9.6 
+        let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0 
+        if (isBoosting) spd = isAbilityActive ? 24 : 18 
+        const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd 
+        if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90) 
+        cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy)) 
+        return { x: cx, y: cy } 
+      }) 
+      setFoodPellets((prev) => prev.map((f) => { 
+        if (f.isEaten) return f 
+        if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) { 
+          setScore((s) => s + f.value) 
+          setFoodEatenCount((pr) => { 
+            const nxt = pr + 1; 
+            if (nxt >= 5) { 
+              setBoostBars((b) => Math.min(3, b + 1)); 
+              return 0 
+            }; 
+            return nxt 
+          }) 
+          setTimeout(() => { 
+            setFoodPellets((cur) => cur.map((p) => { 
+              if (p.id === f.id) { 
+                const loc = getRandomCoord(); 
+                return { ...p, x: loc.x, y: loc.y, isEaten: false } 
+              } 
+              return p 
+            })) 
+          }, 4000) 
+          return { ...f, isEaten: true } 
+        } 
+        return f 
+      })) 
+    }, 1000 / 60) 
+    window.addEventListener('mousemove', mm) 
+    window.addEventListener('keydown', handleKeyDown) 
+    return () => { 
+      window.removeEventListener('mousemove', mm); 
+      window.removeEventListener('keydown', handleKeyDown); 
+      clearInterval(tick) 
+    } 
+  }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex, evoTiers])
 
   return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
