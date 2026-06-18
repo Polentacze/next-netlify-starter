@@ -14,12 +14,11 @@ export default function Home() {
   const [score, setScore] = useState(0)
   const [foodPellets, setFoodPellets] = useState([])
   const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
-    // 🚀 METERS, GAME MODES & ABILITY SYSTEM STATES
+    // 🚀 METERS, GAME MODES & SYSTEM STATES
   const [boostBars, setBoostBars] = useState(3) 
   const [foodEatenCount, setFoodEatenCount] = useState(0) 
   const [isBoosting, setIsBoosting] = useState(false)
-  const [isAbilityActive, setIsAbilityActive] = useState(false)
-  const [gameMode, setGameMode] = useState("normal") // Dynamic mode selector variable
+  const [gameMode, setGameMode] = useState("normal") // Tracks normal vs siege profiles
 
   // 🧬 TIER 1 DYNAMIC EVOLUTION TREES
   const evoTiers = [
@@ -28,9 +27,10 @@ export default function Home() {
   ]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
   const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
+  const [isAbilityActive, setIsAbilityActive] = useState(false)
     const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Prehistooio Arena loaded. Press E to use your custom lunge ability!", colorCode: "#00FF1A" }
+    { user: "System", text: "Prehistooio Arena loaded. Complete Tier 1 path is active!", colorCode: "#00FF1A" }
   ])
 
   const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
@@ -56,9 +56,9 @@ export default function Home() {
   const getRandomCoord = () => ({ x: Math.floor(Math.random() * 2800) + 100, y: Math.floor(Math.random() * 1650) + 100 })
 
   const handleViewportClick = () => {
-    if (boostBars < 2 || isBoosting || isAbilityActive) return
+    if (boostBars < 1 || isBoosting || isAbilityActive) return
     setIsBoosting(true)
-    setBoostBars((b) => Math.max(0, b - 2)) 
+    setBoostBars(0) 
     setTimeout(() => { setIsBoosting(false) }, 320)
   }
     useEffect(() => {
@@ -94,6 +94,7 @@ export default function Home() {
   }, [score, activeTierIndex, isPlaying])
     useEffect(() => {
     if (!isPlaying) return
+
     const handleKeyDown = (e) => {
       if (document.activeElement.tagName === "INPUT") return
       if (e.key.toLowerCase() === 'e') {
@@ -103,6 +104,7 @@ export default function Home() {
         setTimeout(() => { setIsAbilityActive(false) }, 6000)
       }
     }
+
     const mm = (e) => {
       if (!viewRef.current) return
       const rect = viewRef.current.getBoundingClientRect()
@@ -114,8 +116,10 @@ export default function Home() {
         const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
         let maxSpeed = 4.8
         if (isAbilityActive) maxSpeed = 9.6
+
         let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
         if (isBoosting) spd = 18
+
         const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
         if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
         cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy))
@@ -137,6 +141,7 @@ export default function Home() {
         return f
       }))
     }, 1000 / 60)
+
     window.addEventListener('mousemove', mm)
     window.addEventListener('keydown', handleKeyDown)
     return () => { window.removeEventListener('mousemove', mm); window.removeEventListener('keydown', handleKeyDown); clearInterval(tick) }
@@ -187,14 +192,17 @@ export default function Home() {
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
 
             <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: evoTiers[activeTierIndex].scale + 'px', pointerEvents: 'none', background: 'transparent', backgroundColor: 'transparent' }}>
-              
-              {isAbilityActive && activeTierIndex === 1 && (
-                <img src="/steth-ability.png" alt="Speed Surge" style={{ position: 'absolute', top: '-55px', left: '50%', transform: 'translateX(-50%)', width: '50px', height: 'auto', pointerEvents: 'none' }} onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
-              )}
-
               <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid ' + (detectTextColor(username) !== '#FFFFFF' ? detectTextColor(username) : '#00FF1A'), color: detectTextColor(username), whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
               <div style={{ width: '100%', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}>
                 <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex].file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
+                {isAbilityActive && activeTierIndex === 1 && (
+                  <img 
+                    src="/steth-ability.png" 
+                    alt="Active Surge" 
+                    style={{ position: 'absolute', top: '-60px', left: '50%', transform: 'translateX(-50%)', width: '65px', height: 'auto', background: 'transparent', mixBlendMode: 'screen', pointerEvents: 'none' }} 
+                    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -205,34 +213,7 @@ export default function Home() {
           <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
           <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
           <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
+
           <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
             <div className="wiki-panel" onClick={(e) => e.stopPropagation()}><button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button><h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2><div className="grid-container"><img src="/AnimalGrid.png" alt="Grid" className="grid-img" />{slots.map((s, i) => <div key={i} className="slot-over" style={{ top: slotPositions[i].t, left: slotPositions[i].l, width: "10.5%", height: "28%" }} onMouseEnter={() => setHoveredAnimal(slots[s])} onMouseLeave={() => setHoveredAnimal("")} />)}</div><div className="hud-banner"><p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#fff' }}>{hoveredAnimal || "Hover over a creature to analyze metadata"}</p></div></div>
           </div>
-          <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
-            <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio</h1>
-            <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p>
-            <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} />
-            <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p>
-
-            <form className="launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}>
-              <div className="input-wrap">
-                <img src="/input-box.png" alt="Input" style={{ width: '100%' }} />
-                <input type="text" className="field-text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} placeholder="Enter Name..." style={{ color: '#333' }} />
-              </div>
-              
-              {/* DUAL BUTTON ROW: Places your new Siege graphic strictly on the LEFT side of the Play Game button */}
-              <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', alignItems: 'center', marginTop: '0.5rem', zIndex: 60 }}>
-                <button type="button" className="play-btn" style={{ width: '180px', padding: 0, background: 'none', border: 'none', cursor: 'pointer' }} onClick={(e) => e.preventDefault()}>
-                  <img src="/siege-play.png" alt="PLAY SIEGE" style={{ width: '100%' }} onError={(e) => { e.target.src = "/play-button.png" }} />
-                </button>
-                <button type="submit" className="play-btn" style={{ width: '180px', padding: 0, background: 'none', border: 'none', cursor: 'pointer' }}>
-                  <img src="/play-button.png" alt="PLAY NORMAL" style={{ width: '100%' }} />
-                </button>
-              </div>
-            </form>
-          </main>
-        </>
-      )}
-    </div>
-  )
-}
