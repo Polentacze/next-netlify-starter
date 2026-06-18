@@ -19,17 +19,20 @@ export default function Home() {
   const [isAbilityActive, setIsAbilityActive] = useState(false)
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
 
-  const evoTiers = [
-    { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
-    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" }
-  ]
-    const [activeTierIndex, setActiveTierIndex] = useState(0)
-  const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
-  const [chatInput, setChatInput] = useState("")
-  const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Prehistooio loaded! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" }
-  ])
-    const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
+  const evoTiers = [ 
+    { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
+    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
+    { name: "Dunkleosteus", minScore: 5000, scale: 150, file: "/dunkleosteus.png" }
+  ] 
+
+  const [activeTierIndex, setActiveTierIndex] = useState(0) 
+  const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null) 
+  const [chatInput, setChatInput] = useState("") 
+  const [chatMessages, setChatMessages] = useState([ 
+    { user: "System", text: "Prehistooio loaded! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" } 
+  ]) 
+
+  const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"] 
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
   const detectTextColor = (targetString) => {
@@ -67,30 +70,33 @@ export default function Home() {
     setBoostBars((b) => Math.max(0, b - 1))
     setTimeout(() => { setIsBoosting(false) }, 320)
   }
-    useEffect(() => {
-    if (!isPlaying) return
-    const pellets = []
-    for (let c = 0; c < 8; c++) {
-      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200
-      for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" })
-    }
-    for (let c = 0; c < 4; c++) {
-      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200
-      for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" })
-    }
-    setFoodPellets(pellets)
-          setPropsList({
-      kelp: [{ x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 }, { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }],
-      volcano: { x: 900, y: 1765, w: 110 }, bigRock: { x: 2100, y: 1755, w: 160 }
-    })
-  }, [isPlaying])
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const pellets = [] 
+    for (let c = 0; c < 8; c++) { 
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+      for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" }) 
+    } 
+    for (let c = 0; c < 4; c++) { 
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+      for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
+    } 
+    setFoodPellets(pellets) 
+    // 🌍 KELP ANCHOR RECALIBRATION: Locks properties exactly to the 1740px mud ceiling surface line
+    setPropsList({ 
+      kelp: [{ x: 600, y: 1740, h: 180 }, { x: 1200, y: 1740, h: 210 }, { x: 1800, y: 1740, h: 170 }, { x: 2400, y: 1740, h: 230 }], 
+      volcano: { x: 900, y: 1740, w: 110 }, 
+      bigRock: { x: 2100, y: 1740, w: 160 } 
+    }) 
+  }, [isPlaying]) 
 
-  useEffect(() => {
-    if (!isPlaying) return
-    const nextIndex = activeTierIndex + 1
-    if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) {
-      if (pendingEvolutionIndex !== nextIndex) setPendingEvolutionIndex(nextIndex)
-    }
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const nextIndex = activeTierIndex + 1 
+    // 🧬 Fixed dependency tracking bug here
+    if (nextIndex < 3 && score >= (nextIndex === 1 ? 4500 : 5000)) { 
+      if (pendingEvolutionIndex !== nextIndex) setPendingEvolutionIndex(nextIndex) 
+    } 
   }, [score, activeTierIndex, isPlaying])
     useEffect(() => {
     if (!isPlaying) return
@@ -179,38 +185,26 @@ export default function Home() {
             <form onSubmit={handleSendChat}><input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} /></form>
           </div>
           
-          <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
-            <div className="gravel-seafloor-bed" />
+          <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}> 
+            <div className="gravel-seafloor-bed" /> 
             
-            {/* 🌱 PERFECT ANCHOR PATCH: Hard-locks the roots flush to the 1740px mud baseline surface */}
-            {propsList.kelp.map((k, idx) => (
-              <img 
-                key={idx} 
-                src="/kelp.png" 
-                alt="kelp" 
-                className="scrolling-kelp-prop" 
-                style={{ position: 'absolute', top: 1740, left: k.x, height: k.h, transform: 'translate(-50%, -100%)' }} 
-                onError={(e) => { e.target.style.display = 'none' }} 
-              />
-            ))}
+            {propsList.kelp.map((k, idx) => ( 
+              <img key={idx} src="/kelp.png" alt="kelp" className="scrolling-kelp-prop" style={{ position: 'absolute', top: k.y, left: k.x, height: k.h, transform: 'translate(-50%, -100%)' }} onError={(e) => { e.target.style.display = 'none' }} /> 
+            ))} 
 
-            {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />}
-            {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
-            {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
-              <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}>
-                <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex].file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
-                {isAbilityActive && activeTierIndex === 1 && (
-                  <img 
-                    src="/steth-ability.png" 
-                    alt="Speed Surge Active" 
-                    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} 
-                    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+            {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />} 
+            {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />} 
+            
+            {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)} 
+
+            <div style={{ width: `${evoTiers[activeTierIndex]?.scale || 80}px`, position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}> 
+              <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file || "/sacabambaspis.png"} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
+              {isAbilityActive && activeTierIndex === 1 && ( 
+                <img src="/steth-ability.png" alt="Speed Surge Active" style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
+              )} 
+            </div> 
+          </div> 
+        </div> 
       ) : (
         <>
           <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
