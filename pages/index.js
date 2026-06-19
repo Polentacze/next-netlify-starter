@@ -118,13 +118,13 @@ export default function Home() {
     } 
     setFoodPellets(pellets) 
     
-    // 🌍 KELP BASELINE CORRECTION: Sets all Y coordinates exactly to the 1740px mud floor
+    // 🌍 PROP HEIGHT MATCHING Blueprint: Updates left-side kelp height to 230 to mirror the right side!
     setPropsList({ 
       kelp: [
-        { x: 600, y: 1740, h: 180, type: 'kelp' },        // Far Left Kelp (Anchored!)
+        { x: 600, y: 1740, h: 230, type: 'kelp' },        // Far Left Kelp (Updated height to 230!)
         { x: 1200, y: 1740, h: 85, type: 'coral' },       // Mid-Left Coral
         { x: 1800, y: 1740, h: 85, type: 'coral' },       // Mid-Right Coral
-        { x: 2400, y: 1740, h: 230, type: 'kelp' }        // Far Right Kelp (Anchored!)
+        { x: 2400, y: 1740, h: 230, type: 'kelp' }        // Far Right Kelp (Original height 230)
       ], 
       volcano: { x: 900, y: 1765, w: 110 }, 
       bigRock: { x: 2100, y: 1755, w: 160 }
