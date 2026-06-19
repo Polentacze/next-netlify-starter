@@ -119,14 +119,16 @@ export default function Home() {
     setFoodPellets(pellets) 
     
     // 🪸 MAP CONFIG RE-LAYOUT: Keeps outer kelps, removes inner ones, adds brain coral
+    // 🌍 MAP RE-LAYOUT: Keeps all 4 index slots active to prevent loop shift bugs
     setPropsList({ 
       kelp: [
-        { x: 600, y: 1755, h: 180 },  // Far Left Kelp (Kept!)
-        { x: 2400, y: 1755, h: 230 }  // Far Right Kelp (Kept!)
+        { x: 600, y: 1755, h: 180, type: 'kelp' },        // Slot 0: Far Left (Kept!)
+        { x: 1200, y: 1740, h: 85, type: 'coral' },       // Slot 1: Mid-Left (Transformed to Coral!)
+        { x: 1800, y: 1740, h: 85, type: 'coral' },       // Slot 2: Mid-Right (Transformed to Coral!)
+        { x: 2400, y: 1755, h: 230, type: 'kelp' }        // Slot 3: Far Right (Kept!)
       ], 
       volcano: { x: 900, y: 1765, w: 110 }, 
-      bigRock: { x: 2100, y: 1755, w: 160 },
-      brainCoral: { x: 1500, y: 1740, w: 85 } // 🪸 Added brain coral right in the center, perfectly flush with the seabed!
+      bigRock: { x: 2100, y: 1755, w: 160 }
     }) 
   }, [isPlaying]) 
 
@@ -226,7 +228,26 @@ export default function Home() {
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
-            {propsList.kelp.map((k, idx) => <img key={idx} src="/kelp.png" alt="kelp" className="scrolling-kelp-prop" style={{ top: 1775, left: k.x, height: k.h }} onError={(e) => { e.target.style.display = 'none' }} />)}
+{/* 🌿🪸 DYNAMIC PROP RENDERER: Swaps asset between kelp and brain coral automatically */}
+{propsList.kelp.map((k, idx) => ( 
+  <img 
+    key={idx} 
+    src={k.type === 'coral' ? "/brain-coral.png" : "/kelp.png"} 
+    alt="prop" 
+    style={{ 
+      position: 'absolute', 
+      top: k.y, 
+      left: k.x, 
+      height: k.type === 'coral' ? 'auto' : k.h, 
+      width: k.type === 'coral' ? `${k.h}px` : '38px', 
+      transform: 'translate(-50%, -100%)',
+      zIndex: k.type === 'coral' ? 26 : 25,
+      pointerEvents: 'none',
+      background: 'transparent'
+    }} 
+    onError={(e) => { e.currentTarget.style.display = 'none' }} 
+  /> 
+))}
             {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
