@@ -38,10 +38,28 @@ export default function Home() {
     if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
     if (cleanStr.includes("(GREEN)")) return "#00FF1A" 
     if (cleanStr.includes("(CYAN)")) return "#00ffff" 
-    if (cleanStr.includes("(PURPLE)")) return "#a855f7" // 🟣 Vibrant cosmic purple color block
-    if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" // 🩶 Sleek steel gray color block
+    if (cleanStr.includes("(PURPLE)")) return "#a855f7" 
+    if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
     return "#FFFFFF" 
+  } 
+
+  // 🧼 COMPILER-SAFE TEXT FILTER: Completely avoids regular expressions and slashes
+  const cleanTags = (str) => {
+    if (!str) return ""
+    let result = str
+    const targets = ["(RED)", "(BLUE)", "(GREEN)", "(CYAN)", "(PURPLE)", "(GREY)", "(GRAY)"]
+    for (let i = 0; i < targets.length; i++) {
+      let upper = result.toUpperCase()
+      let idx = upper.indexOf(targets[i])
+      while (idx !== -1) {
+        result = result.substring(0, idx) + result.substring(idx + targets[i].length)
+        upper = result.toUpperCase()
+        idx = upper.indexOf(targets[i])
+      }
+    }
+    return result.trim()
   }
+
   const handleSendChat = (e) => { 
     e.preventDefault() 
     if (!chatInput.trim()) return 
@@ -49,17 +67,13 @@ export default function Home() {
     let messageColor = detectTextColor(chatInput) 
     if (messageColor === "#FFFFFF") messageColor = detectTextColor(username) 
     
-    // 🧼 CHAT FILTERING: Removes the color tags using a global case-insensitive search
-    const cleanMessage = chatInput
-      .replace(/\((red|blue|green|cyan|purple|grey|gray)\)/gi, "")
-      .trim()
-
-    // Fallback if someone typed just the tag and nothing else
+    // Uses our super clean text filter function
+    const cleanMessage = cleanTags(chatInput)
     if (!cleanMessage) return
 
     setChatMessages((p) => [...p, { 
       user: username || "Guest", 
-      text: cleanMessage, // 🚀 Uses the perfectly cleaned text string
+      text: cleanMessage, 
       colorCode: messageColor 
     }]) 
     setChatInput("") 
@@ -194,14 +208,14 @@ export default function Home() {
             <form onSubmit={handleSendChat}><input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} /></form>
           </div>
           
-            {/* 📛 FIXED FLOATING NAMEPLATE: Renders the cleaned, color-bordered tag right above your animal */}
+            {/* 📛 FLOATING NAMEPLATE: Safe from compilation bugs */}
             <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}> 
               
               <div style={{
                 position: 'absolute',
-                top: '-45px', // 📍 Floats cleanly right above the fish sprite
+                top: '-45px',
                 left: '50%',
-                transform: 'translateX(-50%) rotate(' + (-playerRotation) + 'deg)', // 🧭 Negates fish rotation so text stays perfectly upright!
+                transform: 'translateX(-50%) rotate(' + (-playerRotation) + 'deg)',
                 backgroundColor: 'rgba(0, 0, 0, 0.75)',
                 padding: '4px 10px',
                 borderRadius: '6px',
@@ -212,13 +226,11 @@ export default function Home() {
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
                 zIndex: 10,
-                border: `2px solid ${detectTextColor(username)}`, // 🌈 Dynamically shifts border color to match the name tag!
+                border: `2px solid ${detectTextColor(username)}`,
                 boxShadow: `0 0 10px ${detectTextColor(username)}`
               }}>
-                {/* 🧼 Dynamic string filtering pulls out cosmetic tags before rendering layout text */}
-                {(username || "Guest")
-                  .replace(/\((red|blue|green|cyan|purple|grey|gray)\)/gi, "")
-                  .trim()}
+                {/* Clean filter helper runs safely inside the UI markup text */}
+                {cleanTags(username || "Guest")}
               </div>
 
               <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex].file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
