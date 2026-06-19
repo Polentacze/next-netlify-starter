@@ -18,7 +18,6 @@ export default function Home() {
   const [isBoosting, setIsBoosting] = useState(false)
   const [isAbilityActive, setIsAbilityActive] = useState(false)
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
-    const [clamMeats, setClamMeats] = useState([])
 
   const evoTiers = [
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
@@ -183,15 +182,6 @@ export default function Home() {
         }
         return f
       }))
-                  // 🚀 PASTE THE NEW MEAT LOOP DIRECTLY HERE:
-      setClamMeats((prev) => prev.map((m) => {
-        if (m.isEaten) return m
-        if (Math.sqrt((cx - m.x) ** 2 + (cy - m.y) ** 2) < 35) { 
-          setScore((s) => s + 200)
-          return { ...m, isEaten: true }
-        }
-        return m
-      }))
     }, 1000 / 60)
           window.addEventListener('mousemove', mm)
     window.addEventListener('keydown', handleKeyDown)
@@ -269,13 +259,8 @@ export default function Home() {
             {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {propsList.bigClam && <img src="/big-clam.png" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
-              {/* 🍖 CLAM MEAT SPRITES LAYER */}
-{clamMeats.map((m) => !m.isEaten && (
-  <img key={m.id} src="/meat.png" alt="meat" style={{ position: 'absolute', top: m.y, left: m.x, width: '28px', height: 'auto', transform: 'translate(-50%, -50%)', zIndex: 27, pointerEvents: 'none' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />
-))}
 
-  // 🔄 UPDATE THIS LINE CONTAINER WRAPPER TO INCLUDE THE Z-INDEX AT THE END:
-<div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', zIndex: 50 }}>
+            <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: evoTiers[activeTierIndex].scale + 'px', pointerEvents: 'none', background: 'transparent', backgroundColor: 'transparent' }}>
               <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid ' + (detectTextColor(username) !== '#FFFFFF' ? detectTextColor(username) : '#00FF1A'), color: detectTextColor(username), whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
               <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}>
                 <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex].file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
