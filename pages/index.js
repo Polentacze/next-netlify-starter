@@ -255,4 +255,37 @@ export default function Home() {
           </div> 
         </div> 
       ) : (
-            
+                    <> 
+          <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} alt="critter" /> 
+          <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} alt="critter" /> 
+          <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} /> 
+          <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} /> 
+          
+          <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}> 
+            <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
+              <button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
+              <h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2>
+              <div className="grid-container">
+                <img src="/AnimalGrid.png" alt="Grid" className="grid-img" />
+                {slots.map((s, i) => <div key={i} className="slot-over" style={{ top: slotPositions[i].t, left: slotPositions[i].l, width: "10.5%", height: "28%" }} onMouseEnter={() => setHoveredAnimal(s)} onMouseLeave={() => setHoveredAnimal("")} />)}
+              </div>
+              <div className="hud-banner">
+                <p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#fff' }}>{hoveredAnimal || "Hover over a creature to analyze metadata"}</p>
+              </div>
+            </div> 
+          </div>
+          <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}> 
+            <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio</h1> 
+            <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p> 
+            <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.currentTarget.src = "/deep-prehistoo.png" }} /> 
+            <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p> 
+            <form className="launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}> 
+              <div className="input-wrap"><img src="/input-box.png" alt="Input" style={{ width: '100%' }} /><input type="text" className="field-text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} placeholder="Enter Name..." style={{ color: '#333' }} /></div> 
+              <button type="submit" className="play-btn"><img src="/play-button.png" alt="PLAY" style={{ width: '100%' }} /></button> 
+            </form> 
+          </main> 
+        </> 
+      )} 
+    </div> 
+  ) 
+}
