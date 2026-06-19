@@ -19,65 +19,39 @@ export default function Home() {
   const [isAbilityActive, setIsAbilityActive] = useState(false)
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
 
-  const evoTiers = [
-    { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
-    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" }
-  ]
-    const [activeTierIndex, setActiveTierIndex] = useState(0)
-  const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
-  const [chatInput, setChatInput] = useState("")
-  const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Prehistooio loaded! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" }
-  ])
-    const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
+  const evoTiers = [ 
+    { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
+    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
+    { name: "Dunkleosteus", minScore: 5000, scale: 150, file: "/dunkleosteus.png" }
+  ] 
+
+  const [activeTierIndex, setActiveTierIndex] = useState(0) 
+  const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null) 
+  const [chatInput, setChatInput] = useState("") 
+  const [chatMessages, setChatMessages] = useState([ 
+    { user: "System", text: "Prehistooio loaded! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" } 
+  ]) 
+
+  const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"] 
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
-  const detectTextColor = (targetString) => { 
-    const cleanStr = (targetString || "").toUpperCase() 
-    if (cleanStr.includes("(RED)")) return "#ff4d4d" 
-    if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
-    if (cleanStr.includes("(GREEN)")) return "#00FF1A" 
-    if (cleanStr.includes("(CYAN)")) return "#00ffff" 
-    if (cleanStr.includes("(PURPLE)")) return "#a855f7" 
-    if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
-    return "#FFFFFF" 
-  } 
-
-  // 🧼 COMPILER-SAFE TEXT FILTER: Completely avoids regular expressions and slashes
-  const cleanTags = (str) => {
-    if (!str) return ""
-    let result = str
-    const targets = ["(RED)", "(BLUE)", "(GREEN)", "(CYAN)", "(PURPLE)", "(GREY)", "(GRAY)"]
-    for (let i = 0; i < targets.length; i++) {
-      let upper = result.toUpperCase()
-      let idx = upper.indexOf(targets[i])
-      while (idx !== -1) {
-        result = result.substring(0, idx) + result.substring(idx + targets[i].length)
-        upper = result.toUpperCase()
-        idx = upper.indexOf(targets[i])
-      }
-    }
-    return result.trim()
+  const detectTextColor = (targetString) => {
+    const cleanStr = (targetString || "").toUpperCase()
+    if (cleanStr.includes("(RED)")) return "#ff4d4d"
+    if (cleanStr.includes("(BLUE)")) return "#3b82f6"
+    if (cleanStr.includes("(GREEN)")) return "#00FF1A"
+    if (cleanStr.includes("(CYAN)")) return "#00ffff"
+    return "#FFFFFF"
+  }
+    const handleSendChat = (e) => {
+    e.preventDefault()
+    if (!chatInput.trim()) return
+    let messageColor = detectTextColor(chatInput)
+    if (messageColor === "#FFFFFF") messageColor = detectTextColor(username)
+    setChatMessages((p) => [...p, { user: username || "Guest", text: chatInput, colorCode: messageColor }])
+    setChatInput("")
   }
 
-  const handleSendChat = (e) => { 
-    e.preventDefault() 
-    if (!chatInput.trim()) return 
-    
-    let messageColor = detectTextColor(chatInput) 
-    if (messageColor === "#FFFFFF") messageColor = detectTextColor(username) 
-    
-    // Uses our super clean text filter function
-    const cleanMessage = cleanTags(chatInput)
-    if (!cleanMessage) return
-
-    setChatMessages((p) => [...p, { 
-      user: username || "Guest", 
-      text: cleanMessage, 
-      colorCode: messageColor 
-    }]) 
-    setChatInput("") 
-  }
   const getRandomCoord = () => ({ x: Math.floor(Math.random() * 2800) + 100, y: Math.floor(Math.random() * 1650) + 100 })
     const handleViewportClick = () => {
     if (boostBars < 1 || isBoosting) return
@@ -96,87 +70,83 @@ export default function Home() {
     setBoostBars((b) => Math.max(0, b - 1))
     setTimeout(() => { setIsBoosting(false) }, 320)
   }
-    useEffect(() => {
-    if (!isPlaying) return
-    const pellets = []
-    for (let c = 0; c < 8; c++) {
-      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200
-      for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" })
-    }
-    for (let c = 0; c < 4; c++) {
-      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200
-      for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" })
-    }
-    setFoodPellets(pellets)
-          setPropsList({
-      kelp: [{ x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 }, { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }],
-      volcano: { x: 900, y: 1765, w: 110 }, bigRock: { x: 2100, y: 1755, w: 160 }
-    })
-  }, [isPlaying])
-
-  // 🕹️ HOOK 2: Perfectly balanced game engine loop ticker
   useEffect(() => { 
     if (!isPlaying) return 
-    const handleKeyDown = (e) => { 
-      if (document.activeElement.tagName === "INPUT") return 
-      if (e.key.toLowerCase() === 'e') { 
-        if (boostBars < 2 || isAbilityActive || activeTierIndex !== 1) return 
-        setIsAbilityActive(true) 
-        setAbilityBoostsUsed(0) 
-      } 
+    const pellets = [] 
+    for (let c = 0; c < 8; c++) { 
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+      for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" }) 
     } 
-    const mm = (e) => { 
-      if (!viewRef.current) return 
-      const rect = viewRef.current.getBoundingClientRect() 
-      mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) } 
+    for (let c = 0; c < 4; c++) { 
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+      for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
     } 
-    const tick = setInterval(() => { 
-      let cx = playerPosition.x, cy = playerPosition.y 
-      setPlayerPosition((p) => { 
-        const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2) 
-        let maxSpeed = 4.8 
-        if (isAbilityActive) maxSpeed = 9.6 
-        let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0 
-        if (isBoosting) spd = isAbilityActive ? 24 : 18 
-        const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd 
-        if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90) 
-        cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy)) 
-        return { x: cx, y: cy } 
-      }) 
-      setFoodPellets((prev) => prev.map((f) => { 
-        if (f.isEaten) return f 
-        if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) { 
-          setScore((s) => s + f.value) 
-          setFoodEatenCount((pr) => { 
-            const nxt = pr + 1; 
-            if (nxt >= 5) { 
-              setBoostBars((b) => Math.min(3, b + 1)); 
-              return 0 
-            }; 
-            return nxt 
-          }) 
-          setTimeout(() => { 
-            setFoodPellets((cur) => cur.map((p) => { 
-              if (p.id === f.id) { 
-                const loc = getRandomCoord(); 
-                return { ...p, x: loc.x, y: loc.y, isEaten: false } 
-              } 
-              return p 
-            })) 
-          }, 4000) 
-          return { ...f, isEaten: true } 
-        } 
-        return f 
-      })) 
-    }, 1000 / 60) 
-    window.addEventListener('mousemove', mm) 
-    window.addEventListener('keydown', handleKeyDown) 
-    return () => { 
-      window.removeEventListener('mousemove', mm); 
-      window.removeEventListener('keydown', handleKeyDown); 
-      clearInterval(tick) 
+    setFoodPellets(pellets) 
+    // 🌍 KELP ANCHOR RECALIBRATION: Locks properties exactly to the 1740px mud ceiling surface line
+    setPropsList({ 
+      kelp: [{ x: 600, y: 1740, h: 180 }, { x: 1200, y: 1740, h: 210 }, { x: 1800, y: 1740, h: 170 }, { x: 2400, y: 1740, h: 230 }], 
+      volcano: { x: 900, y: 1740, w: 110 }, 
+      bigRock: { x: 2100, y: 1740, w: 160 } 
+    }) 
+  }, [isPlaying]) 
+
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const nextIndex = activeTierIndex + 1 
+    // 🧬 Fixed dependency tracking bug here
+    if (nextIndex < 3 && score >= (nextIndex === 1 ? 4500 : 5000)) { 
+      if (pendingEvolutionIndex !== nextIndex) setPendingEvolutionIndex(nextIndex) 
     } 
+  }, [score, activeTierIndex, isPlaying])
+    useEffect(() => {
+    if (!isPlaying) return
+    const handleKeyDown = (e) => {
+      if (document.activeElement.tagName === "INPUT") return
+      if (e.key.toLowerCase() === 'e') {
+        if (boostBars < 2 || isAbilityActive || activeTierIndex !== 1) return
+        setIsAbilityActive(true)
+        setAbilityBoostsUsed(0)
+      }
+    }
+    const mm = (e) => {
+      if (!viewRef.current) return
+      const rect = viewRef.current.getBoundingClientRect()
+      mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) }
+    }
+          const tick = setInterval(() => {
+      let cx = playerPosition.x, cy = playerPosition.y
+      setPlayerPosition((p) => {
+        const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
+        let maxSpeed = 4.8
+        if (isAbilityActive) maxSpeed = 9.6
+        let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
+        if (isBoosting) spd = isAbilityActive ? 24 : 18
+        const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
+        if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
+        cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy))
+        return { x: cx, y: cy }
+      })
+                  setFoodPellets((prev) => prev.map((f) => {
+        if (f.isEaten) return f
+        if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
+          setScore((s) => s + f.value)
+          setFoodEatenCount((pr) => { const nxt = pr + 1; if (nxt >= 5) { setBoostBars((b) => Math.min(3, b + 1)); return 0 }; return nxt })
+          setTimeout(() => {
+            setFoodPellets((cur) => cur.map((p) => {
+              if (p.id === f.id) { const loc = getRandomCoord(); return { ...p, x: loc.x, y: loc.y, isEaten: false } }
+              return p
+            }))
+          }, 4000)
+          return { ...f, isEaten: true }
+        }
+        return f
+      }))
+    }, 1000 / 60)
+          window.addEventListener('mousemove', mm)
+    window.addEventListener('keydown', handleKeyDown)
+    return () => { window.removeEventListener('mousemove', mm); window.removeEventListener('keydown', handleKeyDown); clearInterval(tick) }
   }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex])
+
   return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head><title>Prehistooio</title><link rel="icon" href="/icon.png?v=1" type="image/png" /></Head>
@@ -215,39 +185,26 @@ export default function Home() {
             <form onSubmit={handleSendChat}><input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} /></form>
           </div>
           
-            {/* 📛 FLOATING NAMEPLATE: Safe from compilation bugs */}
-            <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}> 
-              
-              <div style={{
-                position: 'absolute',
-                top: '-45px',
-                left: '50%',
-                transform: 'translateX(-50%) rotate(' + (-playerRotation) + 'deg)',
-                backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                padding: '4px 10px',
-                borderRadius: '6px',
-                fontSize: '0.85rem',
-                fontFamily: 'sans-serif',
-                fontWeight: 'bold',
-                color: '#FFFFFF',
-                whiteSpace: 'nowrap',
-                pointerEvents: 'none',
-                zIndex: 10,
-                border: `2px solid ${detectTextColor(username)}`,
-                boxShadow: `0 0 10px ${detectTextColor(username)}`
-              }}>
-                {/* Clean filter helper runs safely inside the UI markup text */}
-                {cleanTags(username || "Guest")}
-              </div>
+          <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}> 
+            <div className="gravel-seafloor-bed" /> 
+            
+            {propsList.kelp.map((k, idx) => ( 
+              <img key={idx} src="/kelp.png" alt="kelp" className="scrolling-kelp-prop" style={{ position: 'absolute', top: k.y, left: k.x, height: k.h, transform: 'translate(-50%, -100%)' }} onError={(e) => { e.target.style.display = 'none' }} /> 
+            ))} 
 
-              <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex].file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
+            {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />} 
+            {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />} 
+            
+            {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)} 
+
+            <div style={{ width: `${evoTiers[activeTierIndex]?.scale || 80}px`, position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}> 
+              <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file || "/sacabambaspis.png"} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
               {isAbilityActive && activeTierIndex === 1 && ( 
                 <img src="/steth-ability.png" alt="Speed Surge Active" style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
               )} 
-            </div>
-            </div>
-          </div>
-        </div>
+            </div> 
+          </div> 
+        </div> 
       ) : (
         <>
           <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
