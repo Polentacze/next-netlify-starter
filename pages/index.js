@@ -228,26 +228,32 @@ export default function Home() {
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
-{/* 🌿🪸 DYNAMIC PROP RENDERER: Swaps asset between kelp and brain coral automatically */}
-{propsList.kelp.map((k, idx) => ( 
-  <img 
-    key={idx} 
-    src={k.type === 'coral' ? "/brain-coral.png" : "/kelp.png"} 
-    alt="prop" 
-    style={{ 
-      position: 'absolute', 
-      top: k.y, 
-      left: k.x, 
-      height: k.type === 'coral' ? 'auto' : k.h, 
-      width: k.type === 'coral' ? `${k.h}px` : '38px', 
-      transform: 'translate(-50%, -100%)',
-      zIndex: k.type === 'coral' ? 26 : 25,
-      pointerEvents: 'none',
-      background: 'transparent'
-    }} 
-    onError={(e) => { e.currentTarget.style.display = 'none' }} 
-  /> 
-))}
+{/* 🌿🪸 PERFECTLY ANCHORED PROP RENDERER: Sinks the roots flat into the soil texture baseline */}
+{propsList.kelp.map((k, idx) => {
+  // 🧭 Sinks corals down slightly extra to bury their flat bases into the mud line
+  const anchorAdjustment = k.type === 'coral' ? 12 : 5;
+  const finalTopY = k.y + anchorAdjustment;
+
+  return (
+    <img 
+      key={idx} 
+      src={k.type === 'coral' ? "/brain-coral.png" : "/kelp.png"} 
+      alt="prop" 
+      style={{ 
+        position: 'absolute', 
+        top: finalTopY, // 🚀 Uses the sunken Y coordinate to lock them flush into the mud
+        left: k.x, 
+        height: k.type === 'coral' ? 'auto' : k.h, 
+        width: k.type === 'coral' ? `${k.h}px` : '38px', 
+        transform: 'translate(-50%, -100%)',
+        zIndex: k.type === 'coral' ? 26 : 25,
+        pointerEvents: 'none',
+        background: 'transparent'
+      }} 
+      onError={(e) => { e.currentTarget.style.display = 'none' }} 
+    />
+  );
+})}
             {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
