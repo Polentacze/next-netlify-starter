@@ -32,13 +32,15 @@ export default function Home() {
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
-  const detectTextColor = (targetString) => {
-    const cleanStr = (targetString || "").toUpperCase()
-    if (cleanStr.includes("(RED)")) return "#ff4d4d"
-    if (cleanStr.includes("(BLUE)")) return "#3b82f6"
-    if (cleanStr.includes("(GREEN)")) return "#00FF1A"
-    if (cleanStr.includes("(CYAN)")) return "#00ffff"
-    return "#FFFFFF"
+  const detectTextColor = (targetString) => { 
+    const cleanStr = (targetString || "").toUpperCase() 
+    if (cleanStr.includes("(RED)")) return "#ff4d4d" 
+    if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
+    if (cleanStr.includes("(GREEN)")) return "#00FF1A" 
+    if (cleanStr.includes("(CYAN)")) return "#00ffff" 
+    if (cleanStr.includes("(PURPLE)")) return "#a855f7" // 🟣 Vibrant cosmic purple color block
+    if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" // 🩶 Sleek steel gray color block
+    return "#FFFFFF" 
   }
     const handleSendChat = (e) => {
     e.preventDefault()
