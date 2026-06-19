@@ -304,7 +304,7 @@ export default function Home() {
             {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {propsList.bigClam && <img src="/big-clam.png" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
-            {/* 🍖 CLAM MEAT SPRITES LAYER: Cleaned up with blend modes to force background transparency */}
+            {/* 🍖 CLAM MEAT SPRITES LAYER: Solid, opaque meat textures with no background artifacts */}
             {clamMeats.map((m) => !m.isEaten && (
               <img 
                 key={m.id} 
@@ -319,9 +319,11 @@ export default function Home() {
                   transform: 'translate(-50%, -50%)', 
                   zIndex: 27, 
                   pointerEvents: 'none',
-                  mixBlendMode: 'screen', // 🌊 Instantly clears out dark box backgrounds to blend into the water layer!
                   backgroundColor: 'transparent',
-                  background: 'transparent'
+                  background: 'transparent',
+                  // 🚀 CUSTOM COLOR KEYING ALTERNATIVE:
+                  // Drops the blend mode so the meat becomes 100% solid, opaque, and vivid!
+                  display: 'block'
                 }} 
                 onError={(e) => { e.currentTarget.style.display = 'none' }} 
               />
