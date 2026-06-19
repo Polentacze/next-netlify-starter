@@ -118,16 +118,17 @@ export default function Home() {
     } 
     setFoodPellets(pellets) 
     
-    // 🌍 PROP HEIGHT MATCHING Blueprint: Updates left-side kelp height to 230 to mirror the right side!
+    // 🌍 ADVANCED SEABED CONFIG: Adds the legendary centerpiece big clam!
     setPropsList({ 
       kelp: [
-        { x: 600, y: 1740, h: 230, type: 'kelp' },        // Far Left Kelp (Updated height to 230!)
-        { x: 1200, y: 1740, h: 85, type: 'coral' },       // Mid-Left Coral
-        { x: 1800, y: 1740, h: 85, type: 'coral' },       // Mid-Right Coral
-        { x: 2400, y: 1740, h: 230, type: 'kelp' }        // Far Right Kelp (Original height 230)
+        { x: 600, y: 1740, h: 230, type: 'kelp' },        
+        { x: 1200, y: 1740, h: 85, type: 'coral' },       
+        { x: 1800, y: 1740, h: 85, type: 'coral' },       
+        { x: 2400, y: 1740, h: 230, type: 'kelp' }        
       ], 
       volcano: { x: 900, y: 1765, w: 110 }, 
-      bigRock: { x: 2100, y: 1755, w: 160 }
+      bigRock: { x: 2100, y: 1755, w: 160 },
+      bigClam: { x: 1500, y: 1740, w: 120 } // 🦪 Sized large at 120px right in the exact map center (x: 1500)
     }) 
   }, [isPlaying]) 
 
@@ -256,6 +257,7 @@ export default function Home() {
 
             {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
+            {propsList.bigClam && <img src="/big-clam.png" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
 
             <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: evoTiers[activeTierIndex].scale + 'px', pointerEvents: 'none', background: 'transparent', backgroundColor: 'transparent' }}>
