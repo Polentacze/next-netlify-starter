@@ -18,6 +18,7 @@ export default function Home() {
   const [isBoosting, setIsBoosting] = useState(false)
   const [isAbilityActive, setIsAbilityActive] = useState(false)
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
+    const [clamMeats, setClamMeats] = useState([])
 
   const evoTiers = [
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
@@ -88,23 +89,21 @@ export default function Home() {
   } 
 
   const getRandomCoord = () => ({ x: Math.floor(Math.random() * 2800) + 100, y: Math.floor(Math.random() * 1650) + 100 })
-    const handleViewportClick = () => {
-    if (boostBars < 1 || isBoosting) return
-    
-    if (isAbilityActive) {
-      setAbilityBoostsUsed((prev) => {
-        const next = prev + 1
-        if (next >= 2) {
-          setIsAbilityActive(false)
-        }
-        return next
-      })
-    }
+  const handleViewportClick = () => { 
+    if (boostBars < 1 || isBoosting) return 
+    if (isAbilityActive) { 
+      setAbilityBoostsUsed((prev) => { 
+        const next = prev + 1 
+        if (next >= 2) { 
+          setIsAbilityActive(false) } 
+        return next 
+      }) 
+    } 
+    setIsBoosting(true) 
+    setBoostBars((b) => Math.max(0, b - 1)) 
+    setTimeout(() => { setIsBoosting(false) }, 320) 
+  } 
 
-    setIsBoosting(true)
-    setBoostBars((b) => Math.max(0, b - 1))
-    setTimeout(() => { setIsBoosting(false) }, 320)
-  }
   useEffect(() => { 
     if (!isPlaying) return 
     const pellets = [] 
@@ -117,8 +116,6 @@ export default function Home() {
       for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
     } 
     setFoodPellets(pellets) 
-    
-    // 🌍 RESIZED CENTERPIECE: Scaled up to 170px width (exactly two brain corals wide!)
     setPropsList({ 
       kelp: [
         { x: 600, y: 1740, h: 230, type: 'kelp' },        
@@ -128,66 +125,114 @@ export default function Home() {
       ], 
       volcano: { x: 900, y: 1765, w: 110 }, 
       bigRock: { x: 2100, y: 1755, w: 160 },
-      bigClam: { x: 1500, y: 1740, w: 170 } // 🦪 Updated width slider value to 170
+      bigClam: { x: 1500, y: 1740, w: 170 }
     }) 
   }, [isPlaying]) 
 
-  useEffect(() => {
-    if (!isPlaying) return
-    const nextIndex = activeTierIndex + 1
-    if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) {
-      if (pendingEvolutionIndex !== nextIndex) setPendingEvolutionIndex(nextIndex)
-    }
-  }, [score, activeTierIndex, isPlaying])
-    useEffect(() => {
-    if (!isPlaying) return
-    const handleKeyDown = (e) => {
-      if (document.activeElement.tagName === "INPUT") return
-      if (e.key.toLowerCase() === 'e') {
-        if (boostBars < 2 || isAbilityActive || activeTierIndex !== 1) return
-        setIsAbilityActive(true)
-        setAbilityBoostsUsed(0)
-      }
-    }
-    const mm = (e) => {
-      if (!viewRef.current) return
-      const rect = viewRef.current.getBoundingClientRect()
-      mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) }
-    }
-          const tick = setInterval(() => {
-      let cx = playerPosition.x, cy = playerPosition.y
-      setPlayerPosition((p) => {
-        const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
-        let maxSpeed = 4.8
-        if (isAbilityActive) maxSpeed = 9.6
-        let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
-        if (isBoosting) spd = isAbilityActive ? 24 : 18
-        const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
-        if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
-        cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy))
-        return { x: cx, y: cy }
-      })
-                  setFoodPellets((prev) => prev.map((f) => {
-        if (f.isEaten) return f
-        if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
-          setScore((s) => s + f.value)
-          setFoodEatenCount((pr) => { const nxt = pr + 1; if (nxt >= 5) { setBoostBars((b) => Math.min(3, b + 1)); return 0 }; return nxt })
-          setTimeout(() => {
-            setFoodPellets((cur) => cur.map((p) => {
-              if (p.id === f.id) { const loc = getRandomCoord(); return { ...p, x: loc.x, y: loc.y, isEaten: false } }
-              return p
-            }))
-          }, 4000)
-          return { ...f, isEaten: true }
-        }
-        return f
-      }))
-    }, 1000 / 60)
-          window.addEventListener('mousemove', mm)
-    window.addEventListener('keydown', handleKeyDown)
-    return () => { window.removeEventListener('mousemove', mm); window.removeEventListener('keydown', handleKeyDown); clearInterval(tick) }
-  }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex])
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const nextIndex = activeTierIndex + 1 
+    if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) { 
+      if (pendingEvolutionIndex !== nextIndex) setPendingEvolutionIndex(nextIndex) 
+    } 
+  }, [score, activeTierIndex, isPlaying]) 
 
+  // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
+  useEffect(() => {
+    if (!isPlaying) {
+      setClamMeats([])
+      return
+    }
+    const meatTimer = setInterval(() => {
+      setClamMeats((currentMeats) => {
+        const activeCount = currentMeats.filter(m => !m.isEaten).length
+        if (activeCount >= 5) return currentMeats 
+
+        const clamCenterX = 1500
+        const clamBaseY = 1740
+        const randomXOffset = Math.floor(Math.random() * 80) - 40     
+        const randomYOffset = -(Math.floor(Math.random() * 45) + 15)  
+
+        const newMeat = {
+          id: "meat_" + Date.now(),
+          x: clamCenterX + randomXOffset,
+          y: clamBaseY + randomYOffset,
+          isEaten: false
+        }
+        return [...currentMeats, newMeat]
+      })
+    }, 4000)
+    return () => clearInterval(meatTimer)
+  }, [isPlaying])
+
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const handleKeyDown = (e) => { 
+      if (document.activeElement.tagName === "INPUT") return 
+      if (e.key.toLowerCase() === 'e') { 
+        if (boostBars < 2 || isAbilityActive || activeTierIndex !== 1) return 
+        setIsAbilityActive(true) 
+        setAbilityBoostsUsed(0) 
+      } 
+    } 
+    const mm = (e) => { 
+      if (!viewRef.current) return 
+      const rect = viewRef.current.getBoundingClientRect() 
+      mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) } 
+    } 
+    const tick = setInterval(() => { 
+      let cx = playerPosition.x, cy = playerPosition.y 
+      setPlayerPosition((p) => { 
+        const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2) 
+        let maxSpeed = 4.8 
+        if (isAbilityActive) maxSpeed = 9.6 
+        let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0 
+        if (isBoosting) spd = isAbilityActive ? 24 : 18 
+        const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd 
+        if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90) 
+        cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy)) 
+        return { x: cx, y: cy } 
+      }) 
+      setFoodPellets((prev) => prev.map((f) => { 
+        if (f.isEaten) return f 
+        if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) { 
+          setScore((s) => s + f.value) 
+          setFoodEatenCount((pr) => { 
+            const nxt = pr + 1; 
+            if (nxt >= 5) { 
+              setBoostBars((b) => Math.min(3, b + 1)); return 0 
+            }; 
+            return nxt 
+          }) 
+          setTimeout(() => { 
+            setFoodPellets((cur) => cur.map((p) => { 
+              if (p.id === f.id) { 
+                const loc = getRandomCoord(); return { ...p, x: loc.x, y: loc.y, isEaten: false } 
+              } 
+              return p 
+            })) 
+          }, 4000) 
+          return { ...f, isEaten: true } 
+        } 
+        return f 
+      })) 
+      
+      // 🍖 MEAT COLLISION LOGIC: Absorbs active clam meat items for 200 points
+      setClamMeats((prev) => prev.map((m) => {
+        if (m.isEaten) return m
+        if (Math.sqrt((cx - m.x) ** 2 + (cy - m.y) ** 2) < 35) { 
+          setScore((s) => s + 200)
+          return { ...m, isEaten: true }
+        }
+        return m
+      }))
+    }, 1000 / 60) 
+    window.addEventListener('mousemove', mm) 
+    window.addEventListener('keydown', handleKeyDown) 
+    return () => { 
+      window.removeEventListener('mousemove', mm); window.removeEventListener('keydown', handleKeyDown); clearInterval(tick) 
+    } 
+  }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex, clamMeats])
   return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head><title>Prehistooio</title><link rel="icon" href="/icon.png?v=1" type="image/png" /></Head>
