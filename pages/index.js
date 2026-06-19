@@ -227,10 +227,10 @@ export default function Home() {
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
-{/* 🌿🪸 UNIFIED ANCHORED PROP RENDERER: Sunk to 30px to force perfect seabed grounding */}
+{/* 🌿🪸 UNIFIED ANCHORED PROP RENDERER: Sunk to 38px to eliminate the tiny baseline gap */}
 {propsList.kelp.map((k, idx) => {
-  // 🧭 Pushing the baseline down by a solid 30px to fully submerge the floating gap
-  const anchorAdjustment = 30;
+  // 🧭 Sinking them by 38px to force the asset roots deep below the mud surface line
+  const anchorAdjustment = 38;
   const finalTopY = k.y + anchorAdjustment;
 
   return (
@@ -240,7 +240,7 @@ export default function Home() {
       alt="prop" 
       style={{ 
         position: 'absolute', 
-        top: finalTopY, // Pushes both the kelp and coral down by exactly 30 pixels
+        top: finalTopY, // Pushes both the kelp and coral down by exactly 38 pixels
         left: k.x, 
         height: k.type === 'coral' ? 'auto' : k.h, 
         width: k.type === 'coral' ? `${k.h}px` : '38px', 
@@ -253,6 +253,7 @@ export default function Home() {
     />
   );
 })}
+
             {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
