@@ -227,10 +227,10 @@ export default function Home() {
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
-{/* 🌿🪸 UNIFIED ANCHORED PROP RENDERER: Sunk to 16px to bury the kelp base deep into the mud */}
+{/* 🌿🪸 UNIFIED ANCHORED PROP RENDERER: Sunk to 21px to fully bury the asset bases */}
 {propsList.kelp.map((k, idx) => {
-  // 🧭 Sunk deeper to 16px to fully resolve the floating asset gap
-  const anchorAdjustment = 16;
+  // 🧭 Deep blueprint update: pushing the baseline down by 21px to force alignment
+  const anchorAdjustment = 21;
   const finalTopY = k.y + anchorAdjustment;
 
   return (
@@ -240,7 +240,7 @@ export default function Home() {
       alt="prop" 
       style={{ 
         position: 'absolute', 
-        top: finalTopY, // Pushes the asset down by exactly 16 pixels
+        top: finalTopY, // Pushes both the kelp and coral down by exactly 21 pixels
         left: k.x, 
         height: k.type === 'coral' ? 'auto' : k.h, 
         width: k.type === 'coral' ? `${k.h}px` : '38px', 
