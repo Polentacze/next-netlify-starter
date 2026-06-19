@@ -227,10 +227,10 @@ export default function Home() {
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
-{/* 🌿🪸 UNIFIED ANCHORED PROP RENDERER: Sunk to 38px to eliminate the tiny baseline gap */}
+{/* 🌿🪸 PROPORTIONAL PROP ANCHOR: Resets coral to 12px and sinks kelp to 42px */}
 {propsList.kelp.map((k, idx) => {
-  // 🧭 Sinking them by 38px to force the asset roots deep below the mud surface line
-  const anchorAdjustment = 38;
+  // 🚀 Dynamically targets adjustments based on prop type to prevent over-burying!
+  const anchorAdjustment = k.type === 'coral' ? 12 : 42;
   const finalTopY = k.y + anchorAdjustment;
 
   return (
@@ -240,7 +240,7 @@ export default function Home() {
       alt="prop" 
       style={{ 
         position: 'absolute', 
-        top: finalTopY, // Pushes both the kelp and coral down by exactly 38 pixels
+        top: finalTopY, // Applies 12px for brain coral and 42px for the kelp
         left: k.x, 
         height: k.type === 'coral' ? 'auto' : k.h, 
         width: k.type === 'coral' ? `${k.h}px` : '38px', 
