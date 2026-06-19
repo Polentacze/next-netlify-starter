@@ -22,7 +22,7 @@ export default function Home() {
   const evoTiers = [ 
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
     { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
-    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // 🧬 4500 + 5000 points to evolve!
+    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" }
   ] 
 
   const [activeTierIndex, setActiveTierIndex] = useState(0) 
@@ -70,6 +70,36 @@ export default function Home() {
     setBoostBars((b) => Math.max(0, b - 1))
     setTimeout(() => { setIsBoosting(false) }, 320)
   }
+    useEffect(() => {
+    if (!isPlaying) return
+    const pellets = []
+    for (let c = 0; c < 8; c++) {
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200
+      for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" })
+    }
+    for (let c = 0; c < 4; c++) {
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200
+      for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" })
+    }
+    setFoodPellets(pellets)
+          setPropsList({
+      kelp: [{ x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 }, { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }],
+      volcano: { x: 900, y: 1765, w: 110 }, bigRock: { x: 2100, y: 1755, w: 160 }
+    })
+  }, [isPlaying])
+
+  // 🧬 UPDATE THIS SPECIFIC LOOP INSIDE YOUR CODE:
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const nextIndex = activeTierIndex + 1 
+    
+    // Check if there is another tier available and if the score meets its milestone
+    if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) { 
+      if (pendingEvolutionIndex !== nextIndex) {
+        setPendingEvolutionIndex(nextIndex) 
+      }
+    } 
+  }, [score, activeTierIndex, isPlaying, evoTiers]) // 🌟 Added evoTiers here so it scans the new Dunkleosteus threshold!
   useEffect(() => { 
     if (!isPlaying) return 
     const pellets = [] 
@@ -82,69 +112,92 @@ export default function Home() {
       for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
     } 
     setFoodPellets(pellets) 
-    // 🌱 PROPS RECALIBRATION: Hard-anchored directly to the mud floor line
-    setPropsList({ 
-      kelp: [{ x: 600, y: 1740, h: 180 }, { x: 1200, y: 1740, h: 210 }, { x: 1800, y: 1740, h: 170 }, { x: 2400, y: 1740, h: 230 }], 
-      volcano: { x: 900, y: 1740, w: 110 }, 
-      bigRock: { x: 2100, y: 1740, w: 160 } 
-    }) 
+    setPropsList({ kelp: [{ x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 }, { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }], volcano: { x: 900, y: 1765, w: 110 }, bigRock: { x: 2100, y: 1755, w: 160 } }) 
   }, [isPlaying]) 
 
+  // 🧬 FIXED HOOK 1: Evolution checker tracks your list array perfectly
   useEffect(() => { 
     if (!isPlaying) return 
     const nextIndex = activeTierIndex + 1 
     if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) { 
       if (pendingEvolutionIndex !== nextIndex) setPendingEvolutionIndex(nextIndex) 
     } 
-  }, [score, activeTierIndex, isPlaying])
-    useEffect(() => {
-    if (!isPlaying) return
-    const handleKeyDown = (e) => {
-      if (document.activeElement.tagName === "INPUT") return
-      if (e.key.toLowerCase() === 'e') {
-        if (boostBars < 2 || isAbilityActive || activeTierIndex !== 1) return
-        setIsAbilityActive(true)
-        setAbilityBoostsUsed(0)
-      }
-    }
-    const mm = (e) => {
-      if (!viewRef.current) return
-      const rect = viewRef.current.getBoundingClientRect()
-      mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) }
-    }
-          const tick = setInterval(() => {
-      let cx = playerPosition.x, cy = playerPosition.y
-      setPlayerPosition((p) => {
-        const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
-        let maxSpeed = 4.8
-        if (isAbilityActive) maxSpeed = 9.6
-        let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
-        if (isBoosting) spd = isAbilityActive ? 24 : 18
-        const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
-        if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
-        cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy))
-        return { x: cx, y: cy }
-      })
-                  setFoodPellets((prev) => prev.map((f) => {
-        if (f.isEaten) return f
-        if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
-          setScore((s) => s + f.value)
-          setFoodEatenCount((pr) => { const nxt = pr + 1; if (nxt >= 5) { setBoostBars((b) => Math.min(3, b + 1)); return 0 }; return nxt })
-          setTimeout(() => {
-            setFoodPellets((cur) => cur.map((p) => {
-              if (p.id === f.id) { const loc = getRandomCoord(); return { ...p, x: loc.x, y: loc.y, isEaten: false } }
-              return p
-            }))
-          }, 4000)
-          return { ...f, isEaten: true }
-        }
-        return f
-      }))
-    }, 1000 / 60)
-          window.addEventListener('mousemove', mm)
-    window.addEventListener('keydown', handleKeyDown)
-    return () => { window.removeEventListener('mousemove', mm); window.removeEventListener('keydown', handleKeyDown); clearInterval(tick) }
-  }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex])
+  }, [score, activeTierIndex, isPlaying, evoTiers]) 
+
+  // 🕹️ FIXED HOOK 2: Primary game engine loops completely clear out all tracking data issues
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const handleKeyDown = (e) => { 
+      if (document.activeElement.tagName === "INPUT") return 
+      if (e.key.toLowerCase() === 'e') { 
+        if (boostBars < 2 || isAbilityActive || activeTierIndex !== 1) return 
+        setIsAbilityActive(true) 
+        setAbilityBoostsUsed(0) 
+      } 
+    } 
+    const mm = (e) => { 
+      if (!viewRef.current) return 
+      const rect = viewRef.current.getBoundingClientRect() 
+      mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) } 
+    } 
+    const tick = setInterval(() => { 
+      let cx = playerPosition.x, cy = playerPosition.y 
+      setPlayerPosition((p) => { 
+        const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2) 
+        let maxSpeed = 4.8 
+        if (isAbilityActive) maxSpeed = 9.6 
+        let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0 
+        if (isBoosting) spd = isAbilityActive ? 24 : 18 
+        const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd 
+        if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90) 
+        cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy)) 
+        return { x: cx, y: cy } 
+      }) 
+      setFoodPellets((prev) => prev.map((f) => { 
+        if (f.isEaten) return f 
+        if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) { 
+          // 🚀 CRITICAL FIX: Intercept the absolute next score value immediately!
+          const nextScore = score + f.value
+          setScore(nextScore) 
+
+          // 🧬 EVOLUTION TRIGGERS IMMEDATELY ON THE FRESH VALUE!
+          const nextIndex = activeTierIndex + 1 
+          if (nextIndex < evoTiers.length && nextScore >= evoTiers[nextIndex].minScore) { 
+            if (pendingEvolutionIndex !== nextIndex) {
+              setPendingEvolutionIndex(nextIndex) 
+            } 
+          }
+
+          setFoodEatenCount((pr) => { 
+            const nxt = pr + 1; 
+            if (nxt >= 5) { 
+              setBoostBars((b) => Math.min(3, b + 1)); 
+              return 0 
+            }; 
+            return nxt 
+          }) 
+          setTimeout(() => { 
+            setFoodPellets((cur) => cur.map((p) => { 
+              if (p.id === f.id) { 
+                const loc = getRandomCoord(); 
+                return { ...p, x: loc.x, y: loc.y, isEaten: false } 
+              } 
+              return p 
+            })) 
+          }, 4000) 
+          return { ...f, isEaten: true } 
+        } 
+        return f 
+      })) 
+    }, 1000 / 60) 
+    window.addEventListener('mousemove', mm) 
+    window.addEventListener('keydown', handleKeyDown) 
+    return () => { 
+      window.removeEventListener('mousemove', mm); 
+      window.removeEventListener('keydown', handleKeyDown); 
+      clearInterval(tick) 
+    } 
+  }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex, evoTiers, score, pendingEvolutionIndex])
 
   return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
@@ -188,46 +241,54 @@ export default function Home() {
             <div className="gravel-seafloor-bed" /> 
             
             {propsList.kelp.map((k, idx) => ( 
-              <img key={idx} src="/kelp.png" alt="kelp" className="scrolling-kelp-prop" style={{ position: 'absolute', top: k.y, left: k.x, height: k.h, transform: 'translate(-50%, -100%)' }} onError={(e) => { e.target.style.display = 'none' }} /> 
+              <img key={idx} src="/kelp.png" alt="kelp" className="scrolling-kelp-prop" style={{ position: 'absolute', top: k.y, left: k.x, height: k.h, transform: 'translate(-50%, -100%)' }} onError={(e) => { e.currentTarget.style.display = 'none' }} /> 
             ))} 
 
-            {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />} 
-            {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />} 
+            {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.currentTarget.style.display = 'none' }} />} 
+            {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.currentTarget.style.display = 'none' }} />} 
             
-            {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)} 
+            {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.currentTarget.src = "/food.png" }} />)} 
 
-            {/* 🛡️ Protected width and image lookup parameters prevent invisible render flaws */}
             <div style={{ width: `${evoTiers[activeTierIndex]?.scale || 80}px`, position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}> 
-              <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : (evoTiers[activeTierIndex]?.file || "/sacabambaspis.png")} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
+              <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : (evoTiers[activeTierIndex]?.file || "/sacabambaspis.png")} alt="fish" className="player-fish-sprite" onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} /> 
               {isAbilityActive && activeTierIndex === 1 && ( 
-                <img src="/steth-ability.png" alt="Speed Surge Active" style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
+                <img src="/steth-ability.png" alt="Speed Surge Active" style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} /> 
               )} 
             </div> 
           </div> 
         </div> 
       ) : (
-        <>
-          <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
-          <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
-          <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
-          <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
-
-          <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
-            <div className="wiki-panel" onClick={(e) => e.stopPropagation()}><button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button><h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2><div className="grid-container"><img src="/AnimalGrid.png" alt="Grid" className="grid-img" />{slots.map((s, i) => <div key={i} className="slot-over" style={{ top: slotPositions[i].t, left: slotPositions[i].l, width: "10.5%", height: "28%" }} onMouseEnter={() => setHoveredAnimal(slots[s])} onMouseLeave={() => setHoveredAnimal("")} />)}</div><div className="hud-banner"><p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#fff' }}>{hoveredAnimal || "Hover over a creature to analyze metadata"}</p></div></div>
+                <> 
+          <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} alt="critter" /> 
+          <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} alt="critter" /> 
+          <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} /> 
+          <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} /> 
+          
+          <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}> 
+            <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
+              <button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
+              <h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2>
+              <div className="grid-container">
+                <img src="/AnimalGrid.png" alt="Grid" className="grid-img" />
+                {slots.map((s, i) => <div key={i} className="slot-over" style={{ top: slotPositions[i].t, left: slotPositions[i].l, width: "10.5%", height: "28%" }} onMouseEnter={() => setHoveredAnimal(s)} onMouseLeave={() => setHoveredAnimal("")} />)}
+              </div>
+              <div className="hud-banner">
+                <p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#fff' }}>{hoveredAnimal || "Hover over a creature to analyze metadata"}</p>
+              </div>
+            </div> 
           </div>
-
-          <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
-            <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio</h1>
-            <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p>
-            <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} />
-            <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p>
-            <form className="launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}>
-              <div className="input-wrap"><img src="/input-box.png" alt="Input" style={{ width: '100%' }} /><input type="text" className="field-text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} placeholder="Enter Name..." style={{ color: '#333' }} /></div>
-              <button type="submit" className="play-btn"><img src="/play-button.png" alt="PLAY" style={{ width: '100%' }} /></button>
-            </form>
-          </main>
-        </>
-      )}
-    </div>
-  )
+                  <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}> 
+            <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio</h1> 
+            <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p> 
+            <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.currentTarget.src = "/deep-prehistoo.png" }} /> 
+            <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p> 
+            <form className="launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}> 
+              <div className="input-wrap"><img src="/input-box.png" alt="Input" style={{ width: '100%' }} /><input type="text" className="field-text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} placeholder="Enter Name..." style={{ color: '#333' }} /></div> 
+              <button type="submit" className="play-btn"><img src="/play-button.png" alt="PLAY" style={{ width: '100%' }} /></button> 
+            </form> 
+          </main> 
+        </> 
+      )} 
+    </div> 
+  ) 
 }
