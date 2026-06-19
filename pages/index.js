@@ -20,7 +20,8 @@ export default function Home() {
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
     const evoTiers = [ 
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
-    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" } 
+    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
+    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" }
   ] 
 
   const [activeTierIndex, setActiveTierIndex] = useState(0) 
@@ -43,39 +44,53 @@ export default function Home() {
     return "#FFFFFF" 
   } 
 
+  const cleanTags = (str) => {
+    if (!str) return ""
+    let result = str
+    const targets = ["(RED)", "(BLUE)", "(GREEN)", "(CYAN)", "(PURPLE)", "(GREY)", "(GRAY)"]
+    for (let i = 0; i < targets.length; i++) {
+      let upper = result.toUpperCase()
+      let idx = upper.indexOf(targets[i])
+      while (idx !== -1) {
+        result = result.substring(0, idx) + result.substring(idx + targets[i].length)
+        upper = result.toUpperCase()
+        idx = upper.indexOf(targets[i])
+      }
+    }
+    return result.trim()
+  }
+
   const handleSendChat = (e) => { 
     e.preventDefault() 
     if (!chatInput.trim()) return 
     let messageColor = detectTextColor(chatInput) 
     if (messageColor === "#FFFFFF") messageColor = detectTextColor(username) 
-    
-    const cleanMessage = chatInput
-      .replace(/\((red|blue|green|cyan|purple|grey|gray)\)/gi, "")
-      .trim()
-
+    const cleanMessage = cleanTags(chatInput)
     if (!cleanMessage) return
-
     setChatMessages((p) => [...p, { user: username || "Guest", text: cleanMessage, colorCode: messageColor }]) 
     setChatInput("") 
   } 
 
-  const getRandomCoord = () => ({ x: Math.floor(Math.random() * 2800) + 100, y: Math.floor(Math.random() * 1650) + 100 })
-    const handleViewportClick = () => { 
+  const getRandomCoord = () => ({ x: Math.floor(Math.random() * 2800) + 100, y: Math.floor(Math.random() * 1650) + 100 }) 
+
+  const handleViewportClick = () => { 
     if (boostBars < 1 || isBoosting) return 
     if (isAbilityActive) { 
       setAbilityBoostsUsed((prev) => { 
         const next = prev + 1 
         if (next >= 2) { 
-          setIsAbilityActive(false) } 
+          setIsAbilityActive(false) 
+        } 
         return next 
       }) 
     } 
     setIsBoosting(true) 
     setBoostBars((b) => Math.max(0, b - 1)) 
-    setTimeout(() => { setIsBoosting(false) }, 320) 
-  } 
-
-  useEffect(() => { 
+    setTimeout(() => { 
+      setIsBoosting(false) 
+    }, 320) 
+  }
+    useEffect(() => { 
     if (!isPlaying) return 
     const pellets = [] 
     for (let c = 0; c < 8; c++) { 
@@ -96,8 +111,8 @@ export default function Home() {
     if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) { 
       if (pendingEvolutionIndex !== nextIndex) setPendingEvolutionIndex(nextIndex) 
     } 
-  }, [score, activeTierIndex, isPlaying])
-          useEffect(() => { 
+  }, [score, activeTierIndex, isPlaying, evoTiers])
+    useEffect(() => { 
     if (!isPlaying) return 
     const handleKeyDown = (e) => { 
       if (document.activeElement.tagName === "INPUT") return 
@@ -132,14 +147,16 @@ export default function Home() {
           setFoodEatenCount((pr) => { 
             const nxt = pr + 1; 
             if (nxt >= 5) { 
-              setBoostBars((b) => Math.min(3, b + 1)); return 0 
+              setBoostBars((b) => Math.min(3, b + 1)); 
+              return 0 
             }; 
             return nxt 
           }) 
           setTimeout(() => { 
             setFoodPellets((cur) => cur.map((p) => { 
               if (p.id === f.id) { 
-                const loc = getRandomCoord(); return { ...p, x: loc.x, y: loc.y, isEaten: false } 
+                const loc = getRandomCoord(); 
+                return { ...p, x: loc.x, y: loc.y, isEaten: false } 
               } 
               return p 
             })) 
@@ -152,9 +169,11 @@ export default function Home() {
     window.addEventListener('mousemove', mm) 
     window.addEventListener('keydown', handleKeyDown) 
     return () => { 
-      window.removeEventListener('mousemove', mm); window.removeEventListener('keydown', handleKeyDown); clearInterval(tick) 
+      window.removeEventListener('mousemove', mm); 
+      window.removeEventListener('keydown', handleKeyDown); 
+      clearInterval(tick) 
     } 
-  }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex])
+  }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex, evoTiers])
     return ( 
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}> 
       <Head><title>Prehistooio</title><link rel="icon" href="/icon.png?v=1" type="image/png" /></Head> 
@@ -164,19 +183,20 @@ export default function Home() {
           <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}> 
             <strong>PREHISTOOIO ARENA v1.0</strong><br /> 
             <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span><br /> 
-            <span style={{ fontSize: '0.85rem', color: '#FFD700', textTransform: 'uppercase' }}>SPECIES: {evoTiers[activeTierIndex].name}</span> 
+            <span style={{ fontSize: '0.85rem', color: '#FFD700', textTransform: 'uppercase' }}>SPECIES: {evoTiers[activeTierIndex]?.name || ""}</span> 
           </div> 
           
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button> 
           
           {pendingEvolutionIndex !== null && ( 
-            <div className="evolution-prompt-clickable-hud-box" onClick={() => { setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Transformed successfully into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]) }}> 
+            <div className="evolution-prompt-clickable-hud-box" onClick={() => { setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Transformed successfully into ${evoTiers[pendingEvolutionIndex]?.name || "New Creature"}!`, colorCode: "#00FF1A" }]) }}> 
               <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" /> 
-              <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="avatar" /> 
+              <img src={evoTiers[pendingEvolutionIndex]?.file || "/prehistoric-skeleton.png"} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} alt="avatar" /> 
               <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span> 
             </div> 
-          )}
-                  <div className="hud-boost-ammunition-deck"> 
+          )} 
+
+          <div className="hud-boost-ammunition-deck"> 
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} /> 
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 2 ? '0 0 8px #00FF1A' : 'none' }} /> 
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 3 ? '0 0 8px #00FF1A' : 'none' }} /> 
@@ -192,59 +212,47 @@ export default function Home() {
             </div> 
             <form onSubmit={handleSendChat}><input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} /></form> 
           </div>
-          <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}> 
+                  <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}> 
             <div className="gravel-seafloor-bed" /> 
             
             {propsList.kelp.map((k, idx) => ( 
-              <img key={idx} src="/kelp.png" alt="kelp" className="scrolling-kelp-prop" style={{ position: 'absolute', top: 1740, left: k.x, height: k.h, transform: 'translate(-50%, -100%)' }} onError={(e) => { e.target.style.display = 'none' }} /> 
+              <img key={idx} src="/kelp.png" alt="kelp" className="scrolling-kelp-prop" style={{ position: 'absolute', top: k.y, left: k.x, height: k.h, transform: 'translate(-50%, -100%)' }} onError={(e) => { e.currentTarget.style.display = 'none' }} /> 
             ))} 
 
-            {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />} 
-            {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />} 
+            {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.currentTarget.style.display = 'none' }} />} 
+            {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.currentTarget.style.display = 'none' }} />} 
             
-            {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)} 
+            {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.currentTarget.src = "/food.png" }} />)} 
 
-            <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}> 
-              <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex].file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
+            <div style={{ width: `${evoTiers[activeTierIndex]?.scale || 80}px`, position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}> 
+              
+              <div style={{
+                position: 'absolute',
+                top: '-45px',
+                left: '50%',
+                transform: 'translateX(-50%) rotate(' + (-playerRotation) + 'deg)',
+                backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                padding: '4px 10px',
+                borderRadius: '6px',
+                fontSize: '0.85rem',
+                fontFamily: 'sans-serif',
+                fontWeight: 'bold',
+                color: '#FFFFFF',
+                whiteSpace: 'nowrap',
+                pointerEvents: 'none',
+                zIndex: 10,
+                border: `2px solid ${detectTextColor(username)}`,
+                boxShadow: `0 0 10px ${detectTextColor(username)}`
+              }}>
+                {cleanTags(username || "Guest")}
+              </div>
+
+              <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : (evoTiers[activeTierIndex]?.file || "/sacabambaspis.png")} alt="fish" className="player-fish-sprite" onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} /> 
               {isAbilityActive && activeTierIndex === 1 && ( 
-                <img src="/steth-ability.png" alt="Speed Surge Active" style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} /> 
+                <img src="/steth-ability.png" alt="Speed Surge Active" style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} /> 
               )} 
             </div> 
           </div> 
         </div> 
       ) : (
-                <> 
-          <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" /> 
-          <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" /> 
-          <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} /> 
-          <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} /> 
-          
-          <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}> 
-            <div className="wiki-panel" onClick={(e) => e.stopPropagation()}>
-              <button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
-              <h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2>
-              <div className="grid-container">
-                <img src="/AnimalGrid.png" alt="Grid" className="grid-img" />
-                {slots.map((s, i) => <div key={i} className="slot-over" style={{ top: slotPositions[i].t, left: slotPositions[i].l, width: "10.5%", height: "28%" }} onMouseEnter={() => setHoveredAnimal(s)} onMouseLeave={() => setHoveredAnimal("")} />)}
-              </div>
-              <div className="hud-banner">
-                <p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#fff' }}>{hoveredAnimal || "Hover over a creature to analyze metadata"}</p>
-              </div>
-            </div> 
-          </div> 
-
-          <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}> 
-            <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio</h1> 
-            <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p> 
-            <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} /> 
-            <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p> 
-            <form className="launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}> 
-              <div className="input-wrap"><img src="/input-box.png" alt="Input" style={{ width: '100%' }} /><input type="text" className="field-text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={14} placeholder="Enter Name..." style={{ color: '#333' }} /></div> 
-              <button type="submit" className="play-btn"><img src="/play-button.png" alt="PLAY" style={{ width: '100%' }} /></button> 
-            </form> 
-          </main> 
-        </> 
-      )} 
-    </div> 
-  ) 
-}
+            
