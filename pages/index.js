@@ -32,22 +32,39 @@ export default function Home() {
     const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
-  const detectTextColor = (targetString) => {
-    const cleanStr = (targetString || "").toUpperCase()
-    if (cleanStr.includes("(RED)")) return "#ff4d4d"
-    if (cleanStr.includes("(BLUE)")) return "#3b82f6"
-    if (cleanStr.includes("(GREEN)")) return "#00FF1A"
-    if (cleanStr.includes("(CYAN)")) return "#00ffff"
-    return "#FFFFFF"
-  }
-    const handleSendChat = (e) => {
-    e.preventDefault()
-    if (!chatInput.trim()) return
-    let messageColor = detectTextColor(chatInput)
-    if (messageColor === "#FFFFFF") messageColor = detectTextColor(username)
-    setChatMessages((p) => [...p, { user: username || "Guest", text: chatInput, colorCode: messageColor }])
-    setChatInput("")
-  }
+  const detectTextColor = (targetString) => { 
+    const cleanStr = (targetString || "").toUpperCase() 
+    if (cleanStr.includes("(RED)")) return "#ff4d4d" 
+    if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
+    if (cleanStr.includes("(GREEN)")) return "#00FF1A" 
+    if (cleanStr.includes("(CYAN)")) return "#00ffff" 
+    if (cleanStr.includes("(PURPLE)")) return "#a855f7" // 🟣 Vibrant custom purple color tag
+    if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" // 🩶 Sleek custom grey color tag
+    return "#FFFFFF" 
+  } 
+
+  const handleSendChat = (e) => { 
+    e.preventDefault() 
+    if (!chatInput.trim()) return 
+    
+    let messageColor = detectTextColor(chatInput) 
+    if (messageColor === "#FFFFFF") messageColor = detectTextColor(username) 
+    
+    // 🧼 CHAT FILTER: Strips out the color tag only when typed into the chat input field
+    const cleanMessage = chatInput
+      .replace(/\((red|blue|green|cyan|purple|grey|gray)\)/gi, "")
+      .trim()
+
+    // Safety gate: stops the message if a user typed a color tag and nothing else
+    if (!cleanMessage) return
+
+    setChatMessages((p) => [...p, { 
+      user: username || "Guest", 
+      text: cleanMessage, // 🚀 Sends the clean text string with the tags completely removed
+      colorCode: messageColor 
+    }]) 
+    setChatInput("") 
+  } 
 
   const getRandomCoord = () => ({ x: Math.floor(Math.random() * 2800) + 100, y: Math.floor(Math.random() * 1650) + 100 })
     const handleViewportClick = () => {
