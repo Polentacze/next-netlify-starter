@@ -141,18 +141,24 @@ export default function Home() {
     }) 
   }, [isPlaying]) 
 
-  // 🧬 BULLETPROOF EVOLUTION ENGINE: Directly tracks absolute milestones without tracking variable delays
+  // 🧬 BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
   useEffect(() => { 
     if (!isPlaying) return 
     
-    // Check milestones based on your active species index level
+    // 🧟 UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever!
+    const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
+    if (isSecretGhoul) {
+      if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
+      return; // 🛑 Force exits the hook early so no evolutionary level-ups can ever process
+    }
+
+    // Standard progression checkpoints for normal fish tiers
     if (activeTierIndex === 0 && score >= 4500) { 
       if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) 
     } else if (activeTierIndex === 1 && score >= 9500) { 
       if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) 
     } 
-  }, [score, activeTierIndex, isPlaying]) 
-
+  }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) // 🌟 Added username monitoring to track the secret name check!
   // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
   useEffect(() => {
     if (!isPlaying) {
