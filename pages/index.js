@@ -23,10 +23,11 @@ export default function Home() {
   const [activeClan, setActiveClan] = useState("")      // 👑 Saves your single registered team name string
   const [clanInputTemp, setClanInputTemp] = useState("") // Tracks text entered inside the panel input field
 
-  const evoTiers = [
-    { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
-    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" }
-  ]
+  const evoTiers = [ 
+    { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
+    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
+    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // 🧬 Balanced Tier 3 landmark addition
+  ] 
     const [activeTierIndex, setActiveTierIndex] = useState(0)
   const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const [chatInput, setChatInput] = useState("")
@@ -133,11 +134,15 @@ export default function Home() {
     }) 
   }, [isPlaying]) 
 
+  // 🧬 BULLETPROOF EVOLUTION ENGINE: Directly tracks absolute milestones without tracking variable delays
   useEffect(() => { 
     if (!isPlaying) return 
-    const nextIndex = activeTierIndex + 1 
-    if (nextIndex < evoTiers.length && score >= evoTiers[nextIndex].minScore) { 
-      if (pendingEvolutionIndex !== nextIndex) setPendingEvolutionIndex(nextIndex) 
+    
+    // Check milestones based on your active species index level
+    if (activeTierIndex === 0 && score >= 4500) { 
+      if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) 
+    } else if (activeTierIndex === 1 && score >= 9500) { 
+      if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) 
     } 
   }, [score, activeTierIndex, isPlaying]) 
 
