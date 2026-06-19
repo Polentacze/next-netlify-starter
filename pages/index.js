@@ -227,10 +227,10 @@ export default function Home() {
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
-{/* 🌿🪸 PERFECTLY ANCHORED PROP RENDERER: Sinks the roots flat into the soil texture baseline */}
+{/* 🌿🪸 UNIFIED ANCHORED PROP RENDERER: Uses the coral's blueprint to bury the kelp deep into the mud */}
 {propsList.kelp.map((k, idx) => {
-  // 🧭 Sinks corals down slightly extra to bury their flat bases into the mud line
-  const anchorAdjustment = k.type === 'coral' ? 12 : 5;
+  // 🧭 Blueprint update: applies the successful coral sinking math (12px) to ALL seabed props!
+  const anchorAdjustment = 12;
   const finalTopY = k.y + anchorAdjustment;
 
   return (
@@ -240,7 +240,7 @@ export default function Home() {
       alt="prop" 
       style={{ 
         position: 'absolute', 
-        top: finalTopY, // 🚀 Uses the sunken Y coordinate to lock them flush into the mud
+        top: finalTopY, // Locks both props deep below the muddy baseline edge
         left: k.x, 
         height: k.type === 'coral' ? 'auto' : k.h, 
         width: k.type === 'coral' ? `${k.h}px` : '38px', 
