@@ -105,23 +105,30 @@ export default function Home() {
     setBoostBars((b) => Math.max(0, b - 1))
     setTimeout(() => { setIsBoosting(false) }, 320)
   }
-    useEffect(() => {
-    if (!isPlaying) return
-    const pellets = []
-    for (let c = 0; c < 8; c++) {
-      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200
-      for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" })
-    }
-    for (let c = 0; c < 4; c++) {
-      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200
-      for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" })
-    }
-    setFoodPellets(pellets)
-          setPropsList({
-      kelp: [{ x: 600, y: 1755, h: 180 }, { x: 1200, y: 1755, h: 210 }, { x: 1800, y: 1755, h: 170 }, { x: 2400, y: 1755, h: 230 }],
-      volcano: { x: 900, y: 1765, w: 110 }, bigRock: { x: 2100, y: 1755, w: 160 }
-    })
-  }, [isPlaying])
+  useEffect(() => { 
+    if (!isPlaying) return 
+    const pellets = [] 
+    for (let c = 0; c < 8; c++) { 
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+      for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" }) 
+    } 
+    for (let c = 0; c < 4; c++) { 
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+      for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
+    } 
+    setFoodPellets(pellets) 
+    
+    // 🪸 MAP CONFIG RE-LAYOUT: Keeps outer kelps, removes inner ones, adds brain coral
+    setPropsList({ 
+      kelp: [
+        { x: 600, y: 1755, h: 180 },  // Far Left Kelp (Kept!)
+        { x: 2400, y: 1755, h: 230 }  // Far Right Kelp (Kept!)
+      ], 
+      volcano: { x: 900, y: 1765, w: 110 }, 
+      bigRock: { x: 2100, y: 1755, w: 160 },
+      brainCoral: { x: 1500, y: 1740, w: 85 } // 🪸 Added brain coral right in the center, perfectly flush with the seabed!
+    }) 
+  }, [isPlaying]) 
 
   useEffect(() => {
     if (!isPlaying) return
