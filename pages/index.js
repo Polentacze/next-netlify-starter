@@ -34,33 +34,54 @@ export default function Home() {
 
   const detectTextColor = (targetString) => { 
     const cleanStr = (targetString || "").toUpperCase() 
+    
+    // 👑 CLAN LOGIC FIRST: If the user or text has a valid bracketed tag like [GOLD], force gold text!
+    // It checks if it starts with [ and has a closing ] within a 12 character span (10 char tag + brackets)
+    if (cleanStr.startsWith("[") && cleanStr.indexOf("]") > 0 && cleanStr.indexOf("]") <= 11) {
+      return "#FFD700" // Golden Yellow
+    }
+
+    // Standard cosmetic modifiers fallback
     if (cleanStr.includes("(RED)")) return "#ff4d4d" 
     if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
     if (cleanStr.includes("(GREEN)")) return "#00FF1A" 
     if (cleanStr.includes("(CYAN)")) return "#00ffff" 
-    if (cleanStr.includes("(PURPLE)")) return "#a855f7" // 🟣 Vibrant custom purple color tag
-    if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" // 🩶 Sleek custom grey color tag
+    if (cleanStr.includes("(PURPLE)")) return "#a855f7" 
+    if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
     return "#FFFFFF" 
   } 
+
+  // 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
+  const cleanTags = (str) => {
+    if (!str) return ""
+    let result = str
+    const targets = ["(RED)", "(BLUE)", "(GREEN)", "(CYAN)", "(PURPLE)", "(GREY)", "(GRAY)"]
+    for (let i = 0; i < targets.length; i++) {
+      let upper = result.toUpperCase()
+      let idx = upper.indexOf(targets[i])
+      while (idx !== -1) {
+        result = result.substring(0, idx) + result.substring(idx + targets[i].length)
+        upper = result.toUpperCase()
+        idx = upper.indexOf(targets[i])
+      }
+    }
+    return result.trim()
+  }
 
   const handleSendChat = (e) => { 
     e.preventDefault() 
     if (!chatInput.trim()) return 
     
+    // 🏷️ Dynamically matches colors to whoever sent it
     let messageColor = detectTextColor(chatInput) 
     if (messageColor === "#FFFFFF") messageColor = detectTextColor(username) 
     
-    // 🧼 CHAT FILTER: Strips out the color tag only when typed into the chat input field
-    const cleanMessage = chatInput
-      .replace(/\((red|blue|green|cyan|purple|grey|gray)\)/gi, "")
-      .trim()
-
-    // Safety gate: stops the message if a user typed a color tag and nothing else
+    const cleanMessage = cleanTags(chatInput)
     if (!cleanMessage) return
 
     setChatMessages((p) => [...p, { 
       user: username || "Guest", 
-      text: cleanMessage, // 🚀 Sends the clean text string with the tags completely removed
+      text: cleanMessage, 
       colorCode: messageColor 
     }]) 
     setChatInput("") 
