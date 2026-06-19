@@ -118,14 +118,13 @@ export default function Home() {
     } 
     setFoodPellets(pellets) 
     
-    // 🪸 MAP CONFIG RE-LAYOUT: Keeps outer kelps, removes inner ones, adds brain coral
-    // 🌍 MAP RE-LAYOUT: Keeps all 4 index slots active to prevent loop shift bugs
+    // 🌍 KELP BASELINE CORRECTION: Sets all Y coordinates exactly to the 1740px mud floor
     setPropsList({ 
       kelp: [
-        { x: 600, y: 1755, h: 180, type: 'kelp' },        // Slot 0: Far Left (Kept!)
-        { x: 1200, y: 1740, h: 85, type: 'coral' },       // Slot 1: Mid-Left (Transformed to Coral!)
-        { x: 1800, y: 1740, h: 85, type: 'coral' },       // Slot 2: Mid-Right (Transformed to Coral!)
-        { x: 2400, y: 1755, h: 230, type: 'kelp' }        // Slot 3: Far Right (Kept!)
+        { x: 600, y: 1740, h: 180, type: 'kelp' },        // Far Left Kelp (Anchored!)
+        { x: 1200, y: 1740, h: 85, type: 'coral' },       // Mid-Left Coral
+        { x: 1800, y: 1740, h: 85, type: 'coral' },       // Mid-Right Coral
+        { x: 2400, y: 1740, h: 230, type: 'kelp' }        // Far Right Kelp (Anchored!)
       ], 
       volcano: { x: 900, y: 1765, w: 110 }, 
       bigRock: { x: 2100, y: 1755, w: 160 }
