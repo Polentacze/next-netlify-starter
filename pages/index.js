@@ -42,15 +42,28 @@ export default function Home() {
     if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" // 🩶 Sleek steel gray color block
     return "#FFFFFF" 
   }
-    const handleSendChat = (e) => {
-    e.preventDefault()
-    if (!chatInput.trim()) return
-    let messageColor = detectTextColor(chatInput)
-    if (messageColor === "#FFFFFF") messageColor = detectTextColor(username)
-    setChatMessages((p) => [...p, { user: username || "Guest", text: chatInput, colorCode: messageColor }])
-    setChatInput("")
-  }
+  const handleSendChat = (e) => { 
+    e.preventDefault() 
+    if (!chatInput.trim()) return 
+    
+    let messageColor = detectTextColor(chatInput) 
+    if (messageColor === "#FFFFFF") messageColor = detectTextColor(username) 
+    
+    // 🧼 CHAT FILTERING: Removes the color tags using a global case-insensitive search
+    const cleanMessage = chatInput
+      .replace(/\((red|blue|green|cyan|purple|grey|gray)\)/gi, "")
+      .trim()
 
+    // Fallback if someone typed just the tag and nothing else
+    if (!cleanMessage) return
+
+    setChatMessages((p) => [...p, { 
+      user: username || "Guest", 
+      text: cleanMessage, // 🚀 Uses the perfectly cleaned text string
+      colorCode: messageColor 
+    }]) 
+    setChatInput("") 
+  }
   const getRandomCoord = () => ({ x: Math.floor(Math.random() * 2800) + 100, y: Math.floor(Math.random() * 1650) + 100 })
     const handleViewportClick = () => {
     if (boostBars < 1 || isBoosting) return
