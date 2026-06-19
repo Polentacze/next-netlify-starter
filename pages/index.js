@@ -118,7 +118,7 @@ export default function Home() {
     } 
     setFoodPellets(pellets) 
     
-    // 🌍 ADVANCED SEABED CONFIG: Adds the legendary centerpiece big clam!
+    // 🌍 RESIZED CENTERPIECE: Scaled up to 170px width (exactly two brain corals wide!)
     setPropsList({ 
       kelp: [
         { x: 600, y: 1740, h: 230, type: 'kelp' },        
@@ -128,7 +128,7 @@ export default function Home() {
       ], 
       volcano: { x: 900, y: 1765, w: 110 }, 
       bigRock: { x: 2100, y: 1755, w: 160 },
-      bigClam: { x: 1500, y: 1740, w: 120 } // 🦪 Sized large at 120px right in the exact map center (x: 1500)
+      bigClam: { x: 1500, y: 1740, w: 170 } // 🦪 Updated width slider value to 170
     }) 
   }, [isPlaying]) 
 
