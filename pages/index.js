@@ -304,9 +304,27 @@ export default function Home() {
             {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {propsList.bigClam && <img src="/big-clam.png" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
-                          {/* 🍖 CLAM MEAT SPRITES LAYER */}
+            {/* 🍖 CLAM MEAT SPRITES LAYER: Cleaned up with blend modes to force background transparency */}
             {clamMeats.map((m) => !m.isEaten && (
-              <img key={m.id} src="/meat.png" alt="meat" style={{ position: 'absolute', top: m.y, left: m.x, width: '28px', height: 'auto', transform: 'translate(-50%, -50%)', zIndex: 27, pointerEvents: 'none' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />
+              <img 
+                key={m.id} 
+                src="/meat.png" 
+                alt="meat" 
+                style={{ 
+                  position: 'absolute', 
+                  top: m.y, 
+                  left: m.x, 
+                  width: '28px', 
+                  height: 'auto', 
+                  transform: 'translate(-50%, -50%)', 
+                  zIndex: 27, 
+                  pointerEvents: 'none',
+                  mixBlendMode: 'screen', // 🌊 Instantly clears out dark box backgrounds to blend into the water layer!
+                  backgroundColor: 'transparent',
+                  background: 'transparent'
+                }} 
+                onError={(e) => { e.currentTarget.style.display = 'none' }} 
+              />
             ))}
 
             <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: evoTiers[activeTierIndex].scale + 'px', pointerEvents: 'none', background: 'transparent', backgroundColor: 'transparent' }}>
