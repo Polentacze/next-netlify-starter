@@ -19,10 +19,17 @@ export default function Home() {
   const [isAbilityActive, setIsAbilityActive] = useState(false)
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
     const [clamMeats, setClamMeats] = useState([])
-    const [isClanOpen, setIsClanOpen] = useState(false) // 🛡️ Controls overlay popup display toggle
-  const [activeClan, setActiveClan] = useState("")      // 👑 Saves your single registered team name string
-  const [clanInputTemp, setClanInputTemp] = useState("") // Tracks text entered inside the panel input field
-
+  const [isClanOpen, setIsClanOpen] = useState(false) 
+  
+  // 💾 LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
+  const [activeClan, setActiveClan] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('prehistooio_clan') || ""
+    }
+    return ""
+  })      
+  
+  const [clanInputTemp, setClanInputTemp] = useState("") 
   const evoTiers = [ 
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
     { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
@@ -379,30 +386,35 @@ export default function Home() {
               <div style={{ position: 'relative', width: '100%' }}>
                 <img src="/clan-selection.png" alt="Clan Selection Panel" style={{ width: '100%', display: 'block', borderRadius: '24px' }} />
                 
-                {/* 📝 SELECTION FORM INPUT WRAPPER */}
+                {/* 📝 SELECTION FORM INPUT WRAPPER: Now writes to permanent local database storage! */}
                 <form onSubmit={(e) => {
                   e.preventDefault();
-                  // Block submission if field is blank or if a clan has already been claimed
                   if (!clanInputTemp.trim() || activeClan) return;
-                  setActiveClan(clanInputTemp.trim().toUpperCase());
+                  
+                  const savedName = clanInputTemp.trim().toUpperCase();
+                  
+                  // 🔒 Permanent memory lock execution:
+                  if (typeof window !== 'undefined') {
+                    localStorage.setItem('prehistooio_clan', savedName);
+                  }
+                  
+                  setActiveClan(savedName);
                   setIsClanOpen(false);
                 }} style={{ position: 'absolute', bottom: '15%', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', width: '70%' }}>
                   
-                  {/* Field text tracks state data with a 10 character constraint clamp */}
                   <input 
                     type="text" 
                     className="field-text" 
                     value={activeClan ? activeClan : clanInputTemp} 
                     onChange={(e) => setClanInputTemp(e.target.value)} 
                     maxLength={10} 
-                    disabled={activeClan !== ""} // 🔒 Freezes the entry slot so they can only register one clan ever!
+                    disabled={activeClan !== ""} 
                     placeholder={activeClan ? `Active Clan: ${activeClan}` : "Type clan name..."} 
                     style={{ position: 'static', transform: 'none', width: '85%', background: '#fff', border: '3px solid #2a437a', borderRadius: '12px', padding: '10px', fontSize: '1.2rem', textAlign: 'center', fontWeight: 'bold', color: '#333' }} 
                   />
                   
-                  {/* Green Submission Trigger Action Button */}
                   <button type="submit" disabled={activeClan !== ""} style={{ background: 'none', border: 'none', cursor: activeClan ? 'not-allowed' : 'pointer', width: '130px', height: '45px' }}>
-                    <div style={{ display: 'none' }}>Form</div> {/* Safe hidden text node placeholder */}
+                    <div style={{ display: 'none' }}>Form</div>
                   </button>
                 </form>
               </div>
