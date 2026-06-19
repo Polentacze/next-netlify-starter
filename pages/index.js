@@ -19,6 +19,9 @@ export default function Home() {
   const [isAbilityActive, setIsAbilityActive] = useState(false)
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
     const [clamMeats, setClamMeats] = useState([])
+    const [isClanOpen, setIsClanOpen] = useState(false) // 🛡️ Controls overlay popup display toggle
+  const [activeClan, setActiveClan] = useState("")      // 👑 Saves your single registered team name string
+  const [clanInputTemp, setClanInputTemp] = useState("") // Tracks text entered inside the panel input field
 
   const evoTiers = [
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
@@ -36,10 +39,12 @@ export default function Home() {
   const detectTextColor = (targetString) => { 
     const cleanStr = (targetString || "").toUpperCase() 
     
-    // 👑 CLAN LOGIC FIRST: If the user or text has a valid bracketed tag like [GOLD], force gold text!
-    // It checks if it starts with [ and has a closing ] within a 12 character span (10 char tag + brackets)
-    if (cleanStr.startsWith("[") && cleanStr.indexOf("]") > 0 && cleanStr.indexOf("]") <= 11) {
-      return "#FFD700" // Golden Yellow
+    // 👑 STATE-VERIFIED CLAN CHECK: Only triggers gold if a crew is registered and matches exactly!
+    if (activeClan) {
+      const matchTag = `[${activeClan.toUpperCase()}]`
+      if (cleanStr.includes(matchTag)) {
+        return "#FFD700" // 🌟 Approved Golden Yellow
+      }
     }
 
     // Standard cosmetic modifiers fallback
@@ -51,7 +56,6 @@ export default function Home() {
     if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
     return "#FFFFFF" 
   } 
-
   // 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
   const cleanTags = (str) => {
     if (!str) return ""
@@ -350,10 +354,54 @@ export default function Home() {
           <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
           <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
           <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
+                  {/* 🛡️ INTERACTIVE CLAN PORTAL ACCESS TRIGGER */}
+          <img 
+            src="/clan-button.png" 
+            alt="Clan Button" 
+            style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
+            onClick={() => setIsClanOpen(true)} 
+          />
           <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
           <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
             <div className="wiki-panel" onClick={(e) => e.stopPropagation()}><button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button><h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2><div className="grid-container"><img src="/AnimalGrid.png" alt="Grid" className="grid-img" />{slots.map((s, i) => <div key={i} className="slot-over" style={{ top: slotPositions[i].t, left: slotPositions[i].l, width: "10.5%", height: "28%" }} onMouseEnter={() => setHoveredAnimal(slots[s])} onMouseLeave={() => setHoveredAnimal("")} />)}</div><div className="hud-banner"><p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#fff' }}>{hoveredAnimal || "Hover over a creature to analyze metadata"}</p></div></div>
+          </div>
+                      {/* 🦪 STATE-LOCKED CLAN CREATION PANEL OVERLAY */}
+          <div onClick={() => setIsClanOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.65)', display: isClanOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 110 }}> 
+            <div className="wiki-panel" onClick={(e) => e.stopPropagation()} style={{ width: '650px', padding: '0', background: 'transparent', border: 'none' }}>
+              <button className="close-btn" style={{ top: '1rem', right: '1rem' }} onClick={() => setIsClanOpen(false)}>Close X</button>
+              
+              <div style={{ position: 'relative', width: '100%' }}>
+                <img src="/clan-selection.png" alt="Clan Selection Panel" style={{ width: '100%', display: 'block', borderRadius: '24px' }} />
+                
+                {/* 📝 SELECTION FORM INPUT WRAPPER */}
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  // Block submission if field is blank or if a clan has already been claimed
+                  if (!clanInputTemp.trim() || activeClan) return;
+                  setActiveClan(clanInputTemp.trim().toUpperCase());
+                  setIsClanOpen(false);
+                }} style={{ position: 'absolute', bottom: '15%', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', width: '70%' }}>
+                  
+                  {/* Field text tracks state data with a 10 character constraint clamp */}
+                  <input 
+                    type="text" 
+                    className="field-text" 
+                    value={activeClan ? activeClan : clanInputTemp} 
+                    onChange={(e) => setClanInputTemp(e.target.value)} 
+                    maxLength={10} 
+                    disabled={activeClan !== ""} // 🔒 Freezes the entry slot so they can only register one clan ever!
+                    placeholder={activeClan ? `Active Clan: ${activeClan}` : "Type clan name..."} 
+                    style={{ position: 'static', transform: 'none', width: '85%', background: '#fff', border: '3px solid #2a437a', borderRadius: '12px', padding: '10px', fontSize: '1.2rem', textAlign: 'center', fontWeight: 'bold', color: '#333' }} 
+                  />
+                  
+                  {/* Green Submission Trigger Action Button */}
+                  <button type="submit" disabled={activeClan !== ""} style={{ background: 'none', border: 'none', cursor: activeClan ? 'not-allowed' : 'pointer', width: '130px', height: '45px' }}>
+                    <div style={{ display: 'none' }}>Form</div> {/* Safe hidden text node placeholder */}
+                  </button>
+                </form>
+              </div>
+            </div> 
           </div>
 
           <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
