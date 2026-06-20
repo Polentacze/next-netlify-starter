@@ -103,14 +103,16 @@ export default function Home() {
   const getRandomCoord = () => ({ x: Math.floor(Math.random() * 2800) + 100, y: Math.floor(Math.random() * 1650) + 100 })
   const handleViewportClick = () => { 
     if (boostBars < 1 || isBoosting) return 
-    if (isAbilityActive) { 
-      setAbilityBoostsUsed((prev) => { 
-        const next = prev + 1 
-        if (next >= 2) { 
-          setIsAbilityActive(false) } 
-        return next 
-      }) 
-    } 
+// Change this line in your handleViewportClick:
+if (isAbilityActive && activeTierIndex !== 2 && activeTierIndex !== 3) {
+  setAbilityBoostsUsed((prev) => {
+    const next = prev + 1
+    if (next >= 2) {
+      setIsAbilityActive(false)
+    }
+    return next
+  })
+}
     setIsBoosting(true) 
     setBoostBars((b) => Math.max(0, b - 1)) 
     setTimeout(() => { setIsBoosting(false) }, 320) 
@@ -206,19 +208,31 @@ if (e.key.toLowerCase() === 'e') {
       const rect = viewRef.current.getBoundingClientRect() 
       mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) } 
     } 
-  const handleKeyDown = (e) => { 
-  if (document.activeElement.tagName === "INPUT") return 
-  
-  if (e.key.toLowerCase() === 'e') { 
-    if (boostBars < 1 || isAbilityActive || activeTierIndex !== 1) return 
-    
-    setIsAbilityActive(true) 
-    setBoostBars((prev) => Math.max(0, prev - 1))
-    
-    setTimeout(() => {
-      setIsAbilityActive(false)
-    }, 5000)
+const handleKeyDown = (e) => {
+  if (document.activeElement.tagName === "INPUT") return
+
+  if (e.key.toLowerCase() === 'e') {
+    // 🦈 STETHACANTHUS (Tier 2) - 5 Seconds, 1 Boost
+    if (activeTierIndex === 2 && boostBars >= 1 && !isAbilityActive) {
+      setIsAbilityActive(true)
+      setBoostBars((prev) => Math.max(0, prev - 1))
+      setTimeout(() => {
+        setIsAbilityActive(false)
+      }, 5000)
+      return
+    }
+
+    // 🛡️ DUNKLEOSTEUS (Tier 3) - Armored Ram, 5 Seconds, 1 Boost
+    if (activeTierIndex === 3 && boostBars >= 1 && !isAbilityActive) {
+      setIsAbilityActive(true)
+      setBoostBars((prev) => Math.max(0, prev - 1))
+      setTimeout(() => {
+        setIsAbilityActive(false)
+      }, 5000)
+      return
+    }
   }
+}
 
     const tick = setInterval(() => { 
       let cx = playerPosition.x, cy = playerPosition.y 
