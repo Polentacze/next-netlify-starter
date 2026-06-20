@@ -212,23 +212,30 @@ const handleKeyDown = (e) => {
   if (document.activeElement.tagName === "INPUT") return
 
   if (e.key.toLowerCase() === 'e') {
-    // 🦈 STETHACANTHUS (Tier 2) - 5 Seconds, 1 Boost
-    if (activeTierIndex === 2 && boostBars >= 1 && !isAbilityActive) {
+    // 🔍 This will print your current tier in the browser console (Press F12 to see it)
+    console.log("E pressed! Your current activeTierIndex is:", activeTierIndex);
+
+    // Try Tier 1 (If Stethacanthus is index 1)
+    if (activeTierIndex === 1 && boostBars >= 1 && !isAbilityActive) {
       setIsAbilityActive(true)
       setBoostBars((prev) => Math.max(0, prev - 1))
-      setTimeout(() => {
-        setIsAbilityActive(false)
-      }, 5000)
+      setTimeout(() => { setIsAbilityActive(false) }, 5000)
       return
     }
 
-    // 🛡️ DUNKLEOSTEUS (Tier 3) - Armored Ram, 5 Seconds, 1 Boost
+    // Try Tier 2 (If Stethacanthus is index 2)
+    if (activeTierIndex === 2 && boostBars >= 1 && !isAbilityActive) {
+      setIsAbilityActive(true)
+      setBoostBars((prev) => Math.max(0, prev - 1))
+      setTimeout(() => { setIsAbilityActive(false) }, 5000)
+      return
+    }
+
+    // Try Tier 3 (If Dunkleosteus is index 3)
     if (activeTierIndex === 3 && boostBars >= 1 && !isAbilityActive) {
       setIsAbilityActive(true)
       setBoostBars((prev) => Math.max(0, prev - 1))
-      setTimeout(() => {
-        setIsAbilityActive(false)
-      }, 5000)
+      setTimeout(() => { setIsAbilityActive(false) }, 5000)
       return
     }
   }
