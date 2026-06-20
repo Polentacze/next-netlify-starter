@@ -206,6 +206,20 @@ if (e.key.toLowerCase() === 'e') {
       const rect = viewRef.current.getBoundingClientRect() 
       mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) } 
     } 
+  const handleKeyDown = (e) => { 
+  if (document.activeElement.tagName === "INPUT") return 
+  
+  if (e.key.toLowerCase() === 'e') { 
+    if (boostBars < 1 || isAbilityActive || activeTierIndex !== 1) return 
+    
+    setIsAbilityActive(true) 
+    setBoostBars((prev) => Math.max(0, prev - 1))
+    
+    setTimeout(() => {
+      setIsAbilityActive(false)
+    }, 5000)
+  }
+
     const tick = setInterval(() => { 
       let cx = playerPosition.x, cy = playerPosition.y 
       setPlayerPosition((p) => { 
