@@ -211,40 +211,41 @@ if (e.key.toLowerCase() === 'e') {
 const handleKeyDown = (e) => {
   if (document.activeElement.tagName === "INPUT") return
 
-if (e.key.toLowerCase() === 'e') {
-  // 🦕 TIER 1: SACABAMBASPIS (Keep your original logic if it uses it)
-  if (activeTierIndex === 1) {
-    if (boostBars < 1 || isAbilityActive) return
-    setIsAbilityActive(true)
-    setBoostBars((prev) => Math.max(0, prev - 1))
-    setTimeout(() => { setIsAbilityActive(false) }, 5000)
-    return
+  if (e.key.toLowerCase() === 'e') {
+    // 🦕 TIER 1
+    if (activeTierIndex === 1) {
+      if (boostBars < 1 || isAbilityActive) return
+      setIsAbilityActive(true)
+      setBoostBars((prev) => Math.max(0, prev - 1))
+      setTimeout(() => { setIsAbilityActive(false) }, 5000)
+      return
+    }
+
+    // 🦈 TIER 2
+    if (activeTierIndex === 2) {
+      if (boostBars < 1 || isAbilityActive) return
+      setIsAbilityActive(true)
+      setBoostBars((prev) => Math.max(0, prev - 1))
+      setTimeout(() => { setIsAbilityActive(false) }, 5000)
+      return
+    }
+
+    // 🛡️ TIER 3
+    if (activeTierIndex === 3) {
+      if (boostBars < 1 || isAbilityActive) return
+      setIsAbilityActive(true)
+      setBoostBars((prev) => Math.max(0, prev - 1))
+      setTimeout(() => { setIsAbilityActive(false) }, 5000)
+      return
+    }
   }
-
-const handleViewportClick = () => {
-  if (boostBars < 1 || isBoosting) return
-
-  setIsBoosting(true)
-  setBoostBars((b) => Math.max(0, b - 1))
-  setTimeout(() => { setBoosting(false) }, 320)
-}
-
-// 🛡️ TIER 3: DUNKLEOSTEUS (Armored Ram - 5 Seconds, 1 Boost)
-  if (activeTierIndex === 3) {
-    if (boostBars < 1 || isAbilityActive) return
-    setIsAbilityActive(true)
-    setBoostBars((prev) => Math.max(0, prev - 1))
-    setTimeout(() => { setIsAbilityActive(false) }, 5000)
-    return
-  }
-
-    const tick = setInterval(() => { 
-      let cx = playerPosition.x, cy = playerPosition.y 
-      setPlayerPosition((p) => { 
-        const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2) 
-        let maxSpeed = 4.8 
-        if (isAbilityActive) maxSpeed = 9.6 
-        let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0 
+const tick = setInterval(() => {
+  let cx = playerPosition.x, cy = playerPosition.y
+  setPlayerPosition((p) => {
+    const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
+    let maxSpeed = 4.8
+    if (isAbilityActive) maxSpeed = 9.6
+    let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
 if (isBoosting) {
       // // Tier 3 (Dunkleosteus) stays normal speed (18) even if ability is active!
       if (activeTierIndex === 3) {
