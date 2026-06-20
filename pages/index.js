@@ -211,33 +211,32 @@ if (e.key.toLowerCase() === 'e') {
 const handleKeyDown = (e) => {
   if (document.activeElement.tagName === "INPUT") return
 
-  if (e.key.toLowerCase() === 'e') {
-    // 🔍 This will print your current tier in the browser console (Press F12 to see it)
-    console.log("E pressed! Your current activeTierIndex is:", activeTierIndex);
+if (e.key.toLowerCase() === 'e') {
+  // 🦕 TIER 1: SACABAMBASPIS (Keep your original logic if it uses it)
+  if (activeTierIndex === 1) {
+    if (boostBars < 1 || isAbilityActive) return
+    setIsAbilityActive(true)
+    setBoostBars((prev) => Math.max(0, prev - 1))
+    setTimeout(() => { setIsAbilityActive(false) }, 5000)
+    return
+  }
 
-    // Try Tier 1 (If Stethacanthus is index 1)
-    if (activeTierIndex === 1 && boostBars >= 1 && !isAbilityActive) {
-      setIsAbilityActive(true)
-      setBoostBars((prev) => Math.max(0, prev - 1))
-      setTimeout(() => { setIsAbilityActive(false) }, 5000)
-      return
-    }
+  // 🦈 TIER 2: STETHACANTHUS (5 Seconds, 1 Boost)
+  if (activeTierIndex === 2) {
+    if (boostBars < 1 || isAbilityActive) return
+    setIsAbilityActive(true)
+    setBoostBars((prev) => Math.max(0, prev - 1))
+    setTimeout(() => { setIsAbilityActive(false) }, 5000)
+    return
+  }
 
-    // Try Tier 2 (If Stethacanthus is index 2)
-    if (activeTierIndex === 2 && boostBars >= 1 && !isAbilityActive) {
-      setIsAbilityActive(true)
-      setBoostBars((prev) => Math.max(0, prev - 1))
-      setTimeout(() => { setIsAbilityActive(false) }, 5000)
-      return
-    }
-
-    // Try Tier 3 (If Dunkleosteus is index 3)
-    if (activeTierIndex === 3 && boostBars >= 1 && !isAbilityActive) {
-      setIsAbilityActive(true)
-      setBoostBars((prev) => Math.max(0, prev - 1))
-      setTimeout(() => { setIsAbilityActive(false) }, 5000)
-      return
-    }
+  // 🛡️ TIER 3: DUNKLEOSTEUS (Armored Ram - 5 Seconds, 1 Boost)
+  if (activeTierIndex === 3) {
+    if (boostBars < 1 || isAbilityActive) return
+    setIsAbilityActive(true)
+    setBoostBars((prev) => Math.max(0, prev - 1))
+    setTimeout(() => { setIsAbilityActive(false) }, 5000)
+    return
   }
 }
 
