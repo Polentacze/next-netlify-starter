@@ -246,20 +246,22 @@ const handleViewportClick = () => {
         if (isAbilityActive) maxSpeed = 9.6 
         let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0 
 if (isBoosting) {
-    // // Tier 3 (Dunkleosteus) stays normal speed (18) even if ability is active!
-    if (activeTierIndex === 3) {
-      spd = 18
-    } else {
-      spd = isAbilityActive ? 24 : 18
-    }
-  } // THIS BRACKET WAS MISSING! This closes 'if (isBoosting)'
+      // // Tier 3 (Dunkleosteus) stays normal speed (18) even if ability is active!
+      if (activeTierIndex === 3) {
+        spd = 18
+      } else {
+        spd = isAbilityActive ? 24 : 18
+      }
+    } // Closes 'if (isBoosting)'
 
-}) // This closes 'setPlayerPosition((p) => {'
-        const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd 
-        if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90) 
-        cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy)) 
-        return { x: cx, y: cy } 
-      }) 
+    // 🟢 ALL MOVEMENT CALCULATION MUST STAY INSIDE setPlayerPosition!
+    const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
+    if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
+    
+    cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy))
+    
+    return { x: cx, y: cy }
+  }) // 👈 This correctly closes 'setPlayerPosition((p) => {' ONLY AFTER the calculations are done!
       setFoodPellets((prev) => prev.map((f) => { 
         if (f.isEaten) return f 
         if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) { 
