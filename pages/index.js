@@ -187,16 +187,20 @@ export default function Home() {
     return () => clearInterval(meatTimer)
   }, [isPlaying])
 
-  useEffect(() => { 
-    if (!isPlaying) return 
-    const handleKeyDown = (e) => { 
-      if (document.activeElement.tagName === "INPUT") return 
-      if (e.key.toLowerCase() === 'e') { 
-        if (boostBars < 2 || isAbilityActive || activeTierIndex !== 1) return 
-        setIsAbilityActive(true) 
-        setAbilityBoostsUsed(0) 
-      } 
-    } 
+if (e.key.toLowerCase() === 'e') { 
+  // 1. Require only 1 boost bar instead of 2 to activate
+  if (boostBars < 1 || isAbilityActive || activeTierIndex !== 1) return 
+  
+  setIsAbilityActive(true) 
+  
+  // 2. Instantly consume exactly 1 boost bar
+  setBoostBars((prev) => Math.max(0, prev - 1))
+  
+  // 3. Keep the ability active for a strict 5-second window
+  setTimeout(() => {
+    setIsAbilityActive(false)
+  }, 5000)
+}
     const mm = (e) => { 
       if (!viewRef.current) return 
       const rect = viewRef.current.getBoundingClientRect() 
