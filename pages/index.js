@@ -221,16 +221,15 @@ if (e.key.toLowerCase() === 'e') {
     return
   }
 
-  // 🦈 TIER 2: STETHACANTHUS (5 Seconds, 1 Boost)
-  if (activeTierIndex === 2) {
-    if (boostBars < 1 || isAbilityActive) return
-    setIsAbilityActive(true)
-    setBoostBars((prev) => Math.max(0, prev - 1))
-    setTimeout(() => { setIsAbilityActive(false) }, 5000)
-    return
-  }
+const handleViewportClick = () => {
+  if (boostBars < 1 || isBoosting) return
 
-  // 🛡️ TIER 3: DUNKLEOSTEUS (Armored Ram - 5 Seconds, 1 Boost)
+  setIsBoosting(true)
+  setBoostBars((b) => Math.max(0, b - 1))
+  setTimeout(() => { setBoosting(false) }, 320)
+}
+
+// 🛡️ TIER 3: DUNKLEOSTEUS (Armored Ram - 5 Seconds, 1 Boost)
   if (activeTierIndex === 3) {
     if (boostBars < 1 || isAbilityActive) return
     setIsAbilityActive(true)
@@ -238,7 +237,6 @@ if (e.key.toLowerCase() === 'e') {
     setTimeout(() => { setIsAbilityActive(false) }, 5000)
     return
   }
-}
 
     const tick = setInterval(() => { 
       let cx = playerPosition.x, cy = playerPosition.y 
@@ -247,7 +245,16 @@ if (e.key.toLowerCase() === 'e') {
         let maxSpeed = 4.8 
         if (isAbilityActive) maxSpeed = 9.6 
         let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0 
-        if (isBoosting) spd = isAbilityActive ? 24 : 18 
+if (isBoosting) {
+    // // Tier 3 (Dunkleosteus) stays normal speed (18) even if ability is active!
+    if (activeTierIndex === 3) {
+      spd = 18
+    } else {
+      spd = isAbilityActive ? 24 : 18
+    }
+  } // THIS BRACKET WAS MISSING! This closes 'if (isBoosting)'
+
+}) // This closes 'setPlayerPosition((p) => {'
         const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd 
         if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90) 
         cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy)) 
