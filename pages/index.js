@@ -36,7 +36,8 @@ export default function Home() {
     { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // 🧬 Balanced Tier 3 landmark addition
   ] 
   const [activeTierIndex, setActiveTierIndex] = useState(0)
-  const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
+const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
+  const [isChatOpen, setIsChatOpen] = useState(true) // 🔥 Add this line right here!
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
     { user: "System", text: "Prehistooio loaded! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" }
