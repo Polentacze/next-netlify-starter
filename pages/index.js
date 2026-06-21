@@ -175,9 +175,62 @@ export default function Home() {
   }, [isPlaying])
 
 // ⏱️ PRIMARY GAME ENGINE LOOP EFFECT HOOK
-  useEffect(() => {
-    if (!isPlaying) return
+useEffect(() => { 
+    if (!isPlaying) return 
+    
+    // 🍉 Initial Food Generation Batch
+    const pellets = [] 
+    for (let c = 0; c < 8; c++) { 
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+      for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" }) 
+    } 
+    for (let c = 0; c < 4; c++) { 
+      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+      for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
+    } 
+    setFoodPellets(pellets) 
+    
+    setPropsList({ 
+      kelp: [
+        { x: 600, y: 1740, h: 230, type: 'kelp' },        
+        { x: 1200, y: 1740, h: 85, type: 'coral' },       
+        { x: 1800, y: 1740, h: 85, type: 'coral' },       
+        { x: 2400, y: 1740, h: 230, type: 'kelp' }        
+      ], 
+      volcano: { x: 900, y: 1765, w: 110 }, 
+      bigRock: { x: 2100, y: 1755, w: 160 },
+      bigClam: { x: 1500, y: 1740, w: 170 }
+    }) 
 
+    // 🔄 Continuous Food Replenishment Loop (Checks and tops up food every 3 seconds)
+    const foodReplenishTimer = setInterval(() => {
+      setFoodPellets((currentPellets) => {
+        const activeCount = currentPellets.filter(p => !p.isEaten).length
+        // If the map has dropped below 30 pellets, spawn a fresh batch automatically
+        if (activeCount < 30) {
+          const spawnGroupX = Math.floor(Math.random() * 2600) + 200
+          const spawnGroupY = Math.floor(Math.random() * 1400) + 200
+          const freshPellets = []
+          
+          for (let i = 0; i < 5; i++) {
+            const isOceanFood = Math.random() > 0.6
+            freshPellets.push({
+              id: "replenish_" + Date.now() + "_" + i,
+              x: spawnGroupX + (Math.random() * 100 - 50),
+              y: spawnGroupY + (Math.random() * 100 - 50),
+              isEaten: false,
+              value: isOceanFood ? 120 : 100,
+              src: isOceanFood ? "/ocean-food.png" : "/food.png"
+            })
+          }
+          return [...currentPellets, ...freshPellets]
+        }
+        return currentPellets
+      })
+    }, 3000)
+
+    return () => clearInterval(foodReplenishTimer)
+  }, [isPlaying])
     const mm = (e) => { 
       if (!viewRef.current) return 
       const rect = viewRef.current.getBoundingClientRect() 
