@@ -175,62 +175,9 @@ export default function Home() {
   }, [isPlaying])
 
 // ⏱️ PRIMARY GAME ENGINE LOOP EFFECT HOOK
-useEffect(() => { 
-    if (!isPlaying) return 
-    
-    // 🍉 Initial Food Generation Batch
-    const pellets = [] 
-    for (let c = 0; c < 8; c++) { 
-      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
-      for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" }) 
-    } 
-    for (let c = 0; c < 4; c++) { 
-      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
-      for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
-    } 
-    setFoodPellets(pellets) 
-    
-    setPropsList({ 
-      kelp: [
-        { x: 600, y: 1740, h: 230, type: 'kelp' },        
-        { x: 1200, y: 1740, h: 85, type: 'coral' },       
-        { x: 1800, y: 1740, h: 85, type: 'coral' },       
-        { x: 2400, y: 1740, h: 230, type: 'kelp' }        
-      ], 
-      volcano: { x: 900, y: 1765, w: 110 }, 
-      bigRock: { x: 2100, y: 1755, w: 160 },
-      bigClam: { x: 1500, y: 1740, w: 170 }
-    }) 
+  useEffect(() => {
+    if (!isPlaying) return
 
-    // 🔄 Continuous Food Replenishment Loop (Checks and tops up food every 3 seconds)
-    const foodReplenishTimer = setInterval(() => {
-      setFoodPellets((currentPellets) => {
-        const activeCount = currentPellets.filter(p => !p.isEaten).length
-        // If the map has dropped below 30 pellets, spawn a fresh batch automatically
-        if (activeCount < 30) {
-          const spawnGroupX = Math.floor(Math.random() * 2600) + 200
-          const spawnGroupY = Math.floor(Math.random() * 1400) + 200
-          const freshPellets = []
-          
-          for (let i = 0; i < 5; i++) {
-            const isOceanFood = Math.random() > 0.6
-            freshPellets.push({
-              id: "replenish_" + Date.now() + "_" + i,
-              x: spawnGroupX + (Math.random() * 100 - 50),
-              y: spawnGroupY + (Math.random() * 100 - 50),
-              isEaten: false,
-              value: isOceanFood ? 120 : 100,
-              src: isOceanFood ? "/ocean-food.png" : "/food.png"
-            })
-          }
-          return [...currentPellets, ...freshPellets]
-        }
-        return currentPellets
-      })
-    }, 3000)
-
-    return () => clearInterval(foodReplenishTimer)
-  }, [isPlaying])
     const mm = (e) => { 
       if (!viewRef.current) return 
       const rect = viewRef.current.getBoundingClientRect() 
@@ -250,21 +197,12 @@ useEffect(() => {
           return
         }
 
-        // 🦈 TIER 2
+        // 🦈 TIER 2 (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
         if (activeTierIndex === 2) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
           setBoostBars((prev) => Math.max(0, prev - 1))
-          setTimeout(() => { setIsAbilityActive(false) }, 5000)
-          return
-        }
-
-        // 🛡️ TIER 3 (Dunkleosteus Armored Guard)
-        if (activeTierIndex === 3) {
-          if (boostBars < 1 || isAbilityActive) return
-          setIsAbilityActive(true)
-          setBoostBars((prev) => Math.max(0, prev - 1))
-          setTimeout(() => { setIsAbilityActive(false) }, 6000) // ⏱️ Lasts exactly 6 seconds
+          setTimeout(() => { setIsAbilityActive(false) }, 6000)
           return
         }
       }
@@ -277,14 +215,13 @@ useEffect(() => {
         const rad = Math.atan2(mousePos.current.y, mousePos.current.x)
         const dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
         
-        // Dunkleosteus (Tier 3) stays at normal speed during active ability
         let maxSpeed = 4.8
-        if (isAbilityActive && activeTierIndex !== 3) maxSpeed = 9.6 
+        if (isAbilityActive && activeTierIndex !== 2) maxSpeed = 9.6 
         
         let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
 
         if (isBoosting) {
-          if (activeTierIndex === 3) {
+          if (activeTierIndex === 2) {
             spd = 18
           } else {
             spd = isAbilityActive ? 24 : 18
@@ -300,25 +237,45 @@ useEffect(() => {
         return { x: cx, y: cy }
       })
 
-      // 🟢 FIX 1: Correctly updates pellet eating logic so old items vanish and spawn loops continue
-      setFoodPellets((prev) => prev.map((f) => {
-        if (f.isEaten) return f
-        if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
-          setScore((s) => s + f.value) // Normal = 100, Ocean = 120
-          setFoodEatenCount((pr) => {
-            const nxt = pr + 1
-            if (nxt >= 5) {
-              setBoostBars((b) => Math.min(3, b + 1))
-              return 0
-            }
-            return nxt
-          })
-          return { ...f, isEaten: true }
+      // 🍏 Force clean pellet collisions and keep array counts static
+      setFoodPellets((current) => {
+        let active = current.filter(f => !f.isEaten);
+        
+        // If the map dips below 25 active food items, immediately rebuild the buffer
+        if (active.length < 25) {
+          const gx = Math.floor(Math.random() * 2500) + 250;
+          const gy = Math.floor(Math.random() * 1300) + 200;
+          for (let i = 0; i < 8; i++) {
+            const isOcean = Math.random() > 0.5;
+            active.push({
+              id: "gen_" + Date.now() + "_" + i + "_" + Math.random(),
+              x: gx + (Math.random() * 120 - 60),
+              y: gy + (Math.random() * 120 - 60),
+              isEaten: false,
+              value: isOcean ? 120 : 100,
+              src: isOcean ? "/ocean-food.png" : "/food.png"
+            });
+          }
         }
-        return f
-      }))
 
-// Clam Meat Collision Layer Loop (205 Points)
+        return active.map((f) => {
+          if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
+            setScore((s) => s + f.value);
+            setFoodEatenCount((pr) => {
+              const nxt = pr + 1;
+              if (nxt >= 5) {
+                setBoostBars((b) => Math.min(3, b + 1));
+                return 0;
+              }
+              return nxt;
+            });
+            return { ...f, isEaten: true };
+          }
+          return f;
+        });
+      });
+
+      // 🥩 Clam Meat Loop
       setClamMeats((prev) => prev.map((m) => {
         if (m.isEaten) return m
         if (Math.sqrt((cx - m.x) ** 2 + (cy - m.y) ** 2) < 35) {
@@ -336,36 +293,6 @@ useEffect(() => {
         return m
       }))
 
-      // 🔄 ON-THE-FLY FOOD REPLENISHMENT (Added directly to the engine loop)
-      setFoodPellets((currentPellets) => {
-        const activeCount = currentPellets.filter(p => !p.isEaten).length
-        
-        // If players eat the map down below 25 pellets, immediately inject a new cluster
-        if (activeCount < 25) {
-          const spawnGroupX = Math.floor(Math.random() * 2500) + 250
-          const spawnGroupY = Math.floor(Math.random() * 1300) + 200
-          const freshPellets = []
-          
-          for (let i = 0; i < 6; i++) {
-            const isOceanFood = Math.random() > 0.5
-            freshPellets.push({
-              id: "tick_spawn_" + Date.now() + "_" + i + "_" + Math.random(),
-              x: spawnGroupX + (Math.random() * 140 - 70),
-              y: spawnGroupY + (Math.random() * 140 - 70),
-              isEaten: false,
-              value: isOceanFood ? 120 : 100,
-              src: isOceanFood ? "/ocean-food.png" : "/food.png"
-            })
-          }
-          return [...currentPellets, ...freshPellets]
-        }
-        return currentPellets
-      })
-          return { ...m, isEaten: true }
-        }
-        return m
-      }))
-
     }, 1000 / 60)
 
     window.addEventListener('mousemove', mm)
@@ -377,7 +304,6 @@ useEffect(() => {
       clearInterval(tick)
     }
   }, [isPlaying, playerPosition, isBoosting, isAbilityActive, activeTierIndex, boostBars])
-
   return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head><title>Prehistooio</title><link rel="icon" href="/icon.png?v=1" type="image/png" /></Head>
