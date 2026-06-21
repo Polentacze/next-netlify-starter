@@ -174,7 +174,7 @@ export default function Home() {
     return () => clearInterval(meatTimer)
   }, [isPlaying])
 
-  // ⏱️ PRIMARY GAME ENGINE LOOP EFFECT HOOK
+// ⏱️ PRIMARY GAME ENGINE LOOP EFFECT HOOK
   useEffect(() => {
     if (!isPlaying) return
 
@@ -184,7 +184,7 @@ export default function Home() {
       mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) } 
     } 
 
-const handleKeyDown = (e) => {
+    const handleKeyDown = (e) => {
       if (document.activeElement.tagName === "INPUT") return
 
       if (e.key.toLowerCase() === 'e') {
@@ -220,11 +220,11 @@ const handleKeyDown = (e) => {
     const tick = setInterval(() => {
       let cx = playerPosition.x, cy = playerPosition.y
       
-setPlayerPosition((p) => {
+      setPlayerPosition((p) => {
         const rad = Math.atan2(mousePos.current.y, mousePos.current.x)
         const dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
         
-        // 🟢 Speed logic change: Dunkleosteus (Tier 3) stays at normal speed during ability
+        // Dunkleosteus (Tier 3) stays at normal speed during active ability
         let maxSpeed = 4.8
         if (isAbilityActive && activeTierIndex !== 3) maxSpeed = 9.6 
         
@@ -247,12 +247,11 @@ setPlayerPosition((p) => {
         return { x: cx, y: cy }
       })
 
-setFoodPellets((prev) => prev.map((f) => {
+      // 🟢 FIX 1: Correctly updates pellet eating logic so old items vanish and spawn loops continue
+      setFoodPellets((prev) => prev.map((f) => {
         if (f.isEaten) return f
         if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
-          // If it's clam meat, give 205 points, otherwise use the pellet's original value (100 or 120)
-          const pointsGained = f.id.startsWith("meat_") ? 205 : f.value
-          setScore((s) => s + pointsGained)
+          setScore((s) => s + f.value) // Normal = 100, Ocean = 120
           setFoodEatenCount((pr) => {
             const nxt = pr + 1
             if (nxt >= 5) {
@@ -261,10 +260,29 @@ setFoodPellets((prev) => prev.map((f) => {
             }
             return nxt
           })
-          return { ...f, isEaten: true } // Marks pellet as consumed
+          return { ...f, isEaten: true }
         }
         return f
       }))
+
+      // 🟢 FIX 2: Monitors the standalone Clam Meat layer and rewards exactly 205 points!
+      setClamMeats((prev) => prev.map((m) => {
+        if (m.isEaten) return m
+        if (Math.sqrt((cx - m.x) ** 2 + (cy - m.y) ** 2) < 35) {
+          setScore((s) => s + 205) // Clam Meat original value
+          setFoodEatenCount((pr) => {
+            const nxt = pr + 1
+            if (nxt >= 5) {
+              setBoostBars((b) => Math.min(3, b + 1))
+              return 0
+            }
+            return nxt
+          })
+          return { ...m, isEaten: true }
+        }
+        return m
+      }))
+
     }, 1000 / 60)
 
     window.addEventListener('mousemove', mm)
@@ -380,26 +398,27 @@ setFoodPellets((prev) => prev.map((f) => {
             <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: evoTiers[activeTierIndex]?.scale + 'px', pointerEvents: 'none', background: 'transparent', backgroundColor: 'transparent' }}>
               <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid ' + (detectTextColor(username) !== '#FFFFFF' ? detectTextColor(username) : '#00FF1A'), color: detectTextColor(username), whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
               <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}>
-                <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
-{/* 🦕 Stethacanthus Ability Image Overlay */}
-                {isAbilityActive && activeTierIndex === 1 && (
-                  <img 
-                    src="/steth-ability.png" 
-                    alt="Speed Surge Active" 
-                    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} 
-                    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
-                  />
-                )}
+<img src={username && username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
 
-                {/* 🛡️ Dunkleosteus Ability Image Overlay */}
-                {isAbilityActive && activeTierIndex === 3 && (
-                  <img 
-                    src="/dunk-ability.png" 
-                    alt="Armored Guard Active" 
-                    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} 
-                    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
-                  />
-                )}
+{/* 🦕 Stethacanthus Ability Layer (Index 1) */}
+{isAbilityActive && activeTierIndex === 1 && (
+  <img 
+    src="/steth-ability.png" 
+    alt="Speed Surge Active" 
+    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} 
+    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+  />
+)}
+
+{/* 🛡️ Dunkleosteus Ability Layer (Index 2) */}
+{isAbilityActive && activeTierIndex === 2 && (
+  <img 
+    src="/dunk-ability.png" 
+    alt="Armored Guard Active" 
+    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', backgroundColor: 'transparent', background: 'transparent', pointerEvents: 'none' }} 
+    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+  />
+)}
               </div>
             </div>
           </div>
