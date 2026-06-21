@@ -240,52 +240,50 @@ const handleKeyDown = (e) => {
     }
   }
 const tick = setInterval(() => {
-  let cx = playerPosition.x, cy = playerPosition.y
-  setPlayerPosition((p) => {
-    const rad = Math.atan2(mousePos.current.y, mousePos.current.x), dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
-let maxSpeed = 4.8
-    if (isAbilityActive) maxSpeed = 9.6
-    let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
+    let cx = playerPosition.x, cy = playerPosition.y
+    
+    setPlayerPosition((p) => {
+      const rad = Math.atan2(mousePos.current.y, mousePos.current.x)
+      const dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
+      let maxSpeed = 4.8
+      if (isAbilityActive) maxSpeed = 9.6
+      let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
 
-    // This is the code from your screenshot:
-    if (isBoosting) {
-      if (activeTierIndex === 3) {
-        spd = 18
-      } else {
-        spd = isAbilityActive ? 24 : 18
+      if (isBoosting) {
+        // Tier 3 (Dunkleosteus) stays normal speed (18) even if ability is active!
+        if (activeTierIndex === 3) {
+          spd = 18
+        } else {
+          spd = isAbilityActive ? 24 : 18
+        }
       }
-    } 
 
-    // Below your block, the movement calculations happen:
-    const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
-    if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
-    cx = Math.max(50, Math.min(2950, p.x + dx)); cy = Math.max(50, Math.min(1725, p.y + dy))
-    return { x: cx, y: cy }
-  }) // This closes setPlayerPosition
-  }) // 👈 This correctly closes 'setPlayerPosition((p) => {' ONLY AFTER the calculations are done!
-      setFoodPellets((prev) => prev.map((f) => { 
-        if (f.isEaten) return f 
-        if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) { 
-          setScore((s) => s + f.value) 
-          setFoodEatenCount((pr) => { 
-            const nxt = pr + 1; 
-            if (nxt >= 5) { 
-              setBoostBars((b) => Math.min(3, b + 1)); return 0 
-            }; 
-            return nxt 
-          }) 
-          setTimeout(() => { 
-            setFoodPellets((cur) => cur.map((p) => { 
-              if (p.id === f.id) { 
-                const loc = getRandomCoord(); return { ...p, x: loc.x, y: loc.y, isEaten: false } 
-              } 
-              return p 
-            })) 
-          }, 4000) 
-          return { ...f, isEaten: true } 
-        } 
-        return f 
-      })) 
+      const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
+      if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
+      
+      cx = Math.max(50, Math.min(2950, p.x + dx))
+      cy = Math.max(50, Math.min(1725, p.y + dy))
+      
+      return { x: cx, y: cy }
+    }) // Closes setPlayerPosition
+
+    setFoodPellets((prev) => prev.map((f) => {
+      if (f.isEaten) return f
+      if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
+        setScore((s) => s + f.value)
+        setFoodEatenCount((pr) => {
+          const nxt = pr + 1
+          if (nxt >= 5) {
+            setBoostBars((b) => Math.min(3, b + 1))
+            return 0
+          }
+          return nxt
+        })
+      }
+      return f
+    })) // Closes setFoodPellets maps
+
+  }, 1000 / 60) // 🟢 THIS IS WHERE THE 1000/60 PROPERLY CLOSES THE TICK INTERVAL!
       
       // 🍖 MEAT COLLISION LOGIC: Absorbs active clam meat items for 200 points
       setClamMeats((prev) => prev.map((m) => {
