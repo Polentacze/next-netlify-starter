@@ -237,18 +237,40 @@ export default function Home() {
         return { x: cx, y: cy }
       })
 
-      // 🍏 Force clean pellet collisions and keep array counts static
+// 🍏 Dynamic Cluster Food Respawning (Scans your immediate area)
       setFoodPellets((current) => {
         let active = current.filter(f => !f.isEaten);
         
-        // If the map dips below 25 active food items, immediately rebuild the buffer
-        if (active.length < 25) {
+        // 1. Scan your immediate neighborhood (e.g., within 400 pixels of the player)
+        const localFood = active.filter(f => Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 400);
+
+        // 2. If the local area has fewer than 4 food dots, force-spawn a fresh patch nearby!
+        if (localFood.length < 4) {
+          // Spawn the new cluster slightly ahead/around the player's current coordinate system
+          const spawnGroupX = Math.max(200, Math.min(2800, cx + (Math.random() * 500 - 250)));
+          const spawnGroupY = Math.max(200, Math.min(1500, cy + (Math.random() * 400 - 200)));
+          
+          for (let i = 0; i < 6; i++) {
+            const isOcean = Math.random() > 0.5;
+            active.push({
+              id: "local_spawn_" + Date.now() + "_" + i + "_" + Math.random(),
+              x: spawnGroupX + (Math.random() * 100 - 50),
+              y: spawnGroupY + (Math.random() * 100 - 50),
+              isEaten: false,
+              value: isOcean ? 120 : 100,
+              src: isOcean ? "/ocean-food.png" : "/food.png"
+            });
+          }
+        }
+
+        // 3. Absolute map minimum safety net (keeps total map populated)
+        if (active.length < 30) {
           const gx = Math.floor(Math.random() * 2500) + 250;
           const gy = Math.floor(Math.random() * 1300) + 200;
           for (let i = 0; i < 8; i++) {
             const isOcean = Math.random() > 0.5;
             active.push({
-              id: "gen_" + Date.now() + "_" + i + "_" + Math.random(),
+              id: "global_gen_" + Date.now() + "_" + i + "_" + Math.random(),
               x: gx + (Math.random() * 120 - 60),
               y: gy + (Math.random() * 120 - 60),
               isEaten: false,
@@ -258,6 +280,7 @@ export default function Home() {
           }
         }
 
+        // 4. Run standard hit/eating detection
         return active.map((f) => {
           if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
             setScore((s) => s + f.value);
