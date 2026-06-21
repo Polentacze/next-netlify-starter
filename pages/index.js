@@ -568,7 +568,7 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
             <form className="launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}>
               <div className="input-wrap">
                 <img src="/input-box.png" alt="Input field" style={{ width: '100%' }} />
-                <input type="text" className="field-text" placeholder="Enter Username..." value={username} onChange={(e) => setUsername(e.target.value)} maxLength={15} required />
+                <input type="text" className="field-text" placeholder="Enter Username..." value={username} onChange={(e) => setUsername(e.target.value)} maxLength={25} required />
               </div>
               <button type="submit" className="play-btn">
                 <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
