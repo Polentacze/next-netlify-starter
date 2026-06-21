@@ -184,11 +184,11 @@ export default function Home() {
       mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) } 
     } 
 
-    const handleKeyDown = (e) => {
+const handleKeyDown = (e) => {
       if (document.activeElement.tagName === "INPUT") return
 
       if (e.key.toLowerCase() === 'e') {
-        // 🦕 TIER 1
+        // 🦕 TIER 1 (Stethacanthus Speed Surge)
         if (activeTierIndex === 1) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
@@ -206,12 +206,12 @@ export default function Home() {
           return
         }
 
-        // 🛡️ TIER 3 (Dunkleosteus Armored Ram Setup)
+        // 🛡️ TIER 3 (Dunkleosteus Armored Guard)
         if (activeTierIndex === 3) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
           setBoostBars((prev) => Math.max(0, prev - 1))
-          setTimeout(() => { setIsAbilityActive(false) }, 5000)
+          setTimeout(() => { setIsAbilityActive(false) }, 6000) // ⏱️ Lasts exactly 6 seconds
           return
         }
       }
@@ -220,11 +220,14 @@ export default function Home() {
     const tick = setInterval(() => {
       let cx = playerPosition.x, cy = playerPosition.y
       
-      setPlayerPosition((p) => {
+setPlayerPosition((p) => {
         const rad = Math.atan2(mousePos.current.y, mousePos.current.x)
         const dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
+        
+        // 🟢 Speed logic change: Dunkleosteus (Tier 3) stays at normal speed during ability
         let maxSpeed = 4.8
-        if (isAbilityActive) maxSpeed = 9.6
+        if (isAbilityActive && activeTierIndex !== 3) maxSpeed = 9.6 
+        
         let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
 
         if (isBoosting) {
@@ -244,10 +247,12 @@ export default function Home() {
         return { x: cx, y: cy }
       })
 
-      setFoodPellets((prev) => prev.map((f) => {
+setFoodPellets((prev) => prev.map((f) => {
         if (f.isEaten) return f
         if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
-          setScore((s) => s + f.value)
+          // If it's clam meat, give 205 points, otherwise use the pellet's original value (100 or 120)
+          const pointsGained = f.id.startsWith("meat_") ? 205 : f.value
+          setScore((s) => s + pointsGained)
           setFoodEatenCount((pr) => {
             const nxt = pr + 1
             if (nxt >= 5) {
@@ -256,6 +261,7 @@ export default function Home() {
             }
             return nxt
           })
+          return { ...f, isEaten: true } // Marks pellet as consumed
         }
         return f
       }))
@@ -375,10 +381,21 @@ export default function Home() {
               <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid ' + (detectTextColor(username) !== '#FFFFFF' ? detectTextColor(username) : '#00FF1A'), color: detectTextColor(username), whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
               <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}>
                 <img src={(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
+{/* 🦕 Stethacanthus Ability Image Overlay */}
                 {isAbilityActive && activeTierIndex === 1 && (
                   <img 
                     src="/steth-ability.png" 
                     alt="Speed Surge Active" 
+                    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} 
+                    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+                  />
+                )}
+
+                {/* 🛡️ Dunkleosteus Ability Image Overlay */}
+                {isAbilityActive && activeTierIndex === 3 && (
+                  <img 
+                    src="/dunk-ability.png" 
+                    alt="Armored Guard Active" 
                     style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} 
                     onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
                   />
