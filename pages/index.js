@@ -250,7 +250,6 @@ const tick = setInterval(() => {
       let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
 
       if (isBoosting) {
-        // Tier 3 (Dunkleosteus) stays normal speed (18) even if ability is active!
         if (activeTierIndex === 3) {
           spd = 18
         } else {
@@ -265,7 +264,7 @@ const tick = setInterval(() => {
       cy = Math.max(50, Math.min(1725, p.y + dy))
       
       return { x: cx, y: cy }
-    }) // Closes setPlayerPosition
+    })
 
     setFoodPellets((prev) => prev.map((f) => {
       if (f.isEaten) return f
@@ -281,20 +280,9 @@ const tick = setInterval(() => {
         })
       }
       return f
-    })) // Closes setFoodPellets maps
+    }))
 
-  }, 1000 / 60) // 🟢 THIS IS WHERE THE 1000/60 PROPERLY CLOSES THE TICK INTERVAL!
-      
-      // 🍖 MEAT COLLISION LOGIC: Absorbs active clam meat items for 200 points
-      setClamMeats((prev) => prev.map((m) => {
-        if (m.isEaten) return m
-        if (Math.sqrt((cx - m.x) ** 2 + (cy - m.y) ** 2) < 35) { 
-          setScore((s) => s + 200)
-          return { ...m, isEaten: true }
-        }
-        return m
-      }))
-}, 1000 / 60)
+  }, 1000 / 60)
 
   window.addEventListener('mousemove', mm)
   window.addEventListener('keydown', handleKeyDown)
@@ -304,7 +292,7 @@ const tick = setInterval(() => {
     window.removeEventListener('keydown', handleKeyDown)
     clearInterval(tick)
   }
-}, [isPlaying, playerPosition, isBoosting, isAbilityActive]) // 🟢 All brackets & parentheses are now balanced!
+}, [isPlaying, playerPosition, isBoosting, isAbilityActive, activeTierIndex])
   return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head><title>Prehistooio</title><link rel="icon" href="/icon.png?v=1" type="image/png" /></Head>
