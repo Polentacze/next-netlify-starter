@@ -45,8 +45,11 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
-  const detectTextColor = (targetString) => { 
-    const cleanStr = (targetString || "").toUpperCase() 
+const detectTextColor = (targetString) => {
+  const cleanStr = (targetString || "").toUpperCase()
+
+  // 🍊 NEW VIBRANT ORANGE RULE
+  if (cleanStr.includes("(ORANGE)")) return '#FF6600';
     
     // 👑 STATE-VERIFIED CLAN CHECK: Only triggers gold if a crew is registered and matches exactly!
     if (activeClan) {
