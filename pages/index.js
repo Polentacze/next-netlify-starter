@@ -318,11 +318,11 @@ useEffect(() => {
         return f
       }))
 
-      // 🟢 FIX 2: Monitors the standalone Clam Meat layer and rewards exactly 205 points!
+// Clam Meat Collision Layer Loop (205 Points)
       setClamMeats((prev) => prev.map((m) => {
         if (m.isEaten) return m
         if (Math.sqrt((cx - m.x) ** 2 + (cy - m.y) ** 2) < 35) {
-          setScore((s) => s + 205) // Clam Meat original value
+          setScore((s) => s + 205)
           setFoodEatenCount((pr) => {
             const nxt = pr + 1
             if (nxt >= 5) {
@@ -331,6 +331,36 @@ useEffect(() => {
             }
             return nxt
           })
+          return { ...m, isEaten: true }
+        }
+        return m
+      }))
+
+      // 🔄 ON-THE-FLY FOOD REPLENISHMENT (Added directly to the engine loop)
+      setFoodPellets((currentPellets) => {
+        const activeCount = currentPellets.filter(p => !p.isEaten).length
+        
+        // If players eat the map down below 25 pellets, immediately inject a new cluster
+        if (activeCount < 25) {
+          const spawnGroupX = Math.floor(Math.random() * 2500) + 250
+          const spawnGroupY = Math.floor(Math.random() * 1300) + 200
+          const freshPellets = []
+          
+          for (let i = 0; i < 6; i++) {
+            const isOceanFood = Math.random() > 0.5
+            freshPellets.push({
+              id: "tick_spawn_" + Date.now() + "_" + i + "_" + Math.random(),
+              x: spawnGroupX + (Math.random() * 140 - 70),
+              y: spawnGroupY + (Math.random() * 140 - 70),
+              isEaten: false,
+              value: isOceanFood ? 120 : 100,
+              src: isOceanFood ? "/ocean-food.png" : "/food.png"
+            })
+          }
+          return [...currentPellets, ...freshPellets]
+        }
+        return currentPellets
+      })
           return { ...m, isEaten: true }
         }
         return m
