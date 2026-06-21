@@ -494,7 +494,33 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
             style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
             onClick={() => setIsClanOpen(true)} 
           />
-          <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
+   {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
+<div style={{ 
+  display: 'flex', 
+  justifyContent: 'center', 
+  marginBottom: '15px',
+  width: '100%'
+}}>
+  <div style={{
+    background: 'rgba(42, 67, 122, 0.95)', 
+    border: '2px solid #3b5998', 
+    borderRadius: '16px',
+    padding: '10px 20px',
+    textAlign: 'center',
+    boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
+    width: '220px'
+  }}>
+    <h3 style={{ color: '#ffffff', margin: '0 0 2px 0', fontSize: '1rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
+      New update!
+    </h3>
+    <p style={{ color: '#00FF1A', margin: 0, fontSize: '0.9rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
+      - Rising up
+    </p>
+  </div>
+</div>
+
+{/* YOUR EXISTING WIKI BUTTON */}
+<img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
           <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
             <div className="wiki-panel" onClick={(e) => e.stopPropagation()}><button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button><h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2><div className="grid-container"><img src="/AnimalGrid.png" alt="Grid" className="grid-img" />{slots.map((s, i) => <div key={i} className="slot-over" style={{ top: slotPositions[i].t, left: slotPositions[i].l, width: "10.5%", height: "28%" }} onMouseEnter={() => setHoveredAnimal(slots[i])} onMouseLeave={() => setHoveredAnimal("")} />)}</div><div className="hud-banner"><p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#fff' }}>{hoveredAnimal || "Hover over a creature to analyze metadata"}</p></div></div>
@@ -504,44 +530,7 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
             <div className="wiki-panel" onClick={(e) => e.stopPropagation()} style={{ width: '650px', padding: '0', background: 'transparent', border: 'none' }}>
               <button className="close-btn" style={{ top: '1rem', right: '1rem' }} onClick={() => setIsClanOpen(false)}>Close X</button>
               <div style={{ position: 'relative', width: '100%' }}>
-            {/* 🚀 NEW UPDATE ANNOUNCEMENT BANNER */}
-  <div style={{
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: '20px'
-  }}>
-    <div style={{
-      background: 'rgba(42, 67, 122, 0.95)', // Blends smoothly with your UI's blue theme
-      border: '2px solid #3b5998', 
-      borderRadius: '16px',
-      padding: '12px 24px',
-      textAlign: 'center',
-      boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
-      maxWidth: '240px',
-      width: '100%'
-    }}>
-      <h3 style={{ 
-        color: '#ffffff', 
-        margin: '0 0 4px 0', 
-        fontSize: '1.1rem', 
-        fontWeight: 'bold',
-        fontFamily: 'sans-serif'
-      }}>
-        New update!
-      </h3>
-      <p style={{ 
-        color: '#00FF1A', // Uses your game's signature neon green for awesome contrast
-        margin: 0, 
-        fontSize: '0.95rem', 
-        fontWeight: 'bold',
-        fontFamily: 'sans-serif'
-      }}>
-        - Rising up
-      </p>
-    </div>
-  </div>
+
                 <img src="/clan-selection.png" alt="Clan Selection Panel" style={{ width: '100%', display: 'block', borderRadius: '24px' }} />
                 <form onSubmit={(e) => {
                   e.preventDefault();
