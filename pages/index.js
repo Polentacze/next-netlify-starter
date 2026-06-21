@@ -304,12 +304,13 @@ return (
 <div 
   className="arena-viewport" 
   ref={viewRef} 
-  onClick={() => {
-    if (boostBars < 1 || isBoosting) return
-    setIsBoosting(true)
-    setBoostBars((b) => Math.max(0, b - 1))
-    setTimeout(() => { setIsBoosting(false) }, 320)
-  }}
+// 🟢 THE PERFECTLY ORDERED REPLACEMENT
+onClick={() => {
+  if (boostBars < 1 || isBoosting) return
+  setIsBoosting(true)
+  setBoostBars((b) => Math.max(0, b - 1))
+  setTimeout(() => { setIsBoosting(false) }, 320)
+}}
 >
   if (boostBars < 1 || isBoosting) return
   setIsBoosting(true)
