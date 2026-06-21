@@ -369,16 +369,37 @@ export default function Home() {
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 3 ? '0 0 8px #00FF1A' : 'none' }} />
           </div>
 
-          <div className="chat-container-hud" onClick={(e) => e.stopPropagation()}>
-            <div className="chat-scroll-view">
-              {chatMessages.map((m, i) => (
-                <div key={i} className="chat-msg-row" style={{ color: m.colorCode || '#FFFFFF' }}>
-                  <strong style={{ color: detectTextColor(m.user) !== '#FFFFFF' ? detectTextColor(m.user) : m.user === "System" ? "#00FF1A" : "#FFD700" }}>{m.user}:</strong>{" "}{m.text}
-                </div>
-              ))}
+{/* 💬 DYNAMIC HUD CHAT SYSTEM */}
+          {isChatOpen ? (
+            <div className="chat-container-hud" onClick={(e) => e.stopPropagation()}>
+              {/* Close Button on Top Left */}
+              <button 
+                onClick={() => setIsChatOpen(false)}
+                style={{ position: 'absolute', top: '5px', left: '5px', background: '#ff4d4d', color: 'white', border: 'none', borderRadius: '4px', fontSize: '0.65rem', padding: '2px 6px', cursor: 'pointer', fontWeight: 'bold', zIndex: 160 }}
+              >
+                X
+              </button>
+              
+              <div className="chat-scroll-view" style={{ marginTop: '20px' }}>
+                {chatMessages.map((m, i) => (
+                  <div key={i} className="chat-msg-row" style={{ color: m.colorCode || '#FFFFFF' }}>
+                    <strong style={{ color: detectTextColor(m.user) !== '#FFFFFF' ? detectTextColor(m.user) : m.user === "System" ? "#00FF1A" : "#FFD700" }}>{m.user}:</strong>{" "}{m.text}
+                  </div>
+                ))}
+              </div>
+              <form onSubmit={handleSendChat}>
+                <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
+              </form>
             </div>
-            <form onSubmit={handleSendChat}><input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} /></form>
-          </div>
+          ) : (
+            /* Small Open Chat Button in Bottom Left Corner */
+            <button 
+              onClick={(e) => { e.stopPropagation(); setIsChatOpen(true); }}
+              style={{ position: 'absolute', bottom: '15px', left: '15px', background: 'rgba(42, 67, 122, 0.9)', border: '2px solid #2a437a', color: '#00FF1A', borderRadius: '8px', padding: '6px 12px', fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer', zIndex: 150, boxShadow: '0 4px 10px rgba(0,0,0,0.3)' }}
+            >
+              💬 Open Chat
+            </button>
+          )}
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
