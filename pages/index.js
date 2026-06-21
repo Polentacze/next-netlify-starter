@@ -237,25 +237,34 @@ export default function Home() {
         return { x: cx, y: cy }
       })
 
-// 🍏 Dynamic Cluster Food Respawning (Scans your immediate area)
+// 🍏 Hardcore Scarce Food Respawning (Tiny clumps & solitary dots)
       setFoodPellets((current) => {
         let active = current.filter(f => !f.isEaten);
         
-        // 1. Scan your immediate neighborhood (e.g., within 400 pixels of the player)
+        // 1. Scan your immediate area (within 400 pixels)
         const localFood = active.filter(f => Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 400);
 
-        // 2. If the local area has fewer than 4 food dots, force-spawn a fresh patch nearby!
-        if (localFood.length < 4) {
-          // Spawn the new cluster slightly ahead/around the player's current coordinate system
-          const spawnGroupX = Math.max(200, Math.min(2800, cx + (Math.random() * 500 - 250)));
-          const spawnGroupY = Math.max(200, Math.min(1500, cy + (Math.random() * 400 - 200)));
+        // 2. Only spawn if the local area is practically starved (fewer than 2 dots left)
+        if (localFood.length < 2) {
+          const spawnGroupX = Math.max(200, Math.min(2800, cx + (Math.random() * 600 - 300)));
+          const spawnGroupY = Math.max(200, Math.min(1500, cy + (Math.random() * 500 - 250)));
           
-          for (let i = 0; i < 6; i++) {
-            const isOcean = Math.random() > 0.5;
+          // 🎲 Roll the dice for spawn size: 60% chance for a single/double dot, 40% chance for a tiny clump
+          const spawnChance = Math.random();
+          let itemsToSpawn = 1; 
+          
+          if (spawnChance > 0.8) {
+            itemsToSpawn = 3; // Tiny clump maximum size
+          } else if (spawnChance > 0.4) {
+            itemsToSpawn = 2; // Double dot
+          }
+
+          for (let i = 0; i < itemsToSpawn; i++) {
+            const isOcean = Math.random() > 0.7; // Lowered rare food chance too
             active.push({
-              id: "local_spawn_" + Date.now() + "_" + i + "_" + Math.random(),
-              x: spawnGroupX + (Math.random() * 100 - 50),
-              y: spawnGroupY + (Math.random() * 100 - 50),
+              id: "scarce_spawn_" + Date.now() + "_" + i + "_" + Math.random(),
+              x: spawnGroupX + (Math.random() * 60 - 30), // Tighter spreading space
+              y: spawnGroupY + (Math.random() * 60 - 30),
               isEaten: false,
               value: isOcean ? 120 : 100,
               src: isOcean ? "/ocean-food.png" : "/food.png"
@@ -263,24 +272,21 @@ export default function Home() {
           }
         }
 
-        // 3. Absolute map minimum safety net (keeps total map populated)
-        if (active.length < 30) {
+        // 3. Low absolute map threshold (only tops up global space if completely stripped)
+        if (active.length < 15) {
           const gx = Math.floor(Math.random() * 2500) + 250;
           const gy = Math.floor(Math.random() * 1300) + 200;
-          for (let i = 0; i < 8; i++) {
-            const isOcean = Math.random() > 0.5;
-            active.push({
-              id: "global_gen_" + Date.now() + "_" + i + "_" + Math.random(),
-              x: gx + (Math.random() * 120 - 60),
-              y: gy + (Math.random() * 120 - 60),
-              isEaten: false,
-              value: isOcean ? 120 : 100,
-              src: isOcean ? "/ocean-food.png" : "/food.png"
-            });
-          }
+          active.push({
+            id: "global_safety_" + Date.now() + "_" + Math.random(),
+            x: gx,
+            y: gy,
+            isEaten: false,
+            value: 100,
+            src: "/food.png"
+          });
         }
 
-        // 4. Run standard hit/eating detection
+        // 4. Hit/eating detector
         return active.map((f) => {
           if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
             setScore((s) => s + f.value);
