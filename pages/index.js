@@ -504,6 +504,44 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
             <div className="wiki-panel" onClick={(e) => e.stopPropagation()} style={{ width: '650px', padding: '0', background: 'transparent', border: 'none' }}>
               <button className="close-btn" style={{ top: '1rem', right: '1rem' }} onClick={() => setIsClanOpen(false)}>Close X</button>
               <div style={{ position: 'relative', width: '100%' }}>
+            {/* 🚀 NEW UPDATE ANNOUNCEMENT BANNER */}
+  <div style={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: '20px'
+  }}>
+    <div style={{
+      background: 'rgba(42, 67, 122, 0.95)', // Blends smoothly with your UI's blue theme
+      border: '2px solid #3b5998', 
+      borderRadius: '16px',
+      padding: '12px 24px',
+      textAlign: 'center',
+      boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
+      maxWidth: '240px',
+      width: '100%'
+    }}>
+      <h3 style={{ 
+        color: '#ffffff', 
+        margin: '0 0 4px 0', 
+        fontSize: '1.1rem', 
+        fontWeight: 'bold',
+        fontFamily: 'sans-serif'
+      }}>
+        New update!
+      </h3>
+      <p style={{ 
+        color: '#00FF1A', // Uses your game's signature neon green for awesome contrast
+        margin: 0, 
+        fontSize: '0.95rem', 
+        fontWeight: 'bold',
+        fontFamily: 'sans-serif'
+      }}>
+        - Rising up
+      </p>
+    </div>
+  </div>
                 <img src="/clan-selection.png" alt="Clan Selection Panel" style={{ width: '100%', display: 'block', borderRadius: '24px' }} />
                 <form onSubmit={(e) => {
                   e.preventDefault();
