@@ -296,13 +296,17 @@ let maxSpeed = 4.8
         }
         return m
       }))
-    }, 1000 / 60) 
-    window.addEventListener('mousemove', mm) 
-    window.addEventListener('keydown', handleKeyDown) 
-    return () => { 
-      window.removeEventListener('mousemove', mm); window.removeEventListener('keydown', handleKeyDown); clearInterval(tick) 
-    } 
-  }, [isPlaying, playerPosition, isBoosting, isAbilityActive, boostBars, activeTierIndex, clamMeats])
+}, 1000 / 60)
+
+  window.addEventListener('mousemove', mm)
+  window.addEventListener('keydown', handleKeyDown)
+
+  return () => {
+    window.removeEventListener('mousemove', mm)
+    window.removeEventListener('keydown', handleKeyDown)
+    clearInterval(tick)
+  }
+}, [isPlaying, playerPosition, isBoosting, isAbilityActive]) // 🟢 All brackets & parentheses are now balanced!
   return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#104E8B', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
       <Head><title>Prehistooio</title><link rel="icon" href="/icon.png?v=1" type="image/png" /></Head>
