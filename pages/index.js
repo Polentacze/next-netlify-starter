@@ -68,12 +68,13 @@ const detectTextColor = (targetString) => {
     if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
     return "#FFFFFF" 
   } 
-  // 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
-  const cleanTags = (str) => {
-    if (!str) return ""
-    let result = str
-    const targets = ["(RED)", "(BLUE)", "(GREEN)", "(CYAN)", "(PURPLE)", "(GREY)", "(GRAY)"]
-    for (let i = 0; i < targets.length; i++) {
+const cleanTags = (str) => {
+  if (!str) return ""
+  let result = str
+  
+  const targets = ["(RED)", "(BLUE)", "(GREEN)", "(CYAN)", "(PURPLE)", "(GREY)", "(GRAY)", "(ORANGE)"]
+  
+  for (let i = 0; i < targets.length; i++) {
       let upper = result.toUpperCase()
       let idx = upper.indexOf(targets[i])
       while (idx !== -1) {
