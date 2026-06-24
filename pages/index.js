@@ -45,18 +45,22 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
-const detectTextColor = (targetString) => {
+const detectTextColor = (targetString, playerObject) => {
   const cleanStr = (targetString || "").toUpperCase()
 
-  // 🍊 NEW VIBRANT ORANGE RULE
-  if (cleanStr.includes("(ORANGE)")) return '#FF8B28';
-    
-    // 👑 STATE-VERIFIED CLAN CHECK: Only triggers gold if a crew is registered and matches exactly!
-    if (activeClan) {
-      const matchTag = `[${activeClan.toUpperCase()}]`
-      if (cleanStr.includes(matchTag)) {
-        return "#FFD700" // 🌟 Approved Golden Yellow
-      }
+  // Clean the name directly on the player object if it exists
+  if (playerObject && playerObject.name) {
+    playerObject.name = cleanTags(playerObject.name);
+  }
+
+    if (cleanStr.includes("(RED)")) return "#ff4d4d" 
+    if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
+    if (cleanStr.includes("(GREEN)")) return "#00FF1A" 
+    if (cleanStr.includes("(CYAN)")) return "#00ffff" 
+    if (cleanStr.includes("(PURPLE)")) return "#a855f7" 
+    if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
+  return '#FFFFFF';
+}
     }
 
     // Standard cosmetic modifiers fallback
