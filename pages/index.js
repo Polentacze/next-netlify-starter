@@ -68,23 +68,25 @@ const detectTextColor = (targetString) => {
     if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
     return "#FFFFFF" 
   } 
+// 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
   let result = str
-  
   const targets = ["(RED)", "(BLUE)", "(GREEN)", "(CYAN)", "(PURPLE)", "(GREY)", "(GRAY)", "(ORANGE)"]
   
   for (let i = 0; i < targets.length; i++) {
-      let upper = result.toUpperCase()
-      let idx = upper.indexOf(targets[i])
-      while (idx !== -1) {
-        result = result.substring(0, idx) + result.substring(idx + targets[i].length)
-        upper = result.toUpperCase()
-        idx = upper.indexOf(targets[i])
-      }
+    let upper = result.toUpperCase()
+    let idx = upper.indexOf(targets[i])
+    while (idx !== -1) {
+      result = result.substring(0, idx) + result.substring(idx + targets[i].length)
+      upper = result.toUpperCase()
+      idx = upper.indexOf(targets[i])
     }
-    return result.trim()
   }
+
+  // 🎯 CRITICAL FIX: This line MUST be here to send the cleaned text back to the game!
+  return result
+}
 
   const handleSendChat = (e) => { 
     e.preventDefault() 
