@@ -52,13 +52,14 @@ const detectTextColor = (targetString, playerObject) => {
   if (playerObject && playerObject.name) {
     playerObject.name = cleanTags(playerObject.name);
   }
-
     if (cleanStr.includes("(RED)")) return "#ff4d4d" 
     if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
     if (cleanStr.includes("(GREEN)")) return "#00FF1A" 
     if (cleanStr.includes("(CYAN)")) return "#00ffff" 
     if (cleanStr.includes("(PURPLE)")) return "#a855f7" 
     if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
+
+
   return '#FFFFFF';
 }
     }
