@@ -45,20 +45,16 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
-const detectTextColor = (targetString, playerObject) => {
+const detectTextColor = (targetString) => {
   const cleanStr = (targetString || "").toUpperCase()
 
-  // Clean the name directly on the player object if it exists
-  if (playerObject && playerObject.name) {
-    playerObject.name = cleanTags(playerObject.name);
-  }
-    if (cleanStr.includes("(RED)")) return "#ff4d4d" 
-    if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
-    if (cleanStr.includes("(GREEN)")) return "#00FF1A" 
-    if (cleanStr.includes("(CYAN)")) return "#00ffff" 
-    if (cleanStr.includes("(PURPLE)")) return "#a855f7" 
-    if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
-
+  if (cleanStr.includes("(RED)")) return "#ff4d4d"
+  if (cleanStr.includes("(BLUE)")) return "#3b82f6"
+  if (cleanStr.includes("(GREEN)")) return "#00FF1A"
+  if (cleanStr.includes("(CYAN)")) return "#00ffff"
+  if (cleanStr.includes("(PURPLE)")) return "#a855f7"
+  if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af"
+  if (cleanStr.includes("(ORANGE)")) return "#FF6600" // Make sure your orange is here!
 
   return '#FFFFFF';
 }
@@ -104,11 +100,11 @@ const cleanTags = (str) => {
     const cleanMessage = cleanTags(chatInput)
     if (!cleanMessage) return
 
-    setChatMessages((p) => [...p, { 
-      user: username || "Guest", 
-      text: cleanMessage, 
-      colorCode: messageColor 
-    }]) 
+setChatMessages((p) => [...p, {
+  user: cleanTags(username) || "Guest",
+  text: cleanMessage,
+  colorCode: messageColor
+}])
     setChatInput("") 
   } 
 
