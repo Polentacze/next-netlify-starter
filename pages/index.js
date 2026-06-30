@@ -517,11 +517,18 @@ setChatMessages((p) => [...p, {
     boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
     width: '220px'
   }}>
-    <h3 style={{ color: '#ffffff', margin: '0 0 2px 0', fontSize: '1rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-      New update!
-    </h3>
-        
-<p style={{ 
+<div>
+  <h3 style={{ 
+    color: '#ffffff', 
+    margin: '0 0 2px 0', 
+    fontSize: '1rem', 
+    fontWeight: 'bold', 
+    fontFamily: 'sans-serif' 
+  }}>
+    New update!
+  </h3>
+  
+  <p style={{ 
     color: '#00FF1A', 
     margin: '0', 
     fontSize: '0.9rem', 
