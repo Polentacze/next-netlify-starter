@@ -518,12 +518,14 @@ setChatMessages((p) => [...p, {
     width: '220px'
   }}>
 <div>
-<h3 style="color: #ffffff; margin: 0 0 2px 0; font-size: 1rem; font-weight: bold; font-family: sans-serif;">
-  New update!
-</h3>
-<p style="color: #00FF1A; margin: 0; font-size: 0.9rem; font-weight: bold; font-family: sans-serif;">
-  - In Progress...
-</p>
+const bannerHTML = `
+  <h3 style="color: #ffffff; margin: 0 0 2px 0; font-size: 1rem; font-weight: bold; font-family: sans-serif;">
+    New update!
+  </h3>
+  <p style="color: #00FF1A; margin: 0; font-size: 0.9rem; font-weight: bold; font-family: sans-serif;">
+    - In Progress...
+  </p>
+`;
 </div>
 </div>
 
