@@ -40,7 +40,7 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const [isChatOpen, setIsChatOpen] = useState(true) // 🔥 Add this line right here!
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Prehistooio loaded! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" }
+    { user: "System", text: "Welcome to Prehistooio, explore the ancient sea", colorCode: "#00FF1A" }
   ])
   const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
@@ -135,7 +135,7 @@ setChatMessages((p) => [...p, {
     }) 
   }, [isPlaying]) 
 
-  // 🧬 BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
+  //  BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul
   useEffect(() => { 
     if (!isPlaying) return 
     
@@ -143,7 +143,7 @@ setChatMessages((p) => [...p, {
     const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
     if (isSecretGhoul) {
       if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
-      return; // 🛑 Force exits the hook early so no evolutionary level-ups can ever process
+      return; // Force exits the hook early so no evolutionary level-ups can ever process
     }
 
     // Standard progression checkpoints for normal fish tiers
@@ -152,7 +152,7 @@ setChatMessages((p) => [...p, {
     } else if (activeTierIndex === 1 && score >= 9500) { 
       if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) 
     } 
-  }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) // 🌟 Added username monitoring to track the secret name check!
+  }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
   // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
   useEffect(() => {
@@ -396,7 +396,7 @@ setChatMessages((p) => [...p, {
                 ))}
               </div>
               <form onSubmit={handleSendChat}>
-                <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
+                <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type in chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={47} />
               </form>
             </div>
           ) : (
@@ -521,7 +521,7 @@ setChatMessages((p) => [...p, {
       New update!
     </h3>
     <p style={{ color: '#00FF1A', margin: 0, fontSize: '0.9rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-      - Rising up
+      - In Progress...
     </p>
   </div>
 </div>
