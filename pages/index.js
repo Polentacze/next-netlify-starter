@@ -520,10 +520,17 @@ setChatMessages((p) => [...p, {
     <h3 style={{ color: '#ffffff', margin: '0 0 2px 0', fontSize: '1rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
       New update!
     </h3>
-    <p style={{ color: '#00FF1A', margin: 0, fontSize: '0.9rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-      - In Progress...
-    </p>
-  </div>
+        
+<p style={{ 
+    color: '#00FF1A', 
+    margin: '0', 
+    fontSize: '0.9rem', 
+    fontWeight: 'bold', 
+    fontFamily: 'sans-serif' 
+  }}>
+    - In Progress...
+  </p>
+</div>
 </div>
 
 {/* YOUR EXISTING WIKI BUTTON */}
