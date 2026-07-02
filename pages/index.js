@@ -38,11 +38,11 @@ const evoTiers = [
   { name: "Helicoprion", minScore: 19000, scale: 180, file: "/Helicoprion-Bessonowi.png" }
 
   useEffect(() => {
-if (pendingEvolutionIndex > 3) return;
-    // Logic that changes your character model and UI name
-    setActiveTierIndex(pendingEvolutionIndex);
-    // ...
-  }
+if (pendingEvolutionIndex !== null) {
+  console.log("Attempting to evolve to index:", pendingEvolutionIndex);
+  console.log("Target species data:", evoTiers[pendingEvolutionIndex]);
+  setActiveTierIndex(pendingEvolutionIndex);
+}
 }, [pendingEvolutionIndex]);
   
   const [activeTierIndex, setActiveTierIndex] = useState(0)
