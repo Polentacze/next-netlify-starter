@@ -196,7 +196,7 @@ setChatMessages((p) => [...p, {
       if (document.activeElement.tagName === "INPUT") return
 
       if (e.key.toLowerCase() === 'e') {
-        // 🦕 TIER 1 (Stethacanthus Speed Surge)
+        //  TIER 1 (Stethacanthus Speed Surge)
         if (activeTierIndex === 1) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
@@ -205,7 +205,7 @@ setChatMessages((p) => [...p, {
           return
         }
 
-        // 🦈 TIER 2 (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
+        //  TIER 2 (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
         if (activeTierIndex === 2) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
@@ -215,6 +215,17 @@ setChatMessages((p) => [...p, {
         }
       }
     }
+    //  TIER 3 (Helicoprion Bessonowi - Index 3 - 5 Seconds Duration)
+if (activeTierIndex === 3) {
+  if (boostBars < 1 || isAbilityActive) return
+  
+  setIsAbilityActive(true)
+  setBoostBars((prev) => Math.max(0, prev - 1))
+  
+  // Changed 6000 (6s) to 5000 (5s) just as an example of how you can tweak it!
+  setTimeout(() => { setIsAbilityActive(false) }, 5000) 
+  return
+}
 
     const tick = setInterval(() => {
       let cx = playerPosition.x, cy = playerPosition.y
@@ -467,7 +478,7 @@ setChatMessages((p) => [...p, {
               <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}>
 <img src={username && username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
 
-{/* 🦕 Stethacanthus Ability Layer (Index 1) */}
+{/*  Stethacanthus Ability Layer (Index 1) */}
 {isAbilityActive && activeTierIndex === 1 && (
   <img 
     src="/steth-ability.png" 
@@ -477,7 +488,7 @@ setChatMessages((p) => [...p, {
   />
 )}
 
-{/* 🛡️ Dunkleosteus Ability Layer (Index 2) */}
+{/*  Dunkleosteus Ability Layer (Index 2) */}
 {isAbilityActive && activeTierIndex === 2 && (
   <img 
     src="/dunk-ability.png" 
@@ -492,6 +503,15 @@ setChatMessages((p) => [...p, {
         </div>
       ) : (
         <>
+        {/* Helicoprion Ability Layer (Index 3) */}
+{isAbilityActive && activeTierIndex === 3 && (
+  <img
+    src="/helicoprion-ability.png" // Your new ability asset
+    alt="Saw-Blade Strike Active"
+    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', backgroundColor: 'transparent' }}
+    onError={(e) => { e.target.src = "/Helicoprion-Bessonowi.png" }}
+  />
+)}
           <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
           <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
           <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
