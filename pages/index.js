@@ -139,19 +139,21 @@ setChatMessages((p) => [...p, {
   useEffect(() => { 
     if (!isPlaying) return 
     
-    // 🧟 UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever!
+    //  UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever
     const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
     if (isSecretGhoul) {
       if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
       return; // Force exits the hook early so no evolutionary level-ups can ever process
     }
 
-    // Standard progression checkpoints for normal fish tiers
-    if (activeTierIndex === 0 && score >= 4500) { 
-      if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) 
-    } else if (activeTierIndex === 1 && score >= 9500) { 
-      if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) 
-    } 
+// Standard progression checkpoints for normal fish tiers
+if (activeTierIndex === 0 && score >= 4500) {
+  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1)
+} else if (activeTierIndex === 1 && score >= 9500) {
+  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
+} else if (activeTierIndex === 2 && score >= 19000) { // <-- Added Tier 2 to Tier 3 progression
+  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
+}
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
   // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
@@ -273,7 +275,7 @@ if (activeTierIndex === 3) {
           let itemsToSpawn = 1; 
           
           if (spawnChance > 0.8) {
-            itemsToSpawn = 3; // Tiny clump maximum size
+            itemsToSpawn = 5; // Tiny clump maximum size
           } else if (spawnChance > 0.4) {
             itemsToSpawn = 2; // Double dot
           }
@@ -509,7 +511,7 @@ if (activeTierIndex === 3) {
     src="/helicoprion-ability.png" // Your new ability asset
     alt="Saw-Blade Strike Active"
     style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', backgroundColor: 'transparent' }}
-    onError={(e) => { e.target.src = "/Helicoprion-Bessonowi.png" }}
+    onError={(e) => { e.target.src  = "/prehistoric-skeleton.png" }} 
   />
 )}
           <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
