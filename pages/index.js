@@ -387,7 +387,26 @@ if (activeTierIndex === 3) {
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
           {pendingEvolutionIndex !== null && (
-            <div className="evolution-prompt-clickable-hud-box" onClick={(e) => { e.stopPropagation(); setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Transformed successfully into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]) }}>
+useEffect(() => {
+  if (pendingEvolutionIndex !== null) {
+    // 1. Get the target species data
+    const targetSpecies = evoTiers[pendingEvolutionIndex];
+    
+    if (targetSpecies) {
+      // 2. Automatically change the tier index
+      setActiveTierIndex(pendingEvolutionIndex);
+      
+      // 3. Automatically add the success message to the chat log
+      setChatMessages(p => [...p, { 
+        user: "System", 
+        text: `🧬 Transformed successfully into Helicoprion!` 
+      }]);
+    }
+    
+    // 4. Reset pending back to null so it doesn't run repeatedly
+    setPendingEvolutionIndex(null);
+  }
+}, [pendingEvolutionIndex]);
               <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
               <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="avatar" />
               <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
