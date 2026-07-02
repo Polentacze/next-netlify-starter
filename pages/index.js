@@ -38,7 +38,7 @@ const evoTiers = [
   { name: "Helicoprion", minScore: 19000, scale: 180, file: "/Helicoprion-Bessonowi.png" }
 
   useEffect(() => {
-  if (pendingEvolutionIndex !== null) {
+if (pendingEvolutionIndex > 3) return;
     // Logic that changes your character model and UI name
     setActiveTierIndex(pendingEvolutionIndex);
     // ...
