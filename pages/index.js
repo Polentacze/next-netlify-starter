@@ -391,18 +391,18 @@ useEffect(() => {
   if (pendingEvolutionIndex !== null) {
     // 1. Get the target species data
     const targetSpecies = evoTiers[pendingEvolutionIndex];
-    
+
     if (targetSpecies) {
       // 2. Automatically change the tier index
       setActiveTierIndex(pendingEvolutionIndex);
-      
+
       // 3. Automatically add the success message to the chat log
-      setChatMessages(p => [...p, { 
-        user: "System", 
-        text: `🧬 Transformed successfully into Helicoprion!` 
+      setChatMessages(p => [...p, {
+        user: "System",
+        text: `🧬 Transformed successfully into ${targetSpecies.name}!`
       }]);
     }
-    
+
     // 4. Reset pending back to null so it doesn't run repeatedly
     setPendingEvolutionIndex(null);
   }
