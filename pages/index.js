@@ -29,8 +29,8 @@ export default function Home() {
     return ""
   })      
   
-  const [clanInputTemp, setClanInputTemp] = useState("") 
-  const evoTiers = [ 
+const [clanInputTemp, setClanInputTemp] = useState("") 
+  
 const evoTiers = [
   { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
   { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
@@ -164,7 +164,7 @@ if (activeTierIndex === 0 && score >= 4500) {
 } else if (activeTierIndex === 2 && score >= 19000) { // <-- Added Tier 2 to Tier 3 progression
   if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
 }
-  }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
+  }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check
 
   // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
   useEffect(() => {
