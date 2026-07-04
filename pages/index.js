@@ -47,7 +47,7 @@ if (pendingEvolutionIndex !== null) {
   
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
-  const [isChatOpen, setIsChatOpen] = useState(true) // 🔥 Add this line right here!
+  const [isChatOpen, setIsChatOpen] = useState(true) 
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
     { user: "System", text: "Welcome to Prehistooio, explore the ancient sea", colorCode: "#00FF1A" }
