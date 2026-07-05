@@ -35,7 +35,7 @@ const evoTiers = [
   { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
   { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
   { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" }, // Balanced Tier 3 landmark addition
-  { name: "Helicoprion", minScore: 19000, scale: 180, file: "/helicoprion-b.png" }
+  { name: "Helicoprion", minScore: 19000, scale: 180, file: "/helicoprion-bes.png" }
 ]; //
   useEffect(() => {
 if (pendingEvolutionIndex !== null) {
