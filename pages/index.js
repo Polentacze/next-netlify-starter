@@ -411,7 +411,11 @@ useEffect(() => {
   }
 }, [pendingEvolutionIndex]);
               <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
-              <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="avatar" />
+<img 
+  src={evoTiers[pendingEvolutionIndex]?.file || "/prehistoric-skeleton.png"} 
+  className="evolution-preview-avatar-inside-hud"
+  onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }}
+/>
               <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
             </div>
           )}
