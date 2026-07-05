@@ -155,21 +155,26 @@ setChatMessages((p) => [...p, {
       if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
       return; // Force exits the hook early so no evolutionary level-ups can ever process
     }
+useEffect(() => {
+useEffect(() => {
+  // 1. The diagnostic check (this MUST run first)
+  console.log("🔍 LOOP CHECK -> Score:", score, " | Active Tier Index:", activeTierIndex, " | Type of Index:", typeof activeTierIndex);
 
-if (activeTierIndex === 0 && score >= 4500) {
-    if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1)
-} else if (activeTierIndex === 1 && score >= 9500) {
-    if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
-} else if (activeTierIndex === 2 && score >= 19000) {
-    if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
-} else if (activeTierIndex === 3) {
-    
-    if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null)
-} 
+  // the single clean progression
+  if (activeTierIndex === 0 && score >= 4500) {
+      if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1)
+  } else if (activeTierIndex === 1 && score >= 9500) {
+      if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
+  } else if (activeTierIndex === 2 && score >= 19000) {
+      console.log(" SCORE IS OVER 19K current pending index is:", pendingEvolutionIndex);
+      if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
+  } else if (activeTierIndex === 3) {
+      if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null)
+  }
 
 }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex])
 
-  // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
+  //  AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
   useEffect(() => {
     if (!isPlaying) {
       setClamMeats([])
@@ -322,18 +327,35 @@ if (activeTierIndex === 3) {
 
         // 4. Hit/eating detector
         return active.map((f) => {
-          if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
-            setScore((s) => s + f.value);
-            setFoodEatenCount((pr) => {
-              const nxt = pr + 1;
-              if (nxt >= 5) {
-                setBoostBars((b) => Math.min(3, b + 1));
-                return 0;
-              }
-              return nxt;
-            });
-            return { ...f, isEaten: true };
-          }
+if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
+    // 1. Update the score and catch the exact value fresh from the state
+    setScore((currentScore) => {
+        const updatedScore = currentScore + f.value;
+
+        // 2. Safely trigger the tier progression using the absolute newest score
+        setActiveTierIndex((currentTier) => {
+            if (currentTier === 0 && updatedScore >= 4500) return 1;
+            if (currentTier === 1 && updatedScore >= 9500) return 2;
+            if (currentTier === 2 && updatedScore >= 19000) {
+                console.log("Direct Evolution Success: Welcome Helicoprion!");
+                return 3;
+            }
+            return currentTier;
+        });
+
+        return updatedScore;
+    });
+
+    setFoodEatenCount((pr) => {
+        const nxt = pr + 1;
+        if (nxt >= 5) {
+            setBoostBars((b) => Math.min(3, b + 1));
+            return 0;
+        }
+        return nxt;
+    });
+    return { ...f, isEaten: true };
+}
           return f;
         });
       });
@@ -389,8 +411,7 @@ if (activeTierIndex === 3) {
           </div>
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
-          {pendingEvolutionIndex !== null && (
-useEffect(() => {
+
   if (pendingEvolutionIndex !== null) {
     
     const targetSpecies = evoTiers[pendingEvolutionIndex];
