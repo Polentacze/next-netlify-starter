@@ -68,7 +68,7 @@ const detectTextColor = (targetString) => {
 
   return '#FFFFFF';
 }
-    }
+    
 
     // Standard cosmetic modifiers fallback
     if (cleanStr.includes("(RED)")) return "#ff4d4d" 
