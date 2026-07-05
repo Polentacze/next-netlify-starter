@@ -156,23 +156,13 @@ setChatMessages((p) => [...p, {
       return; // Force exits the hook early so no evolutionary level-ups can ever process
     }
 useEffect(() => {
-  // 1. Diagnostic log to monitor the evolution gate
-  console.log("SCORE GATE CHECK -> Score:", score, " | Active Tier Index:", activeTierIndex);
-
-  // 2. The manual button trigger logic (matches the other tiers)
   if (activeTierIndex === 0 && score >= 4500) {
-      if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1);
+    if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1);
   } else if (activeTierIndex === 1 && score >= 9500) {
-      if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2);
+    if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2);
   } else if (activeTierIndex === 2 && score >= 19000) {
-      if (pendingEvolutionIndex !== 3) {
-          console.log("Triggering 'CLICK TO EVOLVE' menu box for Helicoprion!");
-          setPendingEvolutionIndex(3);
-      }
-  } else if (activeTierIndex === 3) {
-      if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null);
+    if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3);
   }
-
 }, [score, activeTierIndex, pendingEvolutionIndex]);
 
   //  AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
@@ -432,21 +422,30 @@ if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
       }
       setPendingEvolutionIndex(null);
     }
-  }, [pendingEvolutionIndex]); // <-- Notice the exact closing symbol structure here!
-
-  // 2. Your component's visual display return statement
-  return (
-    <div>
-      <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
-      <img 
-        src={evoTiers[activeTierIndex]?.file || "/prehistoric-skeleton.png"} 
-        className="evolution-preview-avatar-inside-hud"
-        onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
-      />
-              <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
-            </div>
-          )}
-
+{/* 1. Only show this container if there's a real pending evolution queued up */}
+{pendingEvolutionIndex !== null && (
+  <div 
+    className="evolution-clickable-container" 
+    onClick={() => {
+      // Direct click action to process the transformation
+      setActiveTierIndex(pendingEvolutionIndex);
+    }}
+    style={{ cursor: 'pointer' }}
+  >
+    {/* Your visual assets from image_5286c7.png */}
+    <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
+    
+    <img 
+      src={evoTiers[pendingEvolutionIndex]?.file || "/prehistoric-skeleton.png"} 
+      className="evolution-preview-avatar-inside-hud"
+      onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+    />
+    
+    <div className="click-to-evolve-text" style={{ color: '#ff6600', fontWeight: 'bold' }}>
+      CLICK TO EVOLVE
+    </div>
+  </div>
+)}
           <div className="hud-boost-ammunition-deck">
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 2 ? '0 0 8px #00FF1A' : 'none' }} />
