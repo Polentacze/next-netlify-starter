@@ -412,31 +412,36 @@ if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
 
-  if (pendingEvolutionIndex !== null) {
-    
-    const targetSpecies = evoTiers[pendingEvolutionIndex];
+// 1
+  useEffect(() => {
+    if (pendingEvolutionIndex !== null) {
+      const targetSpecies = evoTiers[pendingEvolutionIndex];
 
-    if (targetSpecies) {
-      
-      setActiveTierIndex(pendingEvolutionIndex);
-
-      
-      setChatMessages(p => [...p, {
-        user: "System",
-        text: ` Evolved successfully into ${targetSpecies.name}!`
-      }]);
+      if (targetSpecies) {
+        setActiveTierIndex(pendingEvolutionIndex);
+        setChatMessages((p) => [
+          ...p,
+          {
+            id: Date.now(),
+            user: "System",
+            text: `🧬 Evolved successfully into ${targetSpecies.name}!`,
+            isSystem: true
+          }
+        ]);
+      }
+      setPendingEvolutionIndex(null);
     }
+  }, [pendingEvolutionIndex]); // <-- Notice the exact closing symbol structure here!
 
-    
-    setPendingEvolutionIndex(null);
-  }
-}, [pendingEvolutionIndex]);
-              <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
-<img 
-  src={evoTiers[pendingEvolutionIndex]?.file || "/prehistoric-skeleton.png"} 
-  className="evolution-preview-avatar-inside-hud"
-  onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }}
-/>
+  // 2. Your component's visual display return statement
+  return (
+    <div>
+      <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
+      <img 
+        src={evoTiers[activeTierIndex]?.file || "/prehistoric-skeleton.png"} 
+        className="evolution-preview-avatar-inside-hud"
+        onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+      />
               <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
             </div>
           )}
