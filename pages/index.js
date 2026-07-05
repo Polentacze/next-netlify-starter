@@ -10,7 +10,7 @@ export default function Home() {
   const [playerRotation, setPlayerRotation] = useState(0)
   const mousePos = useRef({ x: 0, y: 0 })
   const viewRef = useRef(null)
-  const [score, setScore] = useState(0)
+  const [score, setScore] = useState(0);
   const [foodPellets, setFoodPellets] = useState([])
   const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
   const [boostBars, setBoostBars] = useState(3)
@@ -23,6 +23,23 @@ export default function Home() {
   
   // 💾 LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
   const [activeClan, setActiveClan] = useState(() => {
+useEffect(() => {
+    if (pendingEvolutionIndex !== null) {
+        const targetSpecies = evoTiers[pendingEvolutionIndex];
+        if (targetSpecies) {
+            setActiveTierIndex(pendingEvolutionIndex);
+            
+            // This pushes the welcome message to your chat system
+            setChatMessages((p) => [
+                ...p,
+                {
+                    user: "System",
+                    text: `Welcome to prehistoo! You evolved into ${targetSpecies.name}.`
+                }
+            ]);
+        }
+    }
+}, [pendingEvolutionIndex]);
     if (typeof window !== 'undefined') {
       return localStorage.getItem('prehistooio_clan') || ""
     }
@@ -402,29 +419,13 @@ if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
           </div>
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
-
-// 1
-  useEffect(() => {
-    if (pendingEvolutionIndex !== null) {
-      const targetSpecies = evoTiers[pendingEvolutionIndex];
-
-      if (targetSpecies) {
-        setActiveTierIndex(pendingEvolutionIndex);
-        setChatMessages((p) => [
-          ...p,
-          {
-            id: Date.now(),
-            user: "System",
-            text: `🧬 Evolved successfully into ${targetSpecies.name}!`,
-            isSystem: true
-          }
-        ]);
-      }
-      setPendingEvolutionIndex(null);
-    }
-{/* 1. Only show this container if there's a real pending evolution queued up */}
+onClick={() => {
+    //this triggers the pending index which will fire off useEffect up top
+    setPendingEvolutionIndex(evolutionIndexNumber);
+}}
+{/*only show this container if theres a real pending evolution queued up */}
 {pendingEvolutionIndex !== null && (
-  <div 
+    <div
     className="evolution-clickable-container" 
     onClick={() => {
       // Direct click action to process the transformation
