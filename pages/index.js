@@ -21,15 +21,21 @@ export default function Home() {
   const [clamMeats, setClamMeats] = useState([])
   const [isClanOpen, setIsClanOpen] = useState(false) 
   
-  // 💾 LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
-  const [activeClan, setActiveClan] = useState(() => {
+//:
+const [activeClan, setActiveClan] = useState(() => {
+    if (typeof window !== 'undefined') {
+        // 
+    }
+    return ''; // or whatever your default clan state is
+}); //  make sure this closing bracket and parenthesis are here
+
+// 
 useEffect(() => {
     if (pendingEvolutionIndex !== null) {
         const targetSpecies = evoTiers[pendingEvolutionIndex];
         if (targetSpecies) {
             setActiveTierIndex(pendingEvolutionIndex);
             
-            // This pushes the welcome message to your chat system
             setChatMessages((p) => [
                 ...p,
                 {
@@ -447,11 +453,11 @@ onClick={() => {
     </div>
   </div>
 </div>
-       <div className="hud-boost-ammunition-deck">
-            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
-            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 2 ? '0 0 8px #00FF1A' : 'none' }} />
-            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 3 ? '0 0 8px #00FF1A' : 'none' }} />
-          </div>
+<div className="hud-boost-ammunition-deck">
+    <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255, 255, 255, 0.12)', boxShadow: boostBars >= 1 ? '0 0 10px #00FF1A' : 'none' }}></div>
+    <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255, 255, 255, 0.12)', boxShadow: boostBars >= 2 ? '0 0 10px #00FF1A' : 'none' }}></div>
+    <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255, 255, 255, 0.12)', boxShadow: boostBars >= 3 ? '0 0 10px #00FF1A' : 'none' }}></div>
+</div>
 
 {/* 💬 DYNAMIC HUD CHAT SYSTEM */}
           {isChatOpen ? (
