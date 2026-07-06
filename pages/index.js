@@ -21,16 +21,14 @@ export default function Home() {
   const [clamMeats, setClamMeats] = useState([])
   const [isClanOpen, setIsClanOpen] = useState(false) 
   
-// let activeClan finish and close completely with });
 const [activeClan, setActiveClan] = useState(() => {
     if (typeof window !== 'undefined') {
         const savedClan = localStorage.getItem('prehistoo_clan');
         if (savedClan) return savedClan;
     }
     return ''; 
-}); // DOUBLE CHECK THAT THIS CLOSING IS EXACTLY
+}); // critical: make sure it ends exactly with });
 
-//  place the useEffect completely on its own line beneath it:
 useEffect(() => {
     if (pendingEvolutionIndex !== null) {
         const targetSpecies = evoTiers[pendingEvolutionIndex];
