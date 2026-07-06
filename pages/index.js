@@ -456,12 +456,12 @@ onClick={() => {
     />
     
 <div className="click-to-evolve-text" style={{ color: '#ff6600', fontWeight: 'bold' }}>
-      CLICK TO EVOLVE
-    </div>
-    </div> 
-         
-  <div className="hud-boost-ammunition-deck">
-    <div>
+CLICK TO EVOLVE
+</div>
+</div>
+
+<div className="hud-boost-ammunition-deck">
+  <div>
     <div 
       className="individual-energy-slice"
       style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255, 255, 255, 0.2)' }}
