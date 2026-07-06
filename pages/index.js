@@ -446,13 +446,13 @@ onClick={() => {
     }}
     style={{ cursor: 'pointer' }}
   >
-    {/* Your visual assets from image_5286c7.png */}
+    {/* evolution assets */}
     <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
     
     <img 
       src={evoTiers[pendingEvolutionIndex]?.file || "/prehistoric-skeleton.png"} 
       className="evolution-preview-avatar-inside-hud"
-      onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+      onError={(e) => { e.target.src = "/prehistoric-skeleton.png"; }} 
     />
     
     <div className="click-to-evolve-text" style={{ color: '#ff6600', fontWeight: 'bold' }}>
