@@ -449,16 +449,17 @@ onClick={() => {
     {/* evolution assets */}
     <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
     
-    <img 
-      src={evoTiers[pendingEvolutionIndex]?.file || "/prehistoric-skeleton.png"} 
-      className="evolution-preview-avatar-inside-hud"
-      onError={(e) => { e.target.src = "/prehistoric-skeleton.png"; }} 
-    />
-    
+<img 
+  src={evoTiers[pendingEvolutionIndex]?.file || "/prehistoric-skeleton.png"}
+  className="evolution-preview-avatar-inside-hud"
+  onError={(e) => { e.target.src = "/prehistoric-skeleton.png"; }}
+/>
+
 <div className="click-to-evolve-text" style={{ color: '#ff6600', fontWeight: 'bold' }}>
-CLICK TO EVOLVE
+  CLICK TO EVOLVE
 </div>
-</div>
+</div> {/* 1. Closes click-to-evolve-text */}
+</div> {/* 2. Closes the main evolution-clickable-container */}
 
 <div className="hud-boost-ammunition-deck">
   <div>
