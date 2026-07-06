@@ -455,13 +455,13 @@ onClick={() => {
       onError={(e) => { e.target.src = "/prehistoric-skeleton.png"; }} 
     />
     
-    <div className="click-to-evolve-text" style={{ color: '#ff6600', fontWeight: 'bold' }}>
+<div className="click-to-evolve-text" style={{ color: '#ff6600', fontWeight: 'bold' }}>
       CLICK TO EVOLVE
     </div>
-  </div>
-</div>
-<div className="hud-boost-ammunition-deck">
-  <div>
+    </div> 
+         
+  <div className="hud-boost-ammunition-deck">
+    <div>
     <div 
       className="individual-energy-slice"
       style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255, 255, 255, 0.2)' }}
