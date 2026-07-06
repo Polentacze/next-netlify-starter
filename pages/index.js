@@ -51,7 +51,12 @@ useEffect(() => {
     return ""
   })      
   
-const [clanInputTemp, setClanInputTemp] = useState("") 
+const [clanInput, setClanInput] = useState(() => {
+    if (typeof window !== 'undefined') {
+        return localStorage.getItem('prehistoo_clan') || "";
+    }
+    return "";
+}); //line closes cleanly with });
   
 const evoTiers = [
   { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
