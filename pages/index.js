@@ -45,11 +45,14 @@ useEffect(() => {
         }
     }
 }, [pendingEvolutionIndex]);
-    if (typeof window !== 'undefined') {
+// lines 48 54
+const [clan, setClan] = useState(() => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('prehistooio_clan') || "";
+  }
+  return "";
+}); 
 
-    }
-    return ""
-  })      
   
 const [clanInput, setClanInput] = useState(() => {
     if (typeof window !== 'undefined') {
