@@ -461,9 +461,20 @@ onClick={() => {
   </div>
 </div>
 <div className="hud-boost-ammunition-deck">
-    <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255, 255, 255, 0.12)', boxShadow: boostBars >= 1 ? '0 0 10px #00FF1A' : 'none' }}></div>
-    <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255, 255, 255, 0.12)', boxShadow: boostBars >= 2 ? '0 0 10px #00FF1A' : 'none' }}></div>
-    <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255, 255, 255, 0.12)', boxShadow: boostBars >= 3 ? '0 0 10px #00FF1A' : 'none' }}></div>
+  <div> {/*Line 464*/}
+    <div
+      className="individual-energy-slice" 
+      style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255, 255, 255, 0.2)' }} 
+    />
+    <div 
+      className="individual-energy-slice" 
+      style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255, 255, 255, 0.2)' }} 
+    />
+    <div 
+      className="individual-energy-slice" 
+      style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255, 255, 255, 0.2)' }} 
+    />
+  </div>
 </div>
 
 {/* 💬 DYNAMIC HUD CHAT SYSTEM */}
