@@ -46,7 +46,7 @@ useEffect(() => {
     }
 }, [pendingEvolutionIndex]);
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('prehistooio_clan') || ""
+
     }
     return ""
   })      
