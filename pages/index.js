@@ -588,7 +588,7 @@ onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }}
       
     
 
-{/* Helicoprion Ability Layer (Index 3) */}
+// Helicoprion Ability Layer (Index 3)
 {isAbilityActive && activeTierIndex === 3 && (
   <img
     src="/helicoprion-ability.png"
