@@ -582,8 +582,8 @@ onClick={() => {
     alt="Armored Guard Active" 
     style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', backgroundColor: 'transparent', background: 'transparent', pointerEvents: 'none' }} 
 onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }}
-      />
-    )}
+      
+    
 
     {/* Helicoprion Ability Layer (Index 3) */}
     {isAbilityActive && activeTierIndex === 3 && (
@@ -686,9 +686,7 @@ const bannerHTML = `
                 <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
               </button>
             </form>
-          </main>
-        </>
-      )}
-    </div>
-  )
+    </main>
+  </div>
+)
 }
