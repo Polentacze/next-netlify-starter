@@ -586,12 +586,12 @@ onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }}
     
 
     {/* Helicoprion Ability Layer (Index 3) */}
-    {isAbilityActive && activeTierIndex === 3 && (
-      <img
-        src="/helicoprion-ability.png" // Your new ability asset
-        alt="Saw-Blade Strike Active"
-    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', backgroundColor: 'transparent' }}
-    onError={(e) => { e.target.src  = "/prehistoric-skeleton.png" }} 
+{isAbilityActive && activeTierIndex === 3 && (
+  <img
+    src="/helicoprion-ability.png"
+    alt="Saw-Blade Strike Active"
+    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)' }}
+    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }}
   />
 )}
           <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
