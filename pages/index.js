@@ -457,7 +457,6 @@ onClick={() => {
 
 <div className="click-to-evolve-text" style={{ color: '#ff6600', fontWeight: 'bold' }}>
   CLICK TO EVOLVE
-</div>
 </div> {/* 1. Closes click-to-evolve-text */}
 </div> {/* 2. Closes the main evolution-clickable-container */}
 
