@@ -578,17 +578,17 @@ onClick={() => {
   />
 )}
 
-{/*  Dunkleosteus Ability Layer (Index 2) */}
+{/* Dunkleosteus Ability Layer (Index 2) */}
 {isAbilityActive && activeTierIndex === 2 && (
-  <img 
-    src="/dunk-ability.png" 
-    alt="Armored Guard Active" 
-    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', backgroundColor: 'transparent', background: 'transparent', pointerEvents: 'none' }} 
-onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }}
-      
-    
+  <img
+    src="/dunk-ability.png"
+    alt="Armored Guard Active"
+    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto' }}
+    onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }}
+  />
+)}
 
-// Helicoprion Ability Layer (Index 3)
+{/* Helicoprion Ability Layer (Index 3) */}
 {isAbilityActive && activeTierIndex === 3 && (
   <img
     src="/helicoprion-ability.png"
