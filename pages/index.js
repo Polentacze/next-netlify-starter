@@ -577,8 +577,7 @@ onClick={() => {
     onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }}
   />
 )}
-
-{/* Dunkleosteus Ability Layer (Index 2) */}
+{/* dunkleosteus ability Layer (index 2) */}
 {isAbilityActive && activeTierIndex === 2 && (
   <img
     src="/dunk-ability.png"
@@ -588,7 +587,7 @@ onClick={() => {
   />
 )}
 
-{/* Helicoprion Ability Layer (Index 3) */}
+{/* Helicoprion ability layer (index 3) */}
 {isAbilityActive && activeTierIndex === 3 && (
   <img
     src="/helicoprion-ability.png"
@@ -597,8 +596,10 @@ onClick={() => {
     onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }}
   />
 )}
-          <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
-          <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
+
+{/* lobby Items */}
+<img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} alt="critter" />
+<img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} alt="critter" />
           <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
           <img 
             src="/clan-button.png" 
