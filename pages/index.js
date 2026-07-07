@@ -569,10 +569,12 @@ onClick={() => {
 </div>
 
 {/* Stethacanthus Ability Layer (Index 1) */}
-    src="/steth-ability.png" 
-    alt="Speed Surge Active" 
-    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} 
-    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+{activeTierIndex === 1 && (
+  <img
+    src="/steth-ability.png"
+    alt="Speed Surge Active"
+    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto' }}
+    onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }}
   />
 )}
 
