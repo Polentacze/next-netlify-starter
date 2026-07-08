@@ -637,19 +637,17 @@ const bannerHTML = `
 
 {/* YOUR EXISTING WIKI BUTTON */}
 <>
-  <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
-
-  <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(' }}>
+<img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
+<div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.65)' }}>
     <div className="wiki-panel" onClick={(e) => e.stopPropagation()}><button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
     </div>
   </div>
 </>
-          
-          <div onClick={() => setIsClanOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.65)', display: isClanOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 110 }}> 
-            <div className="wiki-panel" onClick={(e) => e.stopPropagation()} style={{ width: '650px', padding: '0', background: 'transparent', border: 'none' }}>
-              <button className="close-btn" style={{ top: '1rem', right: '1rem' }} onClick={() => setIsClanOpen(false)}>Close X</button>
-              <div style={{ position: 'relative', width: '100%' }}>
 
+<div onClick={() => setIsClanOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.65)', display: isClanOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 110 }}>
+  <div className="clan-panel" onClick={(e) => e.stopPropagation()} style={{ width: '650px', padding: '0', background: 'transparent', border: 'none' }}>
+    <button className="close-btn" style={{ top: '1rem', right: '1rem' }} onClick={() => setIsClanOpen(false)}>Close X</button>
+    <div style={{ position: 'relative', width: '100%' }}>
                 <img src="/clan-selection.png" alt="Clan Selection Panel" style={{ width: '100%', display: 'block', borderRadius: '24px' }} />
                 <form onSubmit={(e) => {
                   e.preventDefault();
