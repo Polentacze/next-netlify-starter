@@ -681,14 +681,14 @@ const bannerHTML = `
             <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p>
             <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} />
             <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p>
-            <form className="launch-form" onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}>
+            <form className="launch-form" onSubmit={(e) => { e.preventDefault(); }}>
               <div className="input-wrap">
                 <img src="/input-box.png" alt="Input field" style={{ width: '100%' }} />
                 <input type="text" className="field-text" placeholder="Enter Username..." value={username} onChange={(e) => setUsername(e.target.value)} maxLength={26} required />
               </div>
               <button type="submit" className="play-btn">
                 <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
-      </button>
+</button>
     </form>
   </main>
 </div>
