@@ -697,6 +697,5 @@ const bannerHTML = `
   </main>
   </div>
  </div>
-</>
 );
 }
