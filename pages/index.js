@@ -689,8 +689,11 @@ const bannerHTML = `
                 <img src="/input-box.png" alt="Input field" style={{ width: '100%' }} />
                 <input type="text" className="field-text" placeholder="Enter Username..." value={username} onChange={(e) => setUsername(e.target.value)} maxLength={26} required />
               </div>
-              <button type="submit" className="play-btn">
-                <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
-  </main></div></>
- );
+  <button type="submit" className="play-btn">
+    <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
+  </button>
+ </main>
+</div>
+</>
+);
 }
