@@ -649,24 +649,27 @@ const bannerHTML = `
     <button className="close-btn" style={{ top: '1rem', right: '1rem' }} onClick={() => setIsClanOpen(false)}>Close X</button>
     <div style={{ position: 'relative', width: '100%' }}>
                 <img src="/clan-selection.png" alt="Clan Selection Panel" style={{ width: '100%', display: 'block', borderRadius: '24px' }} />
-                <form onSubmit={(e) => {
-                  e.preventDefault();
-                  if (!clanInputTemp.trim() || activeClan) return;
-                  const savedName = clanInputTemp.trim().toUpperCase();
-                  if (typeof window !== 'undefined') {
-                    localStorage.setItem('prehistooio_clan', savedName);
-                  }
-                  setActiveClan(savedName);
-                  setIsClanOpen(false);
-                }} style={{ position: 'absolute', bottom: '15%', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', width: '70%' }}>
-                  <input 
-                    type="text" 
-                    className="field-text" 
-                    value={activeClan ? activeClan : clanInputTemp} 
-                    onChange={(e) => setClanInputTemp(e.target.value)} 
-                    maxLength={10} 
-                    disabled={activeClan !== ""} 
-                    placeholder={activeClan ? `Active Clan: ${activeClan}` : "Type clan name..."} 
+      <form 
+        style={{ position: 'absolute', bottom: '15%', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', width: '70%' }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!clanInputTemp.trim() || activeClan) return;
+          const savedName = clanInputTemp.trim().toUpperCase();
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('prehistooio_clan', savedName);
+          }
+          setActiveClan(savedName);
+          setIsClanOpen(false);
+        }} >
+        
+        <input
+          type="text"
+          className="field-text"
+          value={activeClan ? activeClan : clanInputTemp}
+          onChange={(e) => setClanInputTemp(e.target.value)}
+          maxLength={18}
+          disabled={activeClan !== ""}
+          placeholder={activeClan ? `Active Clan: ${activeClan}` : "Type clan name..."}
                     style={{ position: 'static', transform: 'none', width: '85%', background: '#fff', border: '3px solid #2a437a', borderRadius: '12px', padding: '10px', fontSize: '1.2rem', textAlign: 'center', fontWeight: 'bold', color: '#333' }} 
                   />
                   <button type="submit" disabled={activeClan !== ""} style={{ background: 'none', border: 'none', cursor: activeClan ? 'not-allowed' : 'pointer', width: '130px', height: '45px' }}>
