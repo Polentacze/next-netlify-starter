@@ -691,6 +691,6 @@ const bannerHTML = `
               </div>
               <button type="submit" className="play-btn">
                 <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
-  </main></>
+  </main></div></>
  );
 }
