@@ -638,7 +638,10 @@ const bannerHTML = `
 
 {/* YOUR EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
-<div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.65)' }}>
+<div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.65)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 110 }}>
+  {/* If your wiki text/content goes here, keep it, otherwise close it right away: */}
+</div>
+
 <div onClick={() => setIsClanOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.65)', display: isClanOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 110 }}>
   <div className="clan-panel" onClick={(e) => e.stopPropagation()} style={{ width: '650px', padding: '0', background: 'transparent', border: 'none' }}>
     <button className="close-btn" style={{ top: '1rem', right: '1rem' }} onClick={() => setIsClanOpen(false)}>Close X</button>
