@@ -677,9 +677,9 @@ const bannerHTML = `
     </form>
    </div>
   </div>
- </div>
 
-<main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
+
+  <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
             <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio</h1>
             <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p>
             <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} />
