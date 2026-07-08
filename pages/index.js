@@ -673,7 +673,7 @@ const bannerHTML = `
                     style={{ position: 'static', transform: 'none', width: '85%', background: '#fff', border: '3px solid #2a437a', borderRadius: '12px', padding: '10px', fontSize: '1.2rem', textAlign: 'center', fontWeight: 'bold', color: '#333' }} 
                   />
                   <button type="submit" disabled={activeClan !== ""} style={{ background: 'none', border: 'none', cursor: activeClan ? 'not-allowed' : 'pointer', width: '130px', height: '45px' }}>
-                    <div style={{ display: 'none' }}>Form</div>
+                    <div style={{ display: 'none' }}></div>
                   </button>
                 </form>
               </div>
@@ -697,3 +697,4 @@ const bannerHTML = `
 </main>
 );
 }
+
