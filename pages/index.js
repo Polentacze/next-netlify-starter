@@ -692,9 +692,9 @@ const bannerHTML = `
    </div>
    <button type="submit" className="play-btn">
     <img src="/play-button.png" alt="Play Button" width="100%" />
-   </button>
-  </main>
- </div>
+      </button>
+    </main>
+  </div>
 </>
 );
 }
