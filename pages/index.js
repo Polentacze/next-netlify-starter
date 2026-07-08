@@ -636,11 +636,14 @@ const bannerHTML = `
 </div>
 
 {/* YOUR EXISTING WIKI BUTTON */}
-<img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
+<>
+  <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
-          <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
-            <div className="wiki-panel" onClick={(e) => e.stopPropagation()}><button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button><h2 className="ocean-title" style={{ fontSize: '2.2rem', textAlign: 'left', margin: '0' }}>Animal Wiki</h2><div className="grid-container"><img src="/AnimalGrid.png" alt="Grid" className="grid-img" />{slots.map((s, i) => <div key={i} className="slot-over" style={{ top: slotPositions[i].t, left: slotPositions[i].l, width: "10.5%", height: "28%" }} onMouseEnter={() => setHoveredAnimal(slots[i])} onMouseLeave={() => setHoveredAnimal("")} />)}</div><div className="hud-banner"><p style={{ margin: 0, fontFamily: 'sans-serif', fontSize: '1.3rem', fontWeight: 'bold', color: hoveredAnimal ? '#00FF1A' : '#fff' }}>{hoveredAnimal || "Hover over a creature to analyze species data"}</p></div></div>
-          </div>
+  <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(' }}>
+    <div className="wiki-panel" onClick={(e) => e.stopPropagation()}><button className="close-btn" onClick={() => setIsWikiOpen(false)}>Close X</button>
+    </div>
+  </div>
+</>
           
           <div onClick={() => setIsClanOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.65)', display: isClanOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 110 }}> 
             <div className="wiki-panel" onClick={(e) => e.stopPropagation()} style={{ width: '650px', padding: '0', background: 'transparent', border: 'none' }}>
@@ -689,9 +692,7 @@ const bannerHTML = `
               <button type="submit" className="play-btn">
                 <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
 </button>
-    </form>
-  </main>
-</div>
-  );
-}
+  </form>
+</main>
+);
 }
