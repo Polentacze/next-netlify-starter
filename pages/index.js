@@ -624,17 +624,6 @@ onClick={() => {
     boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
     width: '220px'
   }}>
-<div>
-const bannerHTML = `
-  <h3 style="color: #ffffff; margin: 0 0 2px 0; font-size: 1rem; font-weight: bold; font-family: sans-serif;">
-    New update!
-  </h3>
-  <p style="color: #00FF1A; margin: 0; font-size: 0.9rem; font-weight: bold; font-family: sans-serif;">
-    - In Progress...
-  </p>
-`;
-</div>
-</div>
 
 {/* YOUR EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
