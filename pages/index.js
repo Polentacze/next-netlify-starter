@@ -585,18 +585,18 @@ onClick={() => {
     alt="Armored Guard Active"
     style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto' }}
     onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }}
-  />
-)}
-
-{/* Helicoprion ability layer (index 3) */}
-{isAbilityActive && activeTierIndex === 3 && (
-  <img
-    src="/helicoprion-ability.png"
-    alt="Saw-Blade Strike Active"
-    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)' }}
-    onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }}
-  />
-)}
+   />
+      
+ 
+   {/* Helicoprion ability layer (index 3) */}
+   {isAbilityActive && activeTierIndex === 3 && (
+     <img
+       src="/helicoprion-ability.png"
+       alt="Saw-Blade Strike Active"
+       style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)' }}
+       onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }}
+     />
+   )}
 
 {/* lobby Items */}
 <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.currentTarget.src = "/prehistoric-skeleton.png" }} alt="critter" />
@@ -624,6 +624,7 @@ onClick={() => {
     boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
     width: '220px'
   }}>
+  </div>
 
 {/* YOUR EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
