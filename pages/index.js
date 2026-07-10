@@ -39,7 +39,7 @@ useEffect(() => {
                 ...p,
                 {
                     user: "System",
-                    text: `Welcome to prehistoo! You evolved into ${targetSpecies.name}.`
+                    text: `Welcome to Prehistooio You evolved into ${targetSpecies.name}.`
                 }
             ]);
         }
@@ -358,7 +358,7 @@ if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
             if (currentTier === 0 && updatedScore >= 4500) return 1;
             if (currentTier === 1 && updatedScore >= 9500) return 2;
             if (currentTier === 2 && updatedScore >= 19000) {
-                console.log("Direct Evolution Success: Welcome Helicoprion!");
+                console.log("Evolution Success Evolved into Helicoprion");
                 return 3;
             }
             return currentTier;
