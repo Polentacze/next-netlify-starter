@@ -688,6 +688,5 @@ onClick={() => {
    </div>
   </div>
   );
-  }
 
   export default Home;
