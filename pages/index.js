@@ -689,12 +689,11 @@ onClick={() => {
     <button type="submit" className="play-btn">
      <img src="/play-button.png" alt="Play Button" width="100%" />
     </button>
-     </form>
-    </main>
-    </div>
-   </div>
-  </div>
- );
+       </form>
+      </main>
+     </div>
+   </div>  
+  );
 }
 
-  export default Home;
+export default Home;
