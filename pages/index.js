@@ -61,18 +61,34 @@ const [clanInput, setClanInput] = useState(() => {
     return "";
 }); //line closes cleanly with });
   
+// 1. Move ALL your state definitions to the top first
+const [activeTierIndex, setActiveTierIndex] = useState(0);
+// ... any other useStates you have ...
+
+// 2. Put your static data list next
 const evoTiers = [
   { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
   { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
-  { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" }, // Balanced Tier 3 landmark addition
-  { name: "Helicoprion", minScore: 19000, scale: 180, file: "/helicoprion-bes.png" }
-]; //
-  useEffect(() => {
-if (pendingEvolutionIndex !== null) {
-  console.log("Attempting to evolve to index:", pendingEvolutionIndex);
-  console.log("Target species data:", evoTiers[pendingEvolutionIndex]);
-  setActiveTierIndex(pendingEvolutionIndex);
-}
+  { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" },
+  { name: "Helicoprion", minScore: 19000, scale: 180, file: "/helicoprion.png" }
+];
+
+// 3. Put useEffect block AFTER the states are initialized
+useEffect(() => {
+  if (pendingEvolutionIndex !== null) {
+    const targetSpecies = evoTiers[pendingEvolutionIndex];
+    if (targetSpecies) {
+      setActiveTierIndex(pendingEvolutionIndex);
+      setChatMessages(p => [
+        ...p,
+        {
+          user: "System",
+          text: `Welcome to Prehistooio You evolved into ${targetSpecies.name}.`
+        }
+      ]);
+    }
+    setPendingEvolutionIndex(null);
+  }
 }, [pendingEvolutionIndex]);
   
   const [activeTierIndex, setActiveTierIndex] = useState(0)
