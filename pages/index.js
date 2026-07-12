@@ -690,9 +690,8 @@ onClick={() => {
      <img src="/play-button.png" alt="Play Button" width="100%" />
     </button>
       </form>
-    </main>
-  </div>   
-  </div>
+    </main> 
+</div>
 </div>
   );
 }
