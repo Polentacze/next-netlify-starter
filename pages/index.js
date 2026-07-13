@@ -91,7 +91,7 @@ useEffect(() => {
   }
 }, [pendingEvolutionIndex]);
   
-  const [activeTierIndex, setActiveTierIndex] = useState(0)
+ const [currentTierIndex, setCurrentTierIndex] = useState(0);
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const [isChatOpen, setIsChatOpen] = useState(true) 
   const [chatInput, setChatInput] = useState("")
@@ -671,28 +671,28 @@ onClick={() => {
                     <div style={{ display: 'none' }}></div>
                   </button>
     </form>
-   </div>
   </div>
+<div>
 
-
+</div>
 <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
    <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio</h1>
    <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p>
    <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => {}} />
    <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p>
-   <form className="launch-form" onSubmit={(e) => { e.preventDefault(); }}>
+<form className="launch-form" onSubmit={(e) => { e.preventDefault(); }}>
     {/* This is the bottom of your username form area */}
     <div className="input-wrap">
      <img src="/input-box.png" alt="Input field" style={{ width: '100%' }} />
      <input type="text" className="field-text" placeholder="Enter Username..." value={username} />
     </div>
     <button type="submit" className="play-btn">
-     <img src="/play-button.png" alt="Play Button" width="100%" />
+      <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
     </button>
-      </form>
-    </main> 
-    </div>
-  );
+  </form>
+</main>
+</div>
+);
 }
 
 export default Home;
