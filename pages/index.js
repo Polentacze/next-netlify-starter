@@ -517,14 +517,28 @@ setChatMessages((p) => [...p, {
   </div>
 </div>
 
-{/* ANCIENT MARKET BUTTON */}
-<img 
-  src="/ancient-market.png" 
-  alt="Ancient Market" 
-  className="wiki-img" 
-  style={{ marginBottom: '15px', cursor: 'pointer' }}
-  onClick={() => setShowVariations(true)} 
-/>
+{/* HUD STACK */}
+<div style={{ position: 'fixed', bottom: '20px', right: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10000 }}>
+  
+  {/* ANCIENT MARKET BUTTON */}
+  <img 
+    src="/ancient-market.png" 
+    alt="Ancient Market" 
+    className="wiki-img" 
+    style={{ position: 'static', marginBottom: '15px', cursor: 'pointer' }}
+    onClick={() => setShowVariations(true)} 
+  />
+
+  {/* YOUR EXISTING WIKI BUTTON */}
+  <img 
+    src="/wiki-button.png" 
+    alt="Wiki" 
+    className="wiki-img" 
+    style={{ position: 'static' }}
+    onClick={() => setIsWikiOpen(true)} 
+  />
+
+</div>
 
 {/* VARIATIONS POPUP MODAL */}
 {showVariations && (
