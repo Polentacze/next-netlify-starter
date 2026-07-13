@@ -33,11 +33,11 @@ export default function Home() {
   const evoTiers = [ 
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
     { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
-    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // 🧬 Balanced Tier 3 landmark addition
+    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // Balanced Tier 3 landmark addition
   ] 
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
-  const [isChatOpen, setIsChatOpen] = useState(true) // 🔥 Add this line right here!
+  const [isChatOpen, setIsChatOpen] = useState(true) // Add this line right here!
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
     { user: "System", text: "Prehistooio loaded! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" }
@@ -69,7 +69,7 @@ const detectTextColor = (targetString) => {
     if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
     return "#FFFFFF" 
   } 
-// 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
+//  CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
   let result = str
@@ -93,7 +93,7 @@ const cleanTags = (str) => {
     e.preventDefault() 
     if (!chatInput.trim()) return 
     
-    // 🏷️ Dynamically matches colors to whoever sent it
+    //  Dynamically matches colors to whoever sent it
     let messageColor = detectTextColor(chatInput) 
     if (messageColor === "#FFFFFF") messageColor = detectTextColor(username) 
     
@@ -135,15 +135,15 @@ setChatMessages((p) => [...p, {
     }) 
   }, [isPlaying]) 
 
-  // 🧬 BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
+  //  BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
   useEffect(() => { 
     if (!isPlaying) return 
     
-    // 🧟 UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever!
+    //  UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever!
     const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
     if (isSecretGhoul) {
       if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
-      return; // 🛑 Force exits the hook early so no evolutionary level-ups can ever process
+      return; //  Force exits the hook early so no evolutionary level-ups can ever process
     }
 
     // Standard progression checkpoints for normal fish tiers
@@ -154,7 +154,7 @@ setChatMessages((p) => [...p, {
     } 
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) // 🌟 Added username monitoring to track the secret name check!
 
-  // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
+  //  AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
   useEffect(() => {
     if (!isPlaying) {
       setClamMeats([])
@@ -356,11 +356,11 @@ setChatMessages((p) => [...p, {
             setTimeout(() => { setIsBoosting(false) }, 320)
           }}
         >
-          <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
-            <strong>PREHISTOOIO ARENA v1.0</strong><br />
-            <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span><br />
-            <span style={{ fontSize: '0.85rem', color: '#FFD700', textTransform: 'uppercase' }}>SPECIES: {(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "UNKNOWN" : evoTiers[activeTierIndex].name}</span>
-          </div>
+<div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.85 }}>
+  <strong>TROPICAL SEA v1.0</strong><br />
+  <span style={{ fontSize: '1.2rem', color: '#00FF1a', fontWeight: 'bold' }}>XP: {score}</span><br />
+  <span style={{ fontSize: '0.85rem', color: '#FFD700', textTransform: 'uppercase' }}>SPECIES: {(username || "").toUpperCase()}</span>
+</div>
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
           {pendingEvolutionIndex !== null && (
