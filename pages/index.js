@@ -520,25 +520,35 @@ setChatMessages((p) => [...p, {
 {/* HUD STACK */}
 <div style={{ position: 'fixed', bottom: '20px', right: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10000 }}>
   
-  {/* ANCIENT MARKET BUTTON */}
-  <img 
-    src="/ancient-market.png" 
-    alt="Ancient Market" 
-    className="wiki-img" 
-    style={{ position: 'static', marginBottom: '15px', cursor: 'pointer' }}
-    onClick={() => setShowVariations(true)} 
-  />
+{/* ANCIENT MARKET BUTTON */}
+<img 
+  src="/ancient-market.png" 
+  alt="Ancient Market" 
+  className="wiki-img" 
+  style={{ 
+    position: 'fixed', 
+    bottom: '220px',  // Explicitly forces it higher up on the screen
+    right: '20px', 
+    cursor: 'pointer',
+    zIndex: 10000 
+  }}
+  onClick={() => setShowVariations(true)} 
+/>
 
-  {/* YOUR EXISTING WIKI BUTTON */}
-  <img 
-    src="/wiki-button.png" 
-    alt="Wiki" 
-    className="wiki-img" 
-    style={{ position: 'static' }}
-    onClick={() => setIsWikiOpen(true)} 
-  />
-
-</div>
+{/* YOUR SINGLE WIKI BUTTON */}
+<img 
+  src="/wiki-button.png" 
+  alt="Wiki" 
+  className="wiki-img" 
+  style={{ 
+    position: 'fixed', 
+    bottom: '20px',   // Pinned exactly to the bottom corner
+    right: '20px', 
+    cursor: 'pointer',
+    zIndex: 10000 
+  }}
+  onClick={() => setIsWikiOpen(true)} 
+/>
 
 {/* VARIATIONS POPUP MODAL */}
 {showVariations && (
@@ -550,21 +560,21 @@ setChatMessages((p) => [...p, {
       left: 0,
       width: '100vw',
       height: '100vh',
-      backgroundColor: 'rgba(0, 0, 0, 0.7)', 
+      backgroundColor: 'rgba(0, 0, 0, 0.85)', // Darker background to hide the main menu mess
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      zIndex: 20000,
+      zIndex: 99999, // Puts it above EVERYTHING else
       cursor: 'pointer'
     }}
   >
-    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }}>
+    <div style={{ position: 'relative', width: '80%', maxWidth: '800px' }}>
       <img 
         src="/variations-section.png" 
         alt="Variations" 
-        style={{ width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }} 
+        style={{ width: '100%', height: 'auto', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.7)' }} 
       />
-      <div style={{ color: '#fff', textAlign: 'center', marginTop: '10px', fontFamily: 'sans-serif', fontSize: '0.8rem', opacity: 0.8 }}>
+      <div style={{ color: '#fff', textAlign: 'center', marginTop: '15px', fontFamily: 'sans-serif', fontSize: '1rem', fontWeight: 'bold' }}>
         Click anywhere to close
       </div>
     </div>
