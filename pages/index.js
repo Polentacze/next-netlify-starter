@@ -517,38 +517,48 @@ setChatMessages((p) => [...p, {
   </div>
 </div>
 
-{/* HUD STACK */}
-<div style={{ position: 'fixed', bottom: '20px', right: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10000 }}>
+{/* THE PINNED BUTTONS CONTAINER */}
+<div style={{
+  position: 'fixed',
+  bottom: '40px',
+  right: '40px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '20px',
+  zIndex: 9999
+}}>
   
-{/* ANCIENT MARKET BUTTON */}
-<img 
-  src="/ancient-market.png" 
-  alt="Ancient Market" 
-  className="wiki-img" 
-  style={{ 
-    position: 'fixed', 
-    bottom: '220px',  // Explicitly forces it higher up on the screen
-    right: '20px', 
-    cursor: 'pointer',
-    zIndex: 10000 
-  }}
-  onClick={() => setShowVariations(true)} 
-/>
+  {/* ANCIENT MARKET BUTTON */}
+  <img 
+    src="/ancient-market.png" 
+    alt="Ancient Market" 
+    style={{ 
+      width: '180px', 
+      height: 'auto',
+      cursor: 'pointer',
+      transition: 'transform 0.1s ease'
+    }}
+    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1.0)'}
+    onClick={() => setShowVariations(true)} 
+  />
 
-{/* YOUR SINGLE WIKI BUTTON */}
-<img 
-  src="/wiki-button.png" 
-  alt="Wiki" 
-  className="wiki-img" 
-  style={{ 
-    position: 'fixed', 
-    bottom: '20px',   // Pinned exactly to the bottom corner
-    right: '20px', 
-    cursor: 'pointer',
-    zIndex: 10000 
-  }}
-  onClick={() => setIsWikiOpen(true)} 
-/>
+  {/* WIKI BUTTON */}
+  <img 
+    src="/wiki-button.png" 
+    alt="Wiki" 
+    style={{ 
+      width: '180px', 
+      height: 'auto',
+      cursor: 'pointer',
+      transition: 'transform 0.1s ease'
+    }}
+    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1.0)'}
+    onClick={() => setIsWikiOpen(true)} 
+  />
+
+</div>
 
 {/* VARIATIONS POPUP MODAL */}
 {showVariations && (
@@ -560,15 +570,15 @@ setChatMessages((p) => [...p, {
       left: 0,
       width: '100vw',
       height: '100vh',
-      backgroundColor: 'rgba(0, 0, 0, 0.85)', // Darker background to hide the main menu mess
+      backgroundColor: 'rgba(0, 0, 0, 0.85)', 
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      zIndex: 99999, // Puts it above EVERYTHING else
+      zIndex: 99999, 
       cursor: 'pointer'
     }}
   >
-    <div style={{ position: 'relative', width: '80%', maxWidth: '800px' }}>
+    <div style={{ position: 'relative', width: '80%', maxWidth: '800px' }} onClick={(e) => e.stopPropagation()}>
       <img 
         src="/variations-section.png" 
         alt="Variations" 
