@@ -351,59 +351,7 @@ setChatMessages((p) => [...p, {
   <span style={{ fontSize: '0.95rem', color: '#00FF1A', fontWeight: 'bold' }}>XP: {score}</span><br />
   <span style={{ fontSize: '0.7rem', color: '#FFD700', textTransform: 'uppercase', opacity: 0.9 }}>SPECIES: {(evoTiers[activeTierIndex]?.name || "Unknown").toUpperCase()}</span>
 </div>
-{/* ANCIENT MARKET BUTTON */}
-<div 
-  onClick={() => setShowVariations(true)}
-  style={{
-    position: 'fixed',
-    bottom: '240px', // Adjusted to float directly above the Wiki button area
-    right: '20px',
-    width: '160px',  // Adjust width/height to match your image aspect ratio
-    cursor: 'pointer',
-    zIndex: 10000,
-    transition: 'transform 0.1s ease'
-  }}
-  onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-  onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1.0)'}
->
-  <img 
-    src="/ancient-market.png" 
-    alt="Ancient Market" 
-    style={{ width: '100%', height: 'auto', display: 'block' }} 
-  />
-</div>
 
-{/* VARIATIONS POPUP MODAL */}
-{showVariations && (
-  <div 
-    onClick={() => setShowVariations(false)} // Clicking anywhere on the screen closes it
-    style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: 'rgba(0, 0, 0, 0.7)', // Darkens the game background
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 20000,
-      cursor: 'pointer'
-    }}
-  >
-    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }}>
-      <img 
-        src="/variations-section.png" 
-        alt="Variations" 
-        style={{ width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }} 
-      />
-      {/* Tiny close hint */}
-      <div style={{ color: '#fff', textAlign: 'center', marginTop: '10px', fontFamily: 'sans-serif', fontSize: '0.8rem', opacity: 0.8 }}>
-        Click anywhere to close
-      </div>
-    </div>
-  </div>
-)}
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
           {pendingEvolutionIndex !== null && (
@@ -569,6 +517,45 @@ setChatMessages((p) => [...p, {
   </div>
 </div>
 
+{/* ANCIENT MARKET BUTTON */}
+<img 
+  src="/ancient-market.png" 
+  alt="Ancient Market" 
+  className="wiki-img" 
+  style={{ marginBottom: '15px', cursor: 'pointer' }}
+  onClick={() => setShowVariations(true)} 
+/>
+
+{/* VARIATIONS POPUP MODAL */}
+{showVariations && (
+  <div 
+    onClick={() => setShowVariations(false)} 
+    style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: 'rgba(0, 0, 0, 0.7)', 
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 20000,
+      cursor: 'pointer'
+    }}
+  >
+    <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }}>
+      <img 
+        src="/variations-section.png" 
+        alt="Variations" 
+        style={{ width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }} 
+      />
+      <div style={{ color: '#fff', textAlign: 'center', marginTop: '10px', fontFamily: 'sans-serif', fontSize: '0.8rem', opacity: 0.8 }}>
+        Click anywhere to close
+      </div>
+    </div>
+  </div>
+)}
 {/* YOUR EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
