@@ -345,11 +345,11 @@ setChatMessages((p) => [...p, {
             setTimeout(() => { setIsBoosting(false) }, 320)
           }}
         >
-<div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.85 }}>
-    <strong>TROPICAL SEA v1.0</strong><br />
-    <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>XP: {score}</span><br />
-    <span style={{ fontSize: '0.85rem', color: '#FFD700', textTransform: 'uppercase' }}>SPECIES: {(username || "").toUpperCase()}</span>
-  </div>
+<div style={{ position: 'fixed', top: '12px', left: '15px', fontFamily: 'sans-serif', fontSize: '0.75rem', opacity: 0.8, pointerEvents: 'none', zIndex: 9999 }}>
+  <strong style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>TROPICAL SEA v1.0</strong><br />
+  <span style={{ fontSize: '0.95rem', color: '#00FF1A', fontWeight: 'bold' }}>XP: {score}</span><br />
+  <span style={{ fontSize: '0.7rem', color: '#FFD700', textTransform: 'uppercase', opacity: 0.9 }}>SPECIES: {(evoTiers[activeTierIndex]?.name || "Unknown").toUpperCase()}</span>
+</div>
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
           {pendingEvolutionIndex !== null && (
