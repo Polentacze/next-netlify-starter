@@ -79,11 +79,12 @@ export default function Home() {
   
   const [clanInputTemp, setClanInputTemp] = useState("") 
   const evoTiers = [ 
-    { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
-    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
-    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // Tier 3 landmark addition
-    { name: "Helicoprion", minScore: 19000, scale: 170, file: "/helicoprion-bes.png" } // Index
-  ] 
+  { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
+  { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
+  { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" }, // Tier 3 landmark addition
+  { name: "Helicoprion", minScore: 19000, scale: 170, file: "/helicoprion-bes.png" } // Index
+]
+
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const [isChatOpen, setIsChatOpen] = useState(true) // 🔥 Add this line right here!
