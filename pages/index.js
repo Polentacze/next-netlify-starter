@@ -31,8 +31,11 @@ export default function Home() {
     localStorage.setItem("prehistooio_password", signInPassword);
     
     // Log them into the game automatically
-    setUsername(signInName.trim());
-    setShowSignIn(false);
+   // 🌟 Checks the chat text first, then falls back to checking your username tag!
+  let messageColor = detectTextColor(chatInput);
+  if (messageColor === "#FFFFFF" || messageColor === "#ffffff") {
+    messageColor = detectTextColor(username);
+  }
   };
 
   useEffect(() => {
@@ -138,7 +141,7 @@ const cleanTags = (str) => {
     if (!cleanMessage) return
 
 setChatMessages((p) => [...p, {
-  user: cleanTags(username) || "Guest",
+  user: {cleanTags(username) || "Guest"}
   text: cleanMessage,
   colorCode: messageColor
 }])
@@ -317,9 +320,15 @@ if (isBoosting) {
           let itemsToSpawn = 1; 
           
           if (spawnChance > 0.8) {
-            itemsToSpawn = 3; // Tiny clump maximum size
-          } else if (spawnChance > 0.4) {
-            itemsToSpawn = 2; // Double dot
+//  Evolution Trigger for Dunkleosteus (Tier 2)
+  if (score >= 9500 && activeTierIndex === 1 && pendingEvolutionIndex === null) {
+    setPendingEvolutionIndex(2);
+  }
+
+  //  NEW: Evolution Trigger for Helicoprion (Tier 3)
+  if (score >= 19000 && activeTierIndex === 2 && pendingEvolutionIndex === null) {
+    setPendingEvolutionIndex(3);
+  }
           }
 
           for (let i = 0; i < itemsToSpawn; i++) {
