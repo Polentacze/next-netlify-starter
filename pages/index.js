@@ -536,30 +536,28 @@ setChatMessages((p) => [...p, {
             style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
             onClick={() => setIsClanOpen(true)} 
           />
-{/* TOP RIGHT ACCOUNT WIDGET */}
-<div 
-  onClick={() => {
-    setAuthError("");
-    setShowSignIn(true);
-  }}
-  style={{
-    position: 'fixed',
-    top: '25px',
-    right: '25px',
-    width: '180px',
-    height: '65px',
-    backgroundImage: 'url("/base-account.png")',
-    backgroundSize: '100% 100%',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    zIndex: 10000,
-    filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.3))'
-  }}
->
+{/* TOP RIGHT ACCOUNT LINK */}
+      <div 
+        onClick={() => {
+          setAuthError("");
+          setShowSignIn(true);
+        }}
+        style={{
+          position: 'fixed',
+          top: '35px',
+          right: '45px', 
+          color: '#ffffff',
+          fontFamily: 'sans-serif',
+          fontWeight: 'bold',
+          fontSize: '1.2rem',
+          cursor: 'pointer',
+          textDecoration: 'underline',
+          textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+          zIndex: 10000
+        }}
+      >
+        {typeof username !== 'undefined' && username ? username : "Sign In"}
+      </div>
   <span
     style={{
       color: '#ffffff',
@@ -671,7 +669,7 @@ setChatMessages((p) => [...p, {
       zIndex: 999999, 
     }}
   >
-    {/* Core UI Card Asset */}
+    {/* Core UI Card Asset Container */}
     <div 
       style={{ 
         position: 'relative', 
@@ -706,10 +704,10 @@ setChatMessages((p) => [...p, {
           }}
         />
 
-        {/* PASSWORD INPUT CONTAINER */}
+        {/* PASSWORD INPUT HOUSING */}
         <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
           <input 
-            type={showPasswordText ? "text" : "password"} // Dynamically toggles input types!
+            type={showPasswordText ? "text" : "password"} 
             value={signInPassword}
             onChange={(e) => setSignInPassword(e.target.value)}
             style={{
@@ -722,13 +720,14 @@ setChatMessages((p) => [...p, {
               color: '#1a4fff',
               fontFamily: 'sans-serif',
               fontWeight: 'bold',
-              paddingRight: '60px' // Keeps typed words from crashing into your text toggle
+              paddingRight: '60px' 
             }}
           />
           
-          {/* Visibility Text Switch Button */}
+          {/* Visibility Text Toggle Button */}
           <span
             onClick={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               setShowPasswordText(!showPasswordText);
             }}
@@ -741,7 +740,8 @@ setChatMessages((p) => [...p, {
               fontSize: '0.85rem',
               cursor: 'pointer',
               userSelect: 'none',
-              textDecoration: 'underline'
+              textDecoration: 'underline',
+              zIndex: 10
             }}
           >
             {showPasswordText ? "Hide" : "Show"}
@@ -752,7 +752,7 @@ setChatMessages((p) => [...p, {
       </form>
     </div>
 
-    {/* SUBMIT BUTTON CONTROL HOUSING */}
+    {/* ACTIONS AND ERROR PANEL */}
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '20px', width: '600px' }}>
       
       {authError && (
@@ -763,6 +763,7 @@ setChatMessages((p) => [...p, {
 
       <div style={{ display: 'flex', gap: '20px', width: '100%' }}>
         <button 
+          type="button"
           onClick={handleSignInSubmit}
           style={{
             flex: 1,
