@@ -560,7 +560,9 @@ if (isBoosting) {
   />
 )}
 
-// Put this outside the component or above the return
+// pages/index.js
+
+// imports...
 const evoData = {
   helicoprion: {
     name: "Helicoprion",
@@ -568,13 +570,15 @@ const evoData = {
     pointsRequired: 19000,
     // ...
   },
-  // ...
+  // other entries...
 };
 
 export default function Home() {
+  // component logic...
+
   return (
     <div>
-      {/* JSX that uses evoData */}
+      {/* JSX here */}
     </div>
   );
 }
