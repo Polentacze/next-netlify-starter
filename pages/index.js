@@ -537,7 +537,7 @@ setChatMessages((p) => [...p, {
             onClick={() => setIsClanOpen(true)} 
           />
 {/* SIGN IN LINK */}
-<div 
+      <div 
         onClick={() => {
           if (typeof setAuthError === 'function') setAuthError("");
           setShowSignIn(true);
@@ -569,8 +569,6 @@ setChatMessages((p) => [...p, {
           </span>
         )}
       </div>
-  {username ? `Account: ${username}` : "Sign In"}
-</div>
    {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
 <div style={{ 
   display: 'flex', 
@@ -723,7 +721,6 @@ setChatMessages((p) => [...p, {
             }}
           />
         </div>
-
         {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
         <button type="submit" style={{ display: 'none' }} />
       </form>
