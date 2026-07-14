@@ -176,17 +176,29 @@ setChatMessages((p) => [...p, {
     // 🧟 UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever!
     const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
     if (isSecretGhoul) {
-      if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
-      return; // 🛑 Force exits the hook early so no evolutionary level-ups can ever process
+      if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // instantly clears out accidental alerts
+      return; // force exits the hook early so no evolutionary level-ups can ever process
     }
 
-    // Standard progression checkpoints for normal fish tiers
-    if (activeTierIndex === 0 && score >= 4500) { 
-      if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) 
-    } else if (activeTierIndex === 1 && score >= 9500) { 
-      if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) 
-    } 
-  }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) // 🌟 Added username monitoring to track the secret name check!
+    // standard progression checkpoints for normal fish tiers
+if (activeTierIndex === 0 && score >= 4500) {
+      if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1)
+    } else if (activeTierIndex === 1 && score >= 9500) {
+      if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
+    } else if (activeTierIndex === 2 && score >= 19000) {
+      if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3) //  sets up the flashing for helicoprion
+    }
+  }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) // added username monitoring to track the name check
+  function checkEvolutionEligibility(currentPoints, currentAnimal) {
+  if (currentAnimal === "dunkleosteus" && currentPoints >= 19000) {
+    return {
+      canEvolve: true,
+      nextAnimal: "helicoprion",
+      asset: "helicoprion-bes.png"
+    };
+  }
+  return { canEvolve: false };
+}
 
   // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
   useEffect(() => {
@@ -511,6 +523,30 @@ setChatMessages((p) => [...p, {
     onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
   />
 )}
+      helicoprion: {
+    name: "Helicoprion",
+    previousEvolution: "dunkleosteus", // Evolves directly after Dunkleosteus
+    pointsRequired: 19000,             // Unlock threshold set to 19,000 points
+    characterAsset: "helicoprion-bes.png",
+    abilityAsset: "helicoprion-ability.png",
+    
+{/* 🛡️ Dunkleosteus & Helicoprion Ability Layer (Index 2) */}
+      {isAbilityActive && activeTierIndex === 2 && (
+        <img
+          src={currentAnimal === "helicoprion" ? "/helicoprion-ability.png" : "/dunk-ability.png"}
+          alt="Active Tier Ability"
+          style={{ 
+            position: 'absolute', 
+            top: '-65px', 
+            left: '50%', 
+            transform: 'translateX(-50%)', 
+            width: '60px', 
+            height: 'auto', 
+            backgroundColor: 'transparent' 
+          }}
+          onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }}
+        />
+      )}
 
 {/* 🛡️ Dunkleosteus Ability Layer (Index 2) */}
 {isAbilityActive && activeTierIndex === 2 && (
