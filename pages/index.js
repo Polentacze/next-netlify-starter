@@ -538,19 +538,19 @@ setChatMessages((p) => [...p, {
           />
 {/* SIGN IN LINK */}
 <div 
-onClick={() => {
-          setAuthError("");
+        onClick={() => {
+          if (typeof setAuthError === 'function') setAuthError("");
           setShowSignIn(true);
         }}
         style={{
           position: 'fixed',
           top: '30px',
-          right: '40px', 
+          right: '40px', // Moves it out from behind the logo over to the top-right
           cursor: 'pointer',
           zIndex: 100000
         }}
       >
-        {username ? (
+        {signInName ? (
           /* Profile Square Mode (Once logged in) */
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: 'rgba(0,0,0,0.6)', padding: '5px 12px', borderRadius: '8px' }}>
             <img 
@@ -559,7 +559,7 @@ onClick={() => {
               style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} 
             />
             <span style={{ color: '#ffffff', fontFamily: 'sans-serif', fontWeight: 'bold', fontSize: '1.1rem' }}>
-              {username}
+              {signInName}
             </span>
           </div>
         ) : (
@@ -705,8 +705,8 @@ onClick={() => {
 {/* PASSWORD INPUT HOUSING */}
         <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
           <input 
-            type={username ? "text" : "password"} //  shows plain words when logged in, dots when logging/signing up
-            disabled={!!username}                  //  locks the box down completely once an account is active
+            type={signInName ? "text" : "password"} // 👁️ If signInName exists, show words! Otherwise show dots.
+            disabled={!!signInName}                 // 🔒 Freeze typing if signInName exists
             value={signInPassword}
             onChange={(e) => setSignInPassword(e.target.value)}
             style={{
@@ -719,7 +719,7 @@ onClick={() => {
               color: '#1a4fff',
               fontFamily: 'sans-serif',
               fontWeight: 'bold',
-              opacity: username ? 0.7 : 1        // subtly dims it when locked out to signal it's read-only
+              opacity: signInName ? 0.7 : 1
             }}
           />
         </div>
