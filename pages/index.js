@@ -521,8 +521,8 @@ setChatMessages((p) => [...p, {
 <div style={{
   position: 'fixed',
   bottom: '20px', 
-  // Removing 'right: 40px' stops it from fighting the stylesheet position
-  transform: 'translateY(-185px) translateX(12px)', // Sharp vertical stack + shifts it right to line up perfectly
+  right: '20px', // Snaps it firmly back to the right edge
+  transform: 'translateY(-250px)', // Blasts it way higher up the screen
   zIndex: 9999
 }}>
   <img 
