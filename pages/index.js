@@ -424,10 +424,9 @@ if (isBoosting) {
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
 {pendingEvolutionIndex !== null && (
-          <div 
-            className="evolution-prompt-clickable-hud-box" 
-{/* 💬 Active HUD Chat Feed */}
-      <div className="active-hud-chat-inner-message-list-scrollarea">
+<div className="evolution-prompt-clickable-hud-box">
+  {/* 💬 Active HUD Chat Feed */}
+  <div className="active-hud-chat-inner-message-list-scrollarea">
         {messages.map((msg, index) => (
           <div key={index} style={{ padding: '2px 0', fontSize: '14px', lineHeight: '1.2' }}>
             <span style={{ color: '#ffd700', fontWeight: 'bold' }}>
