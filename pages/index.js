@@ -553,9 +553,7 @@ onClick={() => {
           cursor: 'pointer',
           textDecoration: 'underline',
           textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-          zIndex: 100000,          // High index lifts it completely out of the image box
-          background: 'transparent',
-          backgroundImage: 'none'
+          zIndex: 100000
         }}
       >
         {username ? username : "Sign In"}
@@ -652,47 +650,44 @@ onClick={() => {
               border: 'none',
               outline: 'none',
               fontSize: '1.2rem',
-              color: '#1a4fff',
+              color: '#000000', // Changed color to black for perfect contrast inside white box
               fontFamily: 'sans-serif',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
+              paddingRight: '60px' 
             }}
           />
-        </div>
-
-        {/* SHOW/HIDE CHECKBOX ROW */}
-        <div style={{ 
-          position: 'absolute', 
-          left: '235px', 
-          top: '292px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '8px',
-          zIndex: 100000 
-        }}>
-          <input 
-            type="checkbox" 
-            id="show-password-checkbox"
-            style={{ cursor: 'pointer', width: '15px', height: '15px' }}
-            onChange={(e) => {
-              const passInput = document.getElementById('modal-password-field');
-              if (passInput) {
-                passInput.type = e.target.checked ? 'text' : 'password';
+          
+          {/* SECURE SHOW/HIDE BUTTON */}
+          <span
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const passwordInput = document.getElementById('modal-password-field');
+              if (passwordInput) {
+                if (passwordInput.type === 'password') {
+                  passwordInput.type = 'text';
+                  e.currentTarget.innerText = 'Hide';
+                } else {
+                  passwordInput.type = 'password';
+                  e.currentTarget.innerText = 'Show';
+                }
               }
             }}
-          />
-          <label 
-            htmlFor="show-password-checkbox" 
-            style={{ 
-              color: '#ffffff', 
-              fontFamily: 'sans-serif', 
-              fontSize: '0.85rem', 
+            style={{
+              position: 'absolute',
+              right: '15px',
+              color: '#1a4fff',
+              fontFamily: 'sans-serif',
               fontWeight: 'bold',
+              fontSize: '0.85rem',
               cursor: 'pointer',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+              userSelect: 'none',
+              textDecoration: 'underline',
+              zIndex: 20
             }}
           >
-            Show Password
-          </label>
+            Show
+          </span>
         </div>
         {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
         <button type="submit" style={{ display: 'none' }} />
