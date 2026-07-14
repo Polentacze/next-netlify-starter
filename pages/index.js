@@ -536,7 +536,7 @@ setChatMessages((p) => [...p, {
             style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
             onClick={() => setIsClanOpen(true)} 
           />
-{/* TOP RIGHT ACCOUNT WIDGET */}
+{/* TOP RIGHT CLEAN ACCOUNT LINK */}
       <div 
         onClick={() => {
           setAuthError("");
@@ -544,22 +544,22 @@ setChatMessages((p) => [...p, {
         }}
         style={{
           position: 'fixed',
-          top: '25px',
-          right: '25px', // Pins it securely to the top right corner
-          width: '180px', // Adjust to size your base-account asset
-          height: '65px',
-          backgroundImage: 'url("/base-account.png")',
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          top: '30px',
+          right: '40px', 
+          color: '#ffffff',
+          fontFamily: 'sans-serif',
+          fontWeight: 'bold',
+          fontSize: '1.2rem',
           cursor: 'pointer',
+          textDecoration: 'underline',
+          textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
           zIndex: 10000,
-          filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.3))'
+          background: 'transparent',
+          backgroundImage: 'none'
         }}
       >
+        {typeof username !== 'undefined' && username ? username : "Sign In"}
+      </div>
         {/* Username Text overlay sitting on the asset */}
         <span
           style={{
@@ -656,78 +656,59 @@ setChatMessages((p) => [...p, {
     </div>
   </div>
 )}
-{/* SIGN IN SCREEN POPUP MODAL */}
-{showSignIn && (
-  <div 
-    style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: 'rgba(0, 0, 0, 0.75)', 
-      display: 'flex',
-      flexDirection: 'column', // Stack card and buttons vertically
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 999999, 
-    }}
-  >
-    {/* The Core Image Card Container */}
-    <div 
-      style={{ 
-        position: 'relative', 
-        width: '600px',  // Adjusted to match standard landscape aspect ratio
-        height: '337px', 
-        backgroundImage: 'url("/sign-in-screen.png")',
-        backgroundSize: '100% 100%',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
-      <form onSubmit={handleSignInSubmit}>
-        
-        {/* NAME INPUT: Positioned precisely over the top white pill slot */}
-        <input 
-          type="text" 
-          value={signInName}
-          onChange={(e) => setSignInName(e.target.value)}
-          style={{
-            position: 'absolute',
-            left: '185px',     // Pushes the text cursor right past the "Name:" text graphic
-            top: '178px',      // Aligns vertically inside the first white pill slot
-            width: '360px',    // Stretches to fill the rest of the white pill box
-            height: '42px',
-            background: 'transparent',
-            border: 'none',
-            outline: 'none',
-            fontSize: '1.2rem',
-            color: '#1a4fff',  // Matches your dark blue UI text color theme
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold'
-          }}
-        />
-
-        {/* PASSWORD INPUT: Positioned precisely over the bottom white pill slot */}
-        <input 
-          type="password" 
-          value={signInPassword}
-          onChange={(e) => setSignInPassword(e.target.value)}
-          style={{
-            position: 'absolute',
-            left: '235px',     // Pushes text cursor right past the longer "Password:" text graphic
-            top: '243px',      // Aligns vertically inside the second white pill slot
-            width: '310px',    // Stretches to fill the rest of the white pill box
-            height: '42px',
-            background: 'transparent',
-            border: 'none',
-            outline: 'none',
-            fontSize: '1.2rem',
-            color: '#1a4fff',
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold'
-          }}
-        />
+{/* PASSWORD INPUT HOUSING */}
+        <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
+          <input 
+            id="modal-password-field" 
+            type="password" 
+            value={signInPassword}
+            onChange={(e) => setSignInPassword(e.target.value)}
+            style={{
+              width: '100%',
+              height: '100%',
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              fontSize: '1.2rem',
+              color: '#1a4fff',
+              fontFamily: 'sans-serif',
+              fontWeight: 'bold',
+              paddingRight: '60px' 
+            }}
+          />
+          
+          {/* HTML Toggle Button */}
+          <span
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const passwordInput = document.getElementById('modal-password-field');
+              if (passwordInput) {
+                if (passwordInput.type === 'password') {
+                  passwordInput.type = 'text';
+                  e.currentTarget.innerText = 'Hide';
+                } else {
+                  passwordInput.type = 'password';
+                  e.currentTarget.innerText = 'Show';
+                }
+              }
+            }}
+            style={{
+              position: 'absolute',
+              right: '15px',
+              color: '#1a4fff',
+              fontFamily: 'sans-serif',
+              fontWeight: 'bold',
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+              userSelect: 'none',
+              textDecoration: 'underline',
+              zIndex: 10
+            }}
+          >
+            Show
+          </span>
+        </div>
 
         {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
         <button type="submit" style={{ display: 'none' }} />
