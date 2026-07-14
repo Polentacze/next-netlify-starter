@@ -522,7 +522,7 @@ setChatMessages((p) => [...p, {
   position: 'fixed',
   bottom: '20px', 
   right: '20px', // Snaps it firmly back to the right edge
-  transform: 'translateY(-250px)', // Blasts it way higher up the screen
+  transform: 'translateY(-350px)', // Blasts it way higher up the screen
   zIndex: 9999
 }}>
   <img 
