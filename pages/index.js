@@ -521,8 +521,8 @@ setChatMessages((p) => [...p, {
 <div style={{
   position: 'fixed',
   bottom: '20px', 
-  right: '40px',
-  transform: 'translateY(-170px)', // Forcefully lifts it directly above the wiki button box
+  // Removing 'right: 40px' stops it from fighting the stylesheet position
+  transform: 'translateY(-185px) translateX(12px)', // Sharp vertical stack + shifts it right to line up perfectly
   zIndex: 9999
 }}>
   <img 
