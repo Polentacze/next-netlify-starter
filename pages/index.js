@@ -438,11 +438,12 @@ if (isBoosting) {
             </span>
           </div>
         ))}
-      </div>
-              setActiveTierIndex(pendingEvolutionIndex); 
-              setPendingEvolutionIndex(null); 
-            }}
-          >
+<div onClick={() => {
+  setActiveTierIndex(pendingEvolutionIndex);
+  setPendingEvolutionIndex(null);
+}}>
+  ...
+</div>
             <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
               <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="avatar" />
               <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
@@ -554,12 +555,19 @@ if (isBoosting) {
     onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
   />
 )}
-      helicoprion: {
+// JS data should be declared outside of the JSX return:
+const evoData = {
+  helicoprion: {
     name: "Helicoprion",
-    previousEvolution: "dunkleosteus", // Evolves directly after Dunkleosteus
-    pointsRequired: 19000,             // Unlock threshold set to 19,000 points
+    previousEvolution: "dunkleosteus",
+    pointsRequired: 19000,
     characterAsset: "helicoprion-bes.png",
-    abilityAsset: "helicoprion-ability.png",
+  },
+  // ...
+};
+
+// then use inside JSX with braces:
+<img src={evoData.helicoprion.characterAsset} />
     
 {/* 🛡️ Dunkleosteus & Helicoprion Ability Layer (Index 2) */}
       {isAbilityActive && activeTierIndex === 2 && (
