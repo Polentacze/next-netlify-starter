@@ -707,7 +707,8 @@ setChatMessages((p) => [...p, {
         {/* PASSWORD INPUT HOUSING */}
         <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
           <input 
-            type={showPasswordText ? "text" : "password"} 
+            id="password-input-field"
+            type="password" 
             value={signInPassword}
             onChange={(e) => setSignInPassword(e.target.value)}
             style={{
@@ -724,12 +725,21 @@ setChatMessages((p) => [...p, {
             }}
           />
           
-          {/* Visibility Text Toggle Button */}
+          {/* Visibility Text Toggle (Uses direct DOM manipulation to avoid hook state crashes) */}
           <span
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              setShowPasswordText(!showPasswordText);
+              const input = document.getElementById('password-input-field');
+              if (input) {
+                if (input.type === 'password') {
+                  input.type = 'text';
+                  e.currentTarget.innerText = 'Hide';
+                } else {
+                  input.type = 'password';
+                  e.currentTarget.innerText = 'Show';
+                }
+              }
             }}
             style={{
               position: 'absolute',
@@ -744,7 +754,7 @@ setChatMessages((p) => [...p, {
               zIndex: 10
             }}
           >
-            {showPasswordText ? "Hide" : "Show"}
+            Show
           </span>
         </div>
 
