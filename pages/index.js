@@ -538,24 +538,37 @@ setChatMessages((p) => [...p, {
           />
 {/* SIGN IN LINK */}
 <div 
-  onClick={() => {
-    setAuthError("");
-    setShowSignIn(true);
-  }}
-  style={{
-    position: 'fixed',
-    top: '30px',
-    left: '120px',
-    color: '#ffffff',
-    fontFamily: 'sans-serif',
-    fontWeight: 'bold',
-    fontSize: '1.2rem',
-    cursor: 'pointer',
-    textDecoration: 'underline',
-    textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-    zIndex: 10000
-  }}
->
+onClick={() => {
+          setAuthError("");
+          setShowSignIn(true);
+        }}
+        style={{
+          position: 'fixed',
+          top: '30px',
+          right: '40px', 
+          cursor: 'pointer',
+          zIndex: 100000
+        }}
+      >
+        {username ? (
+          /* Profile Square Mode (Once logged in) */
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: 'rgba(0,0,0,0.6)', padding: '5px 12px', borderRadius: '8px' }}>
+            <img 
+              src="/base-account.png" 
+              alt="Account Profile" 
+              style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} 
+            />
+            <span style={{ color: '#ffffff', fontFamily: 'sans-serif', fontWeight: 'bold', fontSize: '1.1rem' }}>
+              {username}
+            </span>
+          </div>
+        ) : (
+          /* Clean Link Mode (Before logging in) */
+          <span style={{ color: '#ffffff', fontFamily: 'sans-serif', fontWeight: 'bold', fontSize: '1.2rem', textDecoration: 'underline', textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+            Sign In
+          </span>
+        )}
+      </div>
   {username ? `Account: ${username}` : "Sign In"}
 </div>
    {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
@@ -665,49 +678,51 @@ setChatMessages((p) => [...p, {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <form onSubmit={handleSignInSubmit}>
-        
-        {/* NAME INPUT: Positioned precisely over the top white pill slot */}
+<form onSubmit={handleSignInSubmit}>
+
+        {/* NAME INPUT: positioned precisely over the top white slot */}
         <input 
-          type="text" 
+          type="text"
+          disabled={!!username} // locks field once account exists
           value={signInName}
           onChange={(e) => setSignInName(e.target.value)}
           style={{
             position: 'absolute',
-            left: '185px',     // Pushes the text cursor right past the "Name:" text graphic
-            top: '178px',      // Aligns vertically inside the first white pill slot
-            width: '360px',    // Stretches to fill the rest of the white pill box
+            left: '185px',     // pushes the text cursor right past the "Name:" text
+            top: '178px',      // aligns vertically inside the first white slot
+            width: '360px',    // stretches to fill the rest of the white box
             height: '42px',
             background: 'transparent',
             border: 'none',
             outline: 'none',
             fontSize: '1.2rem',
-            color: '#1a4fff',  // Matches your dark blue UI text color theme
+            color: '#1a4fff',  // matches dark blue ui text color theme
             fontFamily: 'sans-serif',
             fontWeight: 'bold'
           }}
         />
 
-        {/* PASSWORD INPUT: Positioned precisely over the bottom white pill slot */}
-        <input 
-          type="password" 
-          value={signInPassword}
-          onChange={(e) => setSignInPassword(e.target.value)}
-          style={{
-            position: 'absolute',
-            left: '235px',     // Pushes text cursor right past the longer "Password:" text graphic
-            top: '243px',      // Aligns vertically inside the second white pill slot
-            width: '310px',    // Stretches to fill the rest of the white pill box
-            height: '42px',
-            background: 'transparent',
-            border: 'none',
-            outline: 'none',
-            fontSize: '1.2rem',
-            color: '#1a4fff',
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold'
-          }}
-        />
+{/* PASSWORD INPUT HOUSING */}
+        <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
+          <input 
+            type={username ? "text" : "password"} //  shows plain words when logged in, dots when logging/signing up
+            disabled={!!username}                  //  locks the box down completely once an account is active
+            value={signInPassword}
+            onChange={(e) => setSignInPassword(e.target.value)}
+            style={{
+              width: '100%',
+              height: '100%',
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              fontSize: '1.2rem',
+              color: '#1a4fff',
+              fontFamily: 'sans-serif',
+              fontWeight: 'bold',
+              opacity: username ? 0.7 : 1        // subtly dims it when locked out to signal it's read-only
+            }}
+          />
+        </div>
 
         {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
         <button type="submit" style={{ display: 'none' }} />
