@@ -2,7 +2,51 @@ import Head from 'next/head'
 import { useState, useEffect, useRef } from 'react'
 
 export default function Home() {
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [signInName, setSignInName] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
+  const [authError, setAuthError] = useState("");
   const [showVariations, setShowVariations] = useState(false);
+  
+  const handleSignInSubmit = (e) => {
+    e.preventDefault();
+    setAuthError("");
+
+    // Enforce your exact character length rules
+    if (signInName.length > 19) {
+      setAuthError("Name cannot exceed 19 characters.");
+      return;
+    }
+    if (signInPassword.length > 24) {
+      setAuthError("Password cannot exceed 24 characters.");
+      return;
+    }
+    if (signInName.trim() === "") {
+      setAuthError("Name cannot be empty.");
+      return;
+    }
+
+    // Save credentials to browser memory
+    localStorage.setItem("prehistooio_name", signInName.trim());
+    localStorage.setItem("prehistooio_password", signInPassword);
+    
+    // Log them into the game automatically
+    setUsername(signInName.trim());
+    setShowSignIn(false);
+  };
+
+  useEffect(() => {
+    const savedName = localStorage.getItem("prehistooio_name");
+    const savedPassword = localStorage.getItem("prehistooio_password");
+    
+    if (savedName) {
+      setUsername(savedName);
+      setSignInName(savedName);
+    }
+    if (savedPassword) {
+      setSignInPassword(savedPassword);
+    }
+  }, []);
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
   const [username, setUsername] = useState("")
@@ -492,6 +536,28 @@ setChatMessages((p) => [...p, {
             style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
             onClick={() => setIsClanOpen(true)} 
           />
+{/* SIGN IN LINK */}
+<div 
+  onClick={() => {
+    setAuthError("");
+    setShowSignIn(true);
+  }}
+  style={{
+    position: 'fixed',
+    top: '30px',
+    left: '120px',
+    color: '#ffffff',
+    fontFamily: 'sans-serif',
+    fontWeight: 'bold',
+    fontSize: '1.2rem',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+    zIndex: 10000
+  }}
+>
+  {username ? `Account: ${username}` : "Sign In"}
+</div>
    {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
 <div style={{ 
   display: 'flex', 
@@ -567,6 +633,114 @@ setChatMessages((p) => [...p, {
       <div style={{ color: '#fff', textAlign: 'center', marginTop: '15px', fontFamily: 'sans-serif', fontSize: '1rem', fontWeight: 'bold' }}>
         Click anywhere to close
       </div>
+    </div>
+  </div>
+)}
+{showSignIn && (
+  <div 
+    style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: 'rgba(0, 0, 0, 0.75)', 
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 999999, 
+    }}
+  >
+    <div 
+      style={{ 
+        position: 'relative', 
+        width: '560px', 
+        height: '360px',
+        backgroundImage: 'url("/sign-in-screen.png")',
+        backgroundSize: '100% 100%',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
+      }}
+    >
+      <form onSubmit={handleSignInSubmit} style={{ width: '80%', display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '40px' }}>
+        
+        <input 
+          type="text" 
+          placeholder="Enter Name..."
+          value={signInName}
+          onChange={(e) => setSignInName(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '10px 14px',
+            borderRadius: '12px',
+            border: '2px solid #333',
+            fontSize: '1rem',
+            outline: 'none',
+            color: '#000'
+          }}
+        />
+
+        <input 
+          type="password" 
+          placeholder="Enter Password..."
+          value={signInPassword}
+          onChange={(e) => setSignInPassword(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '10px 14px',
+            borderRadius: '12px',
+            border: '2px solid #333',
+            fontSize: '1rem',
+            outline: 'none',
+            color: '#000'
+          }}
+        />
+
+        {authError && (
+          <div style={{ color: '#ff4d4d', textAlign: 'center', fontWeight: 'bold', fontFamily: 'sans-serif', fontSize: '0.9rem', backgroundColor: 'rgba(0,0,0,0.6)', padding: '4px', borderRadius: '6px' }}>
+            {authError}
+          </div>
+        )}
+
+        <div style={{ display: 'flex', gap: '15px', marginTop: '10px' }}>
+          <button 
+            type="submit"
+            style={{
+              flex: 1,
+              padding: '10px',
+              backgroundColor: '#28a745',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            Save & Close
+          </button>
+          
+          <button 
+            type="button"
+            onClick={() => { setShowSignIn(false); setAuthError(""); }}
+            style={{
+              padding: '10px 15px',
+              backgroundColor: '#dc3545',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 )}
