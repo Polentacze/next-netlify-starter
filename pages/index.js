@@ -537,47 +537,45 @@ setChatMessages((p) => [...p, {
             onClick={() => setIsClanOpen(true)} 
           />
 {/* TOP RIGHT ACCOUNT WIDGET */}
-      <div 
-        onClick={() => {
-          setAuthError("");
-          setShowSignIn(true);
-        }}
-        style={{
-          position: 'fixed',
-          top: '25px',
-          right: '25px', // Pins it securely to the top right corner
-          width: '180px', // Adjust to size your base-account asset
-          height: '65px',
-          backgroundImage: 'url("/base-account.png")',
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          zIndex: 10000,
-          filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.3))'
-        }}
-      >
-        {/* Username Text overlay sitting on the asset */}
-        <span
-          style={{
-            color: '#ffffff',
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold',
-            fontSize: '1rem',
-            textShadow: '1px 2px 3px rgba(0,0,0,0.6)',
-            paddingLeft: '10px', // Shifts text if your image has an avatar icon on the left side
-            maxWidth: '140px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }}
-        >
-          {username ? username : "Sign In"}
-        </span>
-      </div>
+<div 
+  onClick={() => {
+    setAuthError("");
+    setShowSignIn(true);
+  }}
+  style={{
+    position: 'fixed',
+    top: '25px',
+    right: '25px',
+    width: '180px',
+    height: '65px',
+    backgroundImage: 'url("/base-account.png")',
+    backgroundSize: '100% 100%',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    zIndex: 10000,
+    filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.3))'
+  }}
+>
+  <span
+    style={{
+      color: '#ffffff',
+      fontFamily: 'sans-serif',
+      fontWeight: 'bold',
+      fontSize: '1rem',
+      textShadow: '1px 2px 3px rgba(0,0,0,0.6)',
+      maxWidth: '140px',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap'
+    }}
+  >
+    {username ? username : "Sign In"}
+  </span>
+</div>
    {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
 <div style={{ 
   display: 'flex', 
@@ -667,17 +665,17 @@ setChatMessages((p) => [...p, {
       height: '100vh',
       backgroundColor: 'rgba(0, 0, 0, 0.75)', 
       display: 'flex',
-      flexDirection: 'column', // Stack card and buttons vertically
+      flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
       zIndex: 999999, 
     }}
   >
-    {/* The Core Image Card Container */}
+    {/* Core UI Card Asset */}
     <div 
       style={{ 
         position: 'relative', 
-        width: '600px',  // Adjusted to match standard landscape aspect ratio
+        width: '600px', 
         height: '337px', 
         backgroundImage: 'url("/sign-in-screen.png")',
         backgroundSize: '100% 100%',
@@ -687,37 +685,16 @@ setChatMessages((p) => [...p, {
     >
       <form onSubmit={handleSignInSubmit}>
         
-        {/* NAME INPUT: Positioned precisely over the top white pill slot */}
+        {/* NAME INPUT */}
         <input 
           type="text" 
           value={signInName}
           onChange={(e) => setSignInName(e.target.value)}
           style={{
             position: 'absolute',
-            left: '185px',     // Pushes the text cursor right past the "Name:" text graphic
-            top: '178px',      // Aligns vertically inside the first white pill slot
-            width: '360px',    // Stretches to fill the rest of the white pill box
-            height: '42px',
-            background: 'transparent',
-            border: 'none',
-            outline: 'none',
-            fontSize: '1.2rem',
-            color: '#1a4fff',  // Matches your dark blue UI text color theme
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold'
-          }}
-        />
-
-        {/* PASSWORD INPUT: Positioned precisely over the bottom white pill slot */}
-        <input 
-          type="password" 
-          value={signInPassword}
-          onChange={(e) => setSignInPassword(e.target.value)}
-          style={{
-            position: 'absolute',
-            left: '235px',     // Pushes text cursor right past the longer "Password:" text graphic
-            top: '243px',      // Aligns vertically inside the second white pill slot
-            width: '310px',    // Stretches to fill the rest of the white pill box
+            left: '185px',
+            top: '178px',
+            width: '360px',
             height: '42px',
             background: 'transparent',
             border: 'none',
@@ -729,12 +706,53 @@ setChatMessages((p) => [...p, {
           }}
         />
 
-        {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
+        {/* PASSWORD INPUT CONTAINER */}
+        <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
+          <input 
+            type={showPasswordText ? "text" : "password"} // Dynamically toggles input types!
+            value={signInPassword}
+            onChange={(e) => setSignInPassword(e.target.value)}
+            style={{
+              width: '100%',
+              height: '100%',
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              fontSize: '1.2rem',
+              color: '#1a4fff',
+              fontFamily: 'sans-serif',
+              fontWeight: 'bold',
+              paddingRight: '60px' // Keeps typed words from crashing into your text toggle
+            }}
+          />
+          
+          {/* Visibility Text Switch Button */}
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowPasswordText(!showPasswordText);
+            }}
+            style={{
+              position: 'absolute',
+              right: '15px',
+              color: '#1a4fff',
+              fontFamily: 'sans-serif',
+              fontWeight: 'bold',
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+              userSelect: 'none',
+              textDecoration: 'underline'
+            }}
+          >
+            {showPasswordText ? "Hide" : "Show"}
+          </span>
+        </div>
+
         <button type="submit" style={{ display: 'none' }} />
       </form>
     </div>
 
-    {/* ERROR AND CONTROLS: Placed safely underneath the graphic card */}
+    {/* SUBMIT BUTTON CONTROL HOUSING */}
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '20px', width: '600px' }}>
       
       {authError && (
