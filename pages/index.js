@@ -78,7 +78,8 @@ export default function Home() {
   const evoTiers = [ 
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
     { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
-    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // 🧬 Balanced Tier 3 landmark addition
+    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // Tier 3 landmark addition
+    { name: "Helicoprion", minScore: 19000, scale: 170, file: "/helicoprion-bes.png" } // Index
   ] 
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
@@ -91,8 +92,8 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
 const detectTextColor = (targetString) => {
-  const cleanStr = (targetString || "").toUpperCase()
-
+  // 🌟 Converts [Red] or [RED] into (RED) automatically before reading it
+  const cleanStr = (targetString || "").replaceAll("[", "(").replaceAll("]", ")").toUpperCase()
   if (cleanStr.includes("(RED)")) return "#ff4d4d"
   if (cleanStr.includes("(BLUE)")) return "#3b82f6"
   if (cleanStr.includes("(GREEN)")) return "#00FF1A"
@@ -106,7 +107,9 @@ const detectTextColor = (targetString) => {
 // 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
-  let result = str
+  // 🌟 Normalizes brackets to match your targets array loop
+  let result = str.replaceAll("[", "(").replaceAll("]", ")")
+  let result = str.replaceAll("[", "(").replaceAll("]", ")")
   const targets = ["(RED)", "(BLUE)", "(GREEN)", "(CYAN)", "(PURPLE)", "(GREY)", "(GRAY)", "(ORANGE)"]
   
   for (let i = 0; i < targets.length; i++) {
@@ -188,6 +191,7 @@ if (activeTierIndex === 0 && score >= 4500) {
     } else if (activeTierIndex === 2 && score >= 19000) {
       if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3) //  sets up the flashing for helicoprion
     }
+
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) // added username monitoring to track the name check
   function checkEvolutionEligibility(currentPoints, currentAnimal) {
   if (currentAnimal === "dunkleosteus" && currentPoints >= 19000) {
@@ -252,7 +256,7 @@ if (activeTierIndex === 0 && score >= 4500) {
         }
 
         // 🦈 TIER 2 (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
-        if (activeTierIndex === 2) {
+        if (activeTierIndex === 2 || activeTierIndex === 3) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
           setBoostBars((prev) => Math.max(0, prev - 1))
@@ -274,13 +278,18 @@ if (activeTierIndex === 0 && score >= 4500) {
         
         let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
 
-        if (isBoosting) {
-          if (activeTierIndex === 2) {
-            spd = 18
-          } else {
-            spd = isAbilityActive ? 24 : 18
-          }
-        }
+if (isBoosting) {
+    if (activeTierIndex === 2 || activeTierIndex === 3) {
+      //  Dunkleosteus & Helicoprion get a locked cap of 18 while boosting
+      spd = 18;
+    } else if (activeTierIndex === 1) {
+      //  Stethacanthus increases speed up to 24 if its ability is active, otherwise 18
+      spd = isAbilityActive ? 24 : 18;
+    } else {
+      // Default fallback for Tier 0 or other future basic tiers
+      spd = 18; 
+    }
+  }
 
         const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
         if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
@@ -410,9 +419,28 @@ if (activeTierIndex === 0 && score >= 4500) {
 
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
-          {pendingEvolutionIndex !== null && (
-            <div className="evolution-prompt-clickable-hud-box" onClick={(e) => { e.stopPropagation(); setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Transformed successfully into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]) }}>
-              <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
+{pendingEvolutionIndex !== null && (
+          <div 
+            className="evolution-prompt-clickable-hud-box" 
+{/* 💬 Active HUD Chat Feed */}
+      <div className="active-hud-chat-inner-message-list-scrollarea">
+        {messages.map((msg, index) => (
+          <div key={index} style={{ padding: '2px 0', fontSize: '14px', lineHeight: '1.2' }}>
+            <span style={{ color: '#ffd700', fontWeight: 'bold' }}>
+              {msg.username}:{" "}
+            </span>
+            {/*  This runs your text through the color detector and strips out the color codes! */}
+            <span style={{ color: detectTextColor(msg.text), fontWeight: 'bold' }}>
+              {cleanTags(msg.text)}
+            </span>
+          </div>
+        ))}
+      </div>
+              setActiveTierIndex(pendingEvolutionIndex); 
+              setPendingEvolutionIndex(null); 
+            }}
+          >
+            <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
               <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="avatar" />
               <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
             </div>
@@ -847,12 +875,17 @@ if (activeTierIndex === 0 && score >= 4500) {
                   <button type="submit" disabled={activeClan !== ""} style={{ background: 'none', border: 'none', cursor: activeClan ? 'not-allowed' : 'pointer', width: '130px', height: '45px' }}>
                     <div style={{ display: 'none' }}>Form</div>
                   </button>
-                </form>
-              </div>
-            </div> 
-          </div>
+if (usernameInputTemp.trim()) {
+    // 🌟 If the player is in a clan, prefix their name with it!
+    const finalName = activeClan 
+      ? `[${activeClan}] ${usernameInputTemp.trim()}` 
+      : usernameInputTemp.trim();
 
-          <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
+    setUsername(finalName);
+    setUsernameInputTemp(finalName); // Sets it for your state
+    
+    setIsPlaying(true);
+  }
             <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio</h1>
             <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p>
             <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} />
