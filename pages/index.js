@@ -536,48 +536,28 @@ setChatMessages((p) => [...p, {
             style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
             onClick={() => setIsClanOpen(true)} 
           />
-{/* TOP RIGHT ACCOUNT WIDGET */}
-      <div 
-        onClick={() => {
-          setAuthError("");
-          setShowSignIn(true);
-        }}
-        style={{
-          position: 'fixed',
-          top: '25px',
-          right: '25px', // Pins it securely to the top right corner
-          width: '180px', // Adjust to size your base-account asset
-          height: '65px',
-          backgroundImage: 'url("/base-account.png")',
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          zIndex: 10000,
-          filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.3))'
-        }}
-      >
-        {/* Username Text overlay sitting on the asset */}
-        <span
-          style={{
-            color: '#ffffff',
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold',
-            fontSize: '1rem',
-            textShadow: '1px 2px 3px rgba(0,0,0,0.6)',
-            paddingLeft: '10px', // Shifts text if your image has an avatar icon on the left side
-            maxWidth: '140px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }}
-        >
-          {username ? username : "Sign In"}
-        </span>
-      </div>
+{/* SIGN IN LINK */}
+<div 
+  onClick={() => {
+    setAuthError("");
+    setShowSignIn(true);
+  }}
+  style={{
+    position: 'fixed',
+    top: '30px',
+    left: '120px',
+    color: '#ffffff',
+    fontFamily: 'sans-serif',
+    fontWeight: 'bold',
+    fontSize: '1.2rem',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+    zIndex: 10000
+  }}
+>
+  {username ? `Account: ${username}` : "Sign In"}
+</div>
    {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
 <div style={{ 
   display: 'flex', 
@@ -656,7 +636,6 @@ setChatMessages((p) => [...p, {
     </div>
   </div>
 )}
-{/* SIGN IN SCREEN POPUP MODAL */}
 {showSignIn && (
   <div 
     style={{
@@ -667,119 +646,101 @@ setChatMessages((p) => [...p, {
       height: '100vh',
       backgroundColor: 'rgba(0, 0, 0, 0.75)', 
       display: 'flex',
-      flexDirection: 'column', // Stack card and buttons vertically
       justifyContent: 'center',
       alignItems: 'center',
       zIndex: 999999, 
     }}
   >
-    {/* The Core Image Card Container */}
     <div 
       style={{ 
         position: 'relative', 
-        width: '600px',  // Adjusted to match standard landscape aspect ratio
-        height: '337px', 
+        width: '560px', 
+        height: '360px',
         backgroundImage: 'url("/sign-in-screen.png")',
         backgroundSize: '100% 100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
       }}
     >
-      <form onSubmit={handleSignInSubmit}>
+      <form onSubmit={handleSignInSubmit} style={{ width: '80%', display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '40px' }}>
         
-        {/* NAME INPUT: Positioned precisely over the top white pill slot */}
         <input 
           type="text" 
+          placeholder="Enter Name..."
           value={signInName}
           onChange={(e) => setSignInName(e.target.value)}
           style={{
-            position: 'absolute',
-            left: '185px',     // Pushes the text cursor right past the "Name:" text graphic
-            top: '178px',      // Aligns vertically inside the first white pill slot
-            width: '360px',    // Stretches to fill the rest of the white pill box
-            height: '42px',
-            background: 'transparent',
-            border: 'none',
+            width: '100%',
+            padding: '10px 14px',
+            borderRadius: '12px',
+            border: '2px solid #333',
+            fontSize: '1rem',
             outline: 'none',
-            fontSize: '1.2rem',
-            color: '#1a4fff',  // Matches your dark blue UI text color theme
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold'
+            color: '#000'
           }}
         />
 
-        {/* PASSWORD INPUT: Positioned precisely over the bottom white pill slot */}
         <input 
           type="password" 
+          placeholder="Enter Password..."
           value={signInPassword}
           onChange={(e) => setSignInPassword(e.target.value)}
           style={{
-            position: 'absolute',
-            left: '235px',     // Pushes text cursor right past the longer "Password:" text graphic
-            top: '243px',      // Aligns vertically inside the second white pill slot
-            width: '310px',    // Stretches to fill the rest of the white pill box
-            height: '42px',
-            background: 'transparent',
-            border: 'none',
+            width: '100%',
+            padding: '10px 14px',
+            borderRadius: '12px',
+            border: '2px solid #333',
+            fontSize: '1rem',
             outline: 'none',
-            fontSize: '1.2rem',
-            color: '#1a4fff',
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold'
+            color: '#000'
           }}
         />
 
-        {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
-        <button type="submit" style={{ display: 'none' }} />
-      </form>
-    </div>
+        {authError && (
+          <div style={{ color: '#ff4d4d', textAlign: 'center', fontWeight: 'bold', fontFamily: 'sans-serif', fontSize: '0.9rem', backgroundColor: 'rgba(0,0,0,0.6)', padding: '4px', borderRadius: '6px' }}>
+            {authError}
+          </div>
+        )}
 
-    {/* ERROR AND CONTROLS: Placed safely underneath the graphic card */}
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '20px', width: '600px' }}>
-      
-      {authError && (
-        <div style={{ color: '#ff4d4d', textAlign: 'center', fontWeight: 'bold', fontFamily: 'sans-serif', fontSize: '1rem', backgroundColor: 'rgba(0,0,0,0.8)', padding: '6px 16px', borderRadius: '8px' }}>
-          {authError}
+        <div style={{ display: 'flex', gap: '15px', marginTop: '10px' }}>
+          <button 
+            type="submit"
+            style={{
+              flex: 1,
+              padding: '10px',
+              backgroundColor: '#28a745',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            Save & Close
+          </button>
+          
+          <button 
+            type="button"
+            onClick={() => { setShowSignIn(false); setAuthError(""); }}
+            style={{
+              padding: '10px 15px',
+              backgroundColor: '#dc3545',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            Cancel
+          </button>
         </div>
-      )}
-
-      <div style={{ display: 'flex', gap: '20px', width: '100%' }}>
-        <button 
-          onClick={handleSignInSubmit}
-          style={{
-            flex: 1,
-            padding: '12px',
-            backgroundColor: '#28a745',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '12px',
-            fontWeight: 'bold',
-            fontSize: '1.1rem',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.2)'
-          }}
-        >
-          Save & Close
-        </button>
-        
-        <button 
-          type="button"
-          onClick={() => { setShowSignIn(false); setAuthError(""); }}
-          style={{
-            padding: '12px 25px',
-            backgroundColor: '#dc3545',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '12px',
-            fontWeight: 'bold',
-            fontSize: '1.1rem',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.2)'
-          }}
-        >
-          Cancel
-        </button>
-      </div>
+      </form>
     </div>
   </div>
 )}
