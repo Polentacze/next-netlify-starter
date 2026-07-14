@@ -425,7 +425,15 @@ if (isBoosting) {
 
 {pendingEvolutionIndex !== null && (
   <div className="evolution-preview">
-    {/* ... inner JSX ... */}
+    <img
+      src={evoTiers[pendingEvolutionIndex].file}
+      className="evolution-preview-avatar-inside-hud"
+      onError={(e) => { /* your handler */ }}
+      alt=""
+    />
+    <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontSize: '12px' }}>
+      {/* content */}
+    </span>
   </div>
 )}
 
