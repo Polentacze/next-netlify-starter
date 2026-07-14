@@ -520,8 +520,9 @@ setChatMessages((p) => [...p, {
 {/* ANCIENT MARKET BUTTON OVERLAY */}
 <div style={{
   position: 'fixed',
-  bottom: '240px', // Positions it perfectly right above the original Wiki button box
+  bottom: '20px', 
   right: '40px',
+  transform: 'translateY(-170px)', // Forcefully lifts it directly above the wiki button box
   zIndex: 9999
 }}>
   <img 
@@ -558,15 +559,10 @@ setChatMessages((p) => [...p, {
     }}
   >
     <div style={{ position: 'relative', width: '80%', maxWidth: '800px' }} onClick={(e) => e.stopPropagation()}>
-      {/* Updated src to variation-selection.png */}
       <img 
-        src="/variation-selection.png" 
+        src="/variations-selection.png" 
         alt="Variations" 
         style={{ width: '100%', height: 'auto', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.7)' }} 
-        onError={(e) => {
-          // Fallback just in case it is named variations-section.png
-          e.target.src = '/variations-section.png';
-        }}
       />
       <div style={{ color: '#fff', textAlign: 'center', marginTop: '15px', fontFamily: 'sans-serif', fontSize: '1rem', fontWeight: 'bold' }}>
         Click anywhere to close
