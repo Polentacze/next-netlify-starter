@@ -536,28 +536,30 @@ setChatMessages((p) => [...p, {
             style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
             onClick={() => setIsClanOpen(true)} 
           />
-{/* TOP RIGHT ACCOUNT LINK */}
-      <div 
-        onClick={() => {
-          setAuthError("");
-          setShowSignIn(true);
-        }}
-        style={{
-          position: 'fixed',
-          top: '35px',
-          right: '45px', 
-          color: '#ffffff',
-          fontFamily: 'sans-serif',
-          fontWeight: 'bold',
-          fontSize: '1.2rem',
-          cursor: 'pointer',
-          textDecoration: 'underline',
-          textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-          zIndex: 10000
-        }}
-      >
-        {typeof username !== 'undefined' && username ? username : "Sign In"}
-      </div>
+{/* TOP RIGHT ACCOUNT WIDGET */}
+<div 
+  onClick={() => {
+    setAuthError("");
+    setShowSignIn(true);
+  }}
+  style={{
+    position: 'fixed',
+    top: '25px',
+    right: '25px',
+    width: '180px',
+    height: '65px',
+    backgroundImage: 'url("/base-account.png")',
+    backgroundSize: '100% 100%',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    zIndex: 10000,
+    filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.3))'
+  }}
+>
   <span
     style={{
       color: '#ffffff',
@@ -669,7 +671,7 @@ setChatMessages((p) => [...p, {
       zIndex: 999999, 
     }}
   >
-    {/* Core UI Card Asset Container */}
+    {/* Core UI Card Asset */}
     <div 
       style={{ 
         position: 'relative', 
@@ -704,11 +706,10 @@ setChatMessages((p) => [...p, {
           }}
         />
 
-        {/* PASSWORD INPUT HOUSING */}
+        {/* PASSWORD INPUT CONTAINER */}
         <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
           <input 
-            id="password-input-field"
-            type="password" 
+            type={showPasswordText ? "text" : "password"} // Dynamically toggles input types!
             value={signInPassword}
             onChange={(e) => setSignInPassword(e.target.value)}
             style={{
@@ -721,25 +722,15 @@ setChatMessages((p) => [...p, {
               color: '#1a4fff',
               fontFamily: 'sans-serif',
               fontWeight: 'bold',
-              paddingRight: '60px' 
+              paddingRight: '60px' // Keeps typed words from crashing into your text toggle
             }}
           />
           
-          {/* Visibility Text Toggle (Uses direct DOM manipulation to avoid hook state crashes) */}
+          {/* Visibility Text Switch Button */}
           <span
             onClick={(e) => {
-              e.preventDefault();
               e.stopPropagation();
-              const input = document.getElementById('password-input-field');
-              if (input) {
-                if (input.type === 'password') {
-                  input.type = 'text';
-                  e.currentTarget.innerText = 'Hide';
-                } else {
-                  input.type = 'password';
-                  e.currentTarget.innerText = 'Show';
-                }
-              }
+              setShowPasswordText(!showPasswordText);
             }}
             style={{
               position: 'absolute',
@@ -750,11 +741,10 @@ setChatMessages((p) => [...p, {
               fontSize: '0.85rem',
               cursor: 'pointer',
               userSelect: 'none',
-              textDecoration: 'underline',
-              zIndex: 10
+              textDecoration: 'underline'
             }}
           >
-            Show
+            {showPasswordText ? "Hide" : "Show"}
           </span>
         </div>
 
@@ -762,7 +752,7 @@ setChatMessages((p) => [...p, {
       </form>
     </div>
 
-    {/* ACTIONS AND ERROR PANEL */}
+    {/* SUBMIT BUTTON CONTROL HOUSING */}
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '20px', width: '600px' }}>
       
       {authError && (
@@ -773,7 +763,6 @@ setChatMessages((p) => [...p, {
 
       <div style={{ display: 'flex', gap: '20px', width: '100%' }}>
         <button 
-          type="button"
           onClick={handleSignInSubmit}
           style={{
             flex: 1,
