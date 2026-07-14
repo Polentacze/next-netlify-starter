@@ -538,8 +538,8 @@ setChatMessages((p) => [...p, {
           />
 {/* TOP RIGHT CLEAN ACCOUNT LINK */}
       <div 
-        onClick={() => {
-          setAuthError("");
+onClick={() => {
+          if (typeof setAuthError === 'function') setAuthError("");
           setShowSignIn(true);
         }}
         style={{
@@ -553,30 +553,12 @@ setChatMessages((p) => [...p, {
           cursor: 'pointer',
           textDecoration: 'underline',
           textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-          zIndex: 10000,
+          zIndex: 100000,          // High index lifts it completely out of the image box
           background: 'transparent',
           backgroundImage: 'none'
         }}
       >
-        {typeof username !== 'undefined' && username ? username : "Sign In"}
-      </div>
-        {/* Username Text overlay sitting on the asset */}
-        <span
-          style={{
-            color: '#ffffff',
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold',
-            fontSize: '1rem',
-            textShadow: '1px 2px 3px rgba(0,0,0,0.6)',
-            paddingLeft: '10px', // Shifts text if your image has an avatar icon on the left side
-            maxWidth: '140px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }}
-        >
-          {username ? username : "Sign In"}
-        </span>
+        {username ? username : "Sign In"}
       </div>
    {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
 <div style={{ 
@@ -657,7 +639,7 @@ setChatMessages((p) => [...p, {
   </div>
 )}
 {/* PASSWORD INPUT HOUSING */}
-        <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
+        <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center', zIndex: 10 }}>
           <input 
             id="modal-password-field" 
             type="password" 
@@ -672,44 +654,46 @@ setChatMessages((p) => [...p, {
               fontSize: '1.2rem',
               color: '#1a4fff',
               fontFamily: 'sans-serif',
-              fontWeight: 'bold',
-              paddingRight: '60px' 
+              fontWeight: 'bold'
             }}
           />
-          
-          {/* HTML Toggle Button */}
-          <span
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              const passwordInput = document.getElementById('modal-password-field');
-              if (passwordInput) {
-                if (passwordInput.type === 'password') {
-                  passwordInput.type = 'text';
-                  e.currentTarget.innerText = 'Hide';
-                } else {
-                  passwordInput.type = 'password';
-                  e.currentTarget.innerText = 'Show';
-                }
-              }
-            }}
-            style={{
-              position: 'absolute',
-              right: '15px',
-              color: '#1a4fff',
-              fontFamily: 'sans-serif',
-              fontWeight: 'bold',
-              fontSize: '0.85rem',
-              cursor: 'pointer',
-              userSelect: 'none',
-              textDecoration: 'underline',
-              zIndex: 10
-            }}
-          >
-            Show
-          </span>
         </div>
 
+        {/* SHOW/HIDE CHECKBOX ROW */}
+        <div style={{ 
+          position: 'absolute', 
+          left: '235px', 
+          top: '292px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '8px',
+          zIndex: 100000 
+        }}>
+          <input 
+            type="checkbox" 
+            id="show-password-checkbox"
+            style={{ cursor: 'pointer', width: '15px', height: '15px' }}
+            onChange={(e) => {
+              const passInput = document.getElementById('modal-password-field');
+              if (passInput) {
+                passInput.type = e.target.checked ? 'text' : 'password';
+              }
+            }}
+          />
+          <label 
+            htmlFor="show-password-checkbox" 
+            style={{ 
+              color: '#ffffff', 
+              fontFamily: 'sans-serif', 
+              fontSize: '0.85rem', 
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+            }}
+          >
+            Show Password
+          </label>
+        </div>
         {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
         <button type="submit" style={{ display: 'none' }} />
       </form>
