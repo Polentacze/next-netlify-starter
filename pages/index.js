@@ -517,18 +517,13 @@ setChatMessages((p) => [...p, {
   </div>
 </div>
 
-{/* THE PINNED BUTTONS CONTAINER */}
+{/* ANCIENT MARKET BUTTON OVERLAY */}
 <div style={{
   position: 'fixed',
-  bottom: '40px',
+  bottom: '240px', // Positions it perfectly right above the original Wiki button box
   right: '40px',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '20px',
   zIndex: 9999
 }}>
-  
-  {/* ANCIENT MARKET BUTTON */}
   <img 
     src="/ancient-market.png" 
     alt="Ancient Market" 
@@ -542,22 +537,6 @@ setChatMessages((p) => [...p, {
     onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1.0)'}
     onClick={() => setShowVariations(true)} 
   />
-
-  {/* WIKI BUTTON */}
-  <img 
-    src="/wiki-button.png" 
-    alt="Wiki" 
-    style={{ 
-      width: '180px', 
-      height: 'auto',
-      cursor: 'pointer',
-      transition: 'transform 0.1s ease'
-    }}
-    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1.0)'}
-    onClick={() => setIsWikiOpen(true)} 
-  />
-
 </div>
 
 {/* VARIATIONS POPUP MODAL */}
@@ -579,10 +558,15 @@ setChatMessages((p) => [...p, {
     }}
   >
     <div style={{ position: 'relative', width: '80%', maxWidth: '800px' }} onClick={(e) => e.stopPropagation()}>
+      {/* Updated src to variation-selection.png */}
       <img 
-        src="/variations-section.png" 
+        src="/variation-selection.png" 
         alt="Variations" 
         style={{ width: '100%', height: 'auto', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.7)' }} 
+        onError={(e) => {
+          // Fallback just in case it is named variations-section.png
+          e.target.src = '/variations-section.png';
+        }}
       />
       <div style={{ color: '#fff', textAlign: 'center', marginTop: '15px', fontFamily: 'sans-serif', fontSize: '1rem', fontWeight: 'bold' }}>
         Click anywhere to close
