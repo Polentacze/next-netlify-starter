@@ -137,17 +137,11 @@ const cleanTags = (str) => {
     // 🏷️ Dynamically matches colors to whoever sent it
     let messageColor = detectTextColor(chatInput) 
     if (messageColor === "#FFFFFF") messageColor = detectTextColor(username) 
-    
-    const cleanMessage = cleanTags(chatInput)
-    if (!cleanMessage) return
-
-setChatMessages((p) => [...p, {
-  user: {cleanTags(username) || "Guest"}
+    setChatMessages((p) => [...p, {
+  user: cleanTags(username) || "Guest", // 🌟 Braces removed here!
   text: cleanMessage,
   colorCode: messageColor
-}])
-    setChatInput("") 
-  } 
+}]);
 
   const getRandomCoord = () => ({ x: Math.floor(Math.random() * 2800) + 100, y: Math.floor(Math.random() * 1650) + 100 })
 
