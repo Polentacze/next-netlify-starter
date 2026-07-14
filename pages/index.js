@@ -424,7 +424,11 @@ if (isBoosting) {
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
 {pendingEvolutionIndex !== null && (
-<div className="evolution-prompt-clickable-hud-box">
+  <div className="evolution-preview">
+    {/* ... inner JSX ... */}
+  </div>
+)}
+
   {/* 💬 Active HUD Chat Feed */}
   <div className="active-hud-chat-inner-message-list-scrollarea">
         {messages.map((msg, index) => (
@@ -555,19 +559,25 @@ if (isBoosting) {
     onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
   />
 )}
-// JS data should be declared outside of the JSX return:
+
+// Put this outside the component or above the return
 const evoData = {
   helicoprion: {
     name: "Helicoprion",
     previousEvolution: "dunkleosteus",
     pointsRequired: 19000,
-    characterAsset: "helicoprion-bes.png",
+    // ...
   },
   // ...
 };
 
-// then use inside JSX with braces:
-<img src={evoData.helicoprion.characterAsset} />
+export default function Home() {
+  return (
+    <div>
+      {/* JSX that uses evoData */}
+    </div>
+  );
+}
     
 {/* 🛡️ Dunkleosteus & Helicoprion Ability Layer (Index 2) */}
       {isAbilityActive && activeTierIndex === 2 && (
