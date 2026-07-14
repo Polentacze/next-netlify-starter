@@ -536,28 +536,48 @@ setChatMessages((p) => [...p, {
             style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
             onClick={() => setIsClanOpen(true)} 
           />
-{/* SIGN IN LINK */}
-<div 
-  onClick={() => {
-    setAuthError("");
-    setShowSignIn(true);
-  }}
-  style={{
-    position: 'fixed',
-    top: '30px',
-    left: '120px',
-    color: '#ffffff',
-    fontFamily: 'sans-serif',
-    fontWeight: 'bold',
-    fontSize: '1.2rem',
-    cursor: 'pointer',
-    textDecoration: 'underline',
-    textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-    zIndex: 10000
-  }}
->
-  {username ? `Account: ${username}` : "Sign In"}
-</div>
+{/* TOP RIGHT ACCOUNT WIDGET */}
+      <div 
+        onClick={() => {
+          setAuthError("");
+          setShowSignIn(true);
+        }}
+        style={{
+          position: 'fixed',
+          top: '25px',
+          right: '25px', // Pins it securely to the top right corner
+          width: '180px', // Adjust to size your base-account asset
+          height: '65px',
+          backgroundImage: 'url("/base-account.png")',
+          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          zIndex: 10000,
+          filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.3))'
+        }}
+      >
+        {/* Username Text overlay sitting on the asset */}
+        <span
+          style={{
+            color: '#ffffff',
+            fontFamily: 'sans-serif',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            textShadow: '1px 2px 3px rgba(0,0,0,0.6)',
+            paddingLeft: '10px', // Shifts text if your image has an avatar icon on the left side
+            maxWidth: '140px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          {username ? username : "Sign In"}
+        </span>
+      </div>
    {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
 <div style={{ 
   display: 'flex', 
