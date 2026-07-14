@@ -538,8 +538,8 @@ setChatMessages((p) => [...p, {
           />
 {/* TOP RIGHT CLEAN ACCOUNT LINK */}
       <div 
-onClick={() => {
-          if (typeof setAuthError === 'function') setAuthError("");
+        onClick={() => {
+          setAuthError("");
           setShowSignIn(true);
         }}
         style={{
@@ -553,10 +553,30 @@ onClick={() => {
           cursor: 'pointer',
           textDecoration: 'underline',
           textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-          zIndex: 100000
+          zIndex: 10000,
+          background: 'transparent',
+          backgroundImage: 'none'
         }}
       >
-        {username ? username : "Sign In"}
+        {typeof username !== 'undefined' && username ? username : "Sign In"}
+      </div>
+        {/* Username Text overlay sitting on the asset */}
+        <span
+          style={{
+            color: '#ffffff',
+            fontFamily: 'sans-serif',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            textShadow: '1px 2px 3px rgba(0,0,0,0.6)',
+            paddingLeft: '10px', // Shifts text if your image has an avatar icon on the left side
+            maxWidth: '140px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          {username ? username : "Sign In"}
+        </span>
       </div>
    {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
 <div style={{ 
@@ -637,7 +657,7 @@ onClick={() => {
   </div>
 )}
 {/* PASSWORD INPUT HOUSING */}
-        <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center', zIndex: 10 }}>
+        <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
           <input 
             id="modal-password-field" 
             type="password" 
@@ -650,14 +670,14 @@ onClick={() => {
               border: 'none',
               outline: 'none',
               fontSize: '1.2rem',
-              color: '#000000', // Changed color to black for perfect contrast inside white box
+              color: '#1a4fff',
               fontFamily: 'sans-serif',
               fontWeight: 'bold',
               paddingRight: '60px' 
             }}
           />
           
-          {/* SECURE SHOW/HIDE BUTTON */}
+          {/* HTML Toggle Button */}
           <span
             onClick={(e) => {
               e.preventDefault();
@@ -683,12 +703,13 @@ onClick={() => {
               cursor: 'pointer',
               userSelect: 'none',
               textDecoration: 'underline',
-              zIndex: 20
+              zIndex: 10
             }}
           >
             Show
           </span>
         </div>
+
         {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
         <button type="submit" style={{ display: 'none' }} />
       </form>
