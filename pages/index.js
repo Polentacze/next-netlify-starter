@@ -443,13 +443,17 @@ setChatMessages((p) => [...p, {
       <span style={{ color: detectTextColor(msg.text), fontWeight: 'bold' }}>
         {cleanTags(msg.text)}
       </span>
+return (
+  <>
+    <div className="messages">
+      {items.map((item) => <div key={item.id}>...</div>)}
     </div>
-  ))}
-</div>
-<form onSubmit={handleSendChat}>
-                <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
-              </form>
-            </div>
+
+    <form onSubmit={handleSendChat}>
+      <input ... />
+    </form>
+  </>
+)
           ) : (
             /* Small Open Chat Button in Bottom Left Corner */
             <button 
