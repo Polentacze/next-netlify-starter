@@ -456,10 +456,19 @@ if (isBoosting) {
 }}>
   ...
 </div>
-            <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
-              <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="avatar" />
-              <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
-            </div>
+{pendingEvolutionIndex !== null && (
+  <div>
+    <img
+      src={evoTiers[pendingEvolutionIndex].file}
+      className="evolution-preview-avatar-inside-hud"
+      onError={...}
+    />
+    <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontSize: '12px' }}>
+      {/* content */}
+    </span>
+  </div>
+)}
+
 -          )}
 -          }
 +          )}
