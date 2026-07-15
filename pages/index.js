@@ -395,7 +395,7 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
 <div style={{ position: 'fixed', top: '12px', left: '15px', fontFamily: 'sans-serif', fontSize: '0.75rem', opacity: 0.8, pointerEvents: 'none', zIndex: 9999 }}>
   <strong style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>TROPICAL SEA v1.0</strong><br />
   <span style={{ fontSize: '0.95rem', color: '#00FF1A', fontWeight: 'bold' }}>XP: {score}</span><br />
-  <span style={{ fontSize: '0.7rem', color: '#FFD700', textTransform: 'uppercase', opacity: 0.9 }}>SPECIES: {isGhoul ? "UNKNOWN" : (evoTiers[activeTierIndex]?.name || "Unknown").toUpperCase()}
+  <span style={{ fontSize: '0.7rem', color: '#FFD700', textTransform: 'uppercase', opacity: 0.9 }}>SPECIES: {username.toLowerCase().includes("(ghoul)") ? "UNKNOWN" : (evoTiers[activeTierIndex]?.name || "Unknown").toUpperCase()}
 </div>
 
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
