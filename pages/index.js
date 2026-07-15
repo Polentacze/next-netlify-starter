@@ -446,8 +446,7 @@ setChatMessages((p) => [...p, {
     </div>
   ))}
 </div>
-              </div>
-              <form onSubmit={handleSendChat}>
+<form onSubmit={handleSendChat}>
                 <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
               </form>
             </div>
