@@ -83,7 +83,7 @@ const evoTiers = [
 ]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
-  const [isChatOpen, setIsChatOpen] = useState(true) // 🔥 Add this line right here!
+  const [isChatOpen, setIsChatOpen] = useState(true) //  Add this line right here!
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
     { user: "System", text: "Prehistooio loaded! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" }
@@ -104,7 +104,7 @@ const detectTextColor = (targetString) => {
 
   return '#FFFFFF';
 }
-// 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
+//  CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
   let result = str
@@ -120,7 +120,7 @@ const cleanTags = (str) => {
     }
   }
 
-  // 🎯 CRITICAL FIX: This line MUST be here to send the cleaned text back to the game!
+  //  CRITICAL FIX: This line MUST be here to send the cleaned text back to the game!
   return result
 }
 
@@ -170,11 +170,11 @@ setChatMessages((p) => [...p, {
     }) 
   }, [isPlaying]) 
 
-  // 🧬 BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
+  //  EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
   useEffect(() => { 
     if (!isPlaying) return 
     
-    // 🧟 UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever!
+    //  UNDEAD ISOLATION: If the player is a secret Ghoul, hard-lock their growth forever!
     const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
     if (isSecretGhoul) {
       if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
@@ -190,7 +190,7 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
-  // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
+  //  AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
   useEffect(() => {
     if (!isPlaying) {
       setClamMeats([])
@@ -218,7 +218,7 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
     return () => clearInterval(meatTimer)
   }, [isPlaying])
 
-// ⏱️ PRIMARY GAME ENGINE LOOP EFFECT HOOK
+//  PRIMARY GAME ENGINE LOOP EFFECT HOOK
   useEffect(() => {
     if (!isPlaying) return
 
@@ -232,7 +232,7 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
       if (document.activeElement.tagName === "INPUT") return
 
       if (e.key.toLowerCase() === 'e') {
-        // 🦕 TIER 1 (Stethacanthus Speed Surge)
+        //  TIER 1 (Stethacanthus Speed Surge)
         if (activeTierIndex === 1) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
@@ -241,7 +241,7 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
           return
         }
 
-        // 🦈 TIER 2 (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
+        //  TIER 2 (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
         if (activeTierIndex === 2) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
@@ -281,7 +281,7 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
         return { x: cx, y: cy }
       })
 
-// 🍏 Hardcore Scarce Food Respawning (Tiny clumps & solitary dots)
+//  Scarce Food Respawning (Tiny clumps & solitary dots)
       setFoodPellets((current) => {
         let active = current.filter(f => !f.isEaten);
         
@@ -348,7 +348,7 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
         });
       });
 
-      // 🥩 Clam Meat Loop
+      // Clam Meat Loop
       setClamMeats((prev) => prev.map((m) => {
         if (m.isEaten) return m
         if (Math.sqrt((cx - m.x) ** 2 + (cy - m.y) ** 2) < 35) {
@@ -703,32 +703,35 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
         />
 
 {/* PASSWORD INPUT HOUSING */}
-        <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
+<div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
 <input
   type={username ? "text" : "password"} //  only show password plain-text if already logged in
   disabled={!!username}                 //  only freeze the field if they are logged in
   value={signInPassword}
   onChange={(e) => setSignInPassword(e.target.value)}
-            style={{
-              width: '100%',
-              height: '100%',
-              background: 'transparent',
-              border: 'none',
-              outline: 'none',
-              fontSize: '1.2rem',
-              color: '#1a4fff',
-              fontFamily: 'sans-serif',
-              fontWeight: 'bold',
-              opacity: signInName ? 0.7 : 1
-            }}
-          />
+style={{
+  width: '100%',
+  height: '100%',
+  background: 'transparent',
+  border: 'none',
+  outline: 'none',
+  fontSize: '1.2rem',
+  color: '#1a4fff',
+  fontFamily: 'sans-serif',
+  fontWeight: 'bold',
+  opacity: signInName ? 0.7 : 1,
+  
+  //  THESE TWO LINES TO AUTO-FILL BLUE BLOCKS:
+  WebkitBoxShadow: '0 0 0px 1000px transparent inset',
+  transition: 'background-color 5000s ease-in-out 0s',
+}}          />
         </div>
         {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
         <button type="submit" style={{ display: 'none' }} />
       </form>
     </div>
 
-    {/* ERROR AND CONTROLS: Placed safely underneath the graphic card */}
+    {/* ERROR AND CONTROLS: placed safely underneath the graphic card */}
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '20px', width: '600px' }}>
       
       {authError && (
@@ -777,7 +780,7 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
     </div>
   </div>
 )}
-{/* YOUR EXISTING WIKI BUTTON */}
+{/* EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
           <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
