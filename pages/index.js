@@ -702,11 +702,11 @@ setChatMessages((p) => [...p, {
 
 {/* PASSWORD INPUT HOUSING */}
         <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
-          <input 
-            type={signInName ? "text" : "password"} // 👁️ If signInName exists, show words! Otherwise show dots.
-            disabled={!!signInName}                 // 🔒 Freeze typing if signInName exists
-            value={signInPassword}
-            onChange={(e) => setSignInPassword(e.target.value)}
+<input
+  type={username ? "text" : "password"} //  only show password plain-text if already logged in
+  disabled={!!username}                 //  only freeze the field if they are logged in
+  value={signInPassword}
+  onChange={(e) => setSignInPassword(e.target.value)}
             style={{
               width: '100%',
               height: '100%',
