@@ -181,7 +181,7 @@ setChatMessages((p) => [...p, {
       return; //  Force exits the hook early so no evolutionary level-ups can ever process
     }
 
-if (activeTierIndex === 0 && score >= 10) {          // 🧪 Match Stethacanthus (10)
+if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanthus (10)
   if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1)
 } else if (activeTierIndex === 1 && score >= 9500) {   // 🧪 Match Dunkleosteus (50)
   if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
