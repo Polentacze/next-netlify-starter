@@ -720,11 +720,13 @@ style={{
   fontFamily: 'sans-serif',
   fontWeight: 'bold',
   opacity: signInName ? 0.7 : 1,
-  
-  //  THESE TWO LINES TO AUTO-FILL BLUE BLOCKS:
-  WebkitBoxShadow: '0 0 0px 1000px transparent inset',
-  transition: 'background-color 5000s ease-in-out 0s',
-}}          />
+
+  // 🛡️ DEFEAT ALL BROWSER AUTOFILL STYLES:
+  WebkitTextFillColor: '#1a4fff', // Prevents browser from forcing black/white text
+  WebkitBoxShadow: '0 0 0px 1000px rgba(0,0,0,0) inset', // Forces transparent shadow over autofill color
+  transition: 'background-color 5000000s ease-in-out 0s, color 5000000s ease-in-out 0s', // Delays background color rendering indefinitely
+}}        
+/>
         </div>
         {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
         <button type="submit" style={{ display: 'none' }} />
