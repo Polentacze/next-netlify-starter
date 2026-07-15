@@ -78,7 +78,8 @@ export default function Home() {
   const evoTiers = [ 
     { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
     { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
-    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // 🧬 Balanced Tier 3 landmark addition
+    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" }
+    { name: "Helicoprion", minScore: 19000, scale: 170, file: "/helicoprion-bes.png" } 
   ] 
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
@@ -177,16 +178,18 @@ setChatMessages((p) => [...p, {
     const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
     if (isSecretGhoul) {
       if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
-      return; // 🛑 Force exits the hook early so no evolutionary level-ups can ever process
+      return; //  Force exits the hook early so no evolutionary level-ups can ever process
     }
 
-    // Standard progression checkpoints for normal fish tiers
-    if (activeTierIndex === 0 && score >= 4500) { 
-      if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) 
-    } else if (activeTierIndex === 1 && score >= 9500) { 
-      if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) 
-    } 
-  }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) // 🌟 Added username monitoring to track the secret name check!
+// standard progression checkpoints for normal fish tiers
+if (activeTierIndex === 0 && score >= 4500) {
+  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1)
+} else if (activeTierIndex === 1 && score >= 9500) {
+  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
+} else if (activeTierIndex === 2 && score >= 19000) { // 🦈 Added for Helicoprion!
+  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
+}
+  }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
   // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
   useEffect(() => {
