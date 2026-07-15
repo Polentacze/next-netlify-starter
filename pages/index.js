@@ -2,6 +2,24 @@ import Head from 'next/head'
 import { useState, useEffect, useRef } from 'react'
 
 export default function Home() {
+  // 🎨 Detects tag commands in chat and returns the hex code
+function detectTextColor(text) {
+  if (!text) return '#ffffff'; // Default white
+  
+  const lowerText = text.toLowerCase();
+  if (lowerText.includes('[red]') || lowerText.includes('/red')) return '#ff4d4d';
+  if (lowerText.includes('[blue]') || lowerText.includes('/blue')) return '#4da6ff';
+  if (lowerText.includes('[green]') || lowerText.includes('/green')) return '#4dff4d';
+  if (lowerText.includes('[yellow]') || lowerText.includes('/yellow')) return '#ffff4d';
+  
+  return '#ffffff'; // Default fallback
+}
+
+// 🧹 Strips out the color tags so they don't clutter the actual message
+function cleanTags(text) {
+  if (!text) return '';
+return text.replace(/\[\w+\]|<\w+>|\/\w+/gi, '').trim();
+}
   const [showSignIn, setShowSignIn] = useState(false);
   const [signInName, setSignInName] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
@@ -414,21 +432,20 @@ setChatMessages((p) => [...p, {
 
 {/* 💬 DYNAMIC HUD CHAT SYSTEM */}
           {isChatOpen ? (
-            <div className="chat-container-hud" onClick={(e) => e.stopPropagation()}>
-              {/* Close Button on Top Left */}
-              <button 
-                onClick={() => setIsChatOpen(false)}
-                style={{ position: 'absolute', top: '5px', left: '5px', background: '#ff4d4d', color: 'white', border: 'none', borderRadius: '4px', fontSize: '0.65rem', padding: '2px 6px', cursor: 'pointer', fontWeight: 'bold', zIndex: 160 }}
-              >
-                X
-              </button>
-              
-              <div className="chat-scroll-view" style={{ marginTop: '20px' }}>
-                {chatMessages.map((m, i) => (
-                  <div key={i} className="chat-msg-row" style={{ color: m.colorCode || '#FFFFFF' }}>
-                    <strong style={{ color: detectTextColor(m.user) !== '#FFFFFF' ? detectTextColor(m.user) : m.user === "System" ? "#00FF1A" : "#FFD700" }}>{m.user}:</strong>{" "}{m.text}
-                  </div>
-                ))}
+<div className="active-hud-chat-inner-message-list-scrollarea">
+  {messages.map((msg, index) => (
+    <div key={index} style={{ padding: '2px 0', fontSize: '14px', lineHeight: '1.2' }}>
+      {/* Username Display */}
+      <span style={{ color: '#ffd700', fontWeight: 'bold' }}>
+        {msg.username}:{" "}
+      </span>
+      {/* Dynamically Colored Message Text */}
+      <span style={{ color: detectTextColor(msg.text), fontWeight: 'bold' }}>
+        {cleanTags(msg.text)}
+      </span>
+    </div>
+  ))}
+</div>
               </div>
               <form onSubmit={handleSendChat}>
                 <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
