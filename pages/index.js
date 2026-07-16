@@ -106,7 +106,7 @@ const detectTextColor = (targetString) => {
 
   return '#FFFFFF';
 }
-// 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
+//  CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
   let result = str
@@ -122,7 +122,7 @@ const cleanTags = (str) => {
     }
   }
 
-  // 🎯 CRITICAL FIX: This line MUST be here to send the cleaned text back to the game!
+  //  CRITICAL FIX: This line MUST be here to send the cleaned text back to the game!
   return result
 }
 
@@ -130,7 +130,7 @@ const cleanTags = (str) => {
     e.preventDefault() 
     if (!chatInput.trim()) return 
     
-    // 🏷️ Dynamically matches colors to whoever sent it
+    //  Dynamically matches colors to whoever sent it
     let messageColor = detectTextColor(chatInput) 
     if (messageColor === "#FFFFFF") messageColor = detectTextColor(username) 
     
@@ -172,16 +172,17 @@ setChatMessages((p) => [...p, {
     }) 
   }, [isPlaying]) 
 
-  // 🧬 BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
+  //  BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
   useEffect(() => { 
     if (!isPlaying) return 
     
-    // 🧟 UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever!
+    //  UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever!
     const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
     if (isSecretGhoul) {
-      if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
-      return; //  Force exits the hook early so no evolutionary level-ups can ever process
-    }
+//  COMMENT THESE LINES OUT:
+// if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); 
+// return; 
+// }
 
 if (activeTierIndex === 0 && score >= 20) {           // To Stethacanthus
   if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1)
@@ -189,12 +190,12 @@ if (activeTierIndex === 0 && score >= 20) {           // To Stethacanthus
   if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
 } else if (activeTierIndex === 2 && score >= 70) {    // To Helicoprion
   if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
-} else if (activeTierIndex === 3 && score >= 100) {   // 🌟 Changed from 4 to 3! To Xiphiorhynchus
+} else if (activeTierIndex === 3 && score >= 100) {   //  Changed from 4 to 3! To Xiphiorhynchus
   if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4)
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
-  // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
+  //  AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
   useEffect(() => {
     if (!isPlaying) {
       setClamMeats([])
@@ -222,7 +223,7 @@ if (activeTierIndex === 0 && score >= 20) {           // To Stethacanthus
     return () => clearInterval(meatTimer)
   }, [isPlaying])
 
-// ⏱️ PRIMARY GAME ENGINE LOOP EFFECT HOOK
+//  PRIMARY GAME ENGINE LOOP EFFECT HOOK
   useEffect(() => {
     if (!isPlaying) return
 
@@ -236,7 +237,7 @@ if (activeTierIndex === 0 && score >= 20) {           // To Stethacanthus
       if (document.activeElement.tagName === "INPUT") return
 
       if (e.key.toLowerCase() === 'e') {
-        // 🦕 TIER 1 (Stethacanthus Speed Surge)
+        //  TIER 1 (Stethacanthus Speed Surge)
         if (activeTierIndex === 1) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
@@ -245,7 +246,7 @@ if (activeTierIndex === 0 && score >= 20) {           // To Stethacanthus
           return
         }
 
-        // 🦈 TIER 2 (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
+        //  TIER 2 (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
         if (activeTierIndex === 2) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
