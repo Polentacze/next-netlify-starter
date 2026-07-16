@@ -680,26 +680,27 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
     >
 <form onSubmit={handleSignInSubmit}>
 
-        {/* NAME INPUT: positioned precisely over the top white slot */}
-<input
-  id="signin-password-input"
-  type="text" // 🌟 Change this to a plain text input! (This tricks the browser!)
-  disabled={!!username}
-  value={signInPassword}
-  onChange={(e) => setSignInPassword(e.target.value)}
-  autoComplete="off" // 🌟 Keeps simple autocomplete suggestions off
-  style={{
-    width: '100%',
-    height: '100%',
-    background: 'transparent',
-    border: 'none',
-    outline: 'none',
-    fontSize: '1.2rem',
-    color: '#104e8bff',
-    fontFamily: 'sans-serif',
-    fontWeight: 'bold',
-    opacity: signInName ? 0.7 : 1,
-    
+{/* NAME INPUT: positioned precisely over the top slot */}
+  <input
+    id="signin-name-input" //  Changed to name input
+    type="text" 
+    disabled={!!username}
+    value={signInName} //  Changed from signInPassword to signInName
+    onChange={(e) => setSignInName(e.target.value)} //  Changed to setSignInName
+    autoComplete="off" 
+    style={{
+      width: '100%',
+      height: '100%',
+      background: 'transparent',
+      border: 'none',
+      outline: 'none',
+      fontSize: '1.2rem',
+      color: '#1a4fff',
+      fontFamily: 'sans-serif',
+      fontWeight: 'bold',
+      opacity: signInName ? 0.7 : 1,
+    }}
+  />    
     // 🛡️ THE MAGIC PASSWORD MASK:
     // This instantly turns text characters into solid dots on Chrome, Safari, and Edge!
     WebkitTextSecurity: 'disc', 
