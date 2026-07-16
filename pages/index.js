@@ -78,6 +78,7 @@ export default function Home() {
 const evoTiers = [
   { name: "Sacabambaspis", minScore: 1, scale: 80, file: "/sacabambaspis.png" },
   { name: "Stethacanthus altonensis", minScore: 10, scale: 115, file: "/Stethacanthus-altonensis.png" }, //  Set to 10!
+  { name: "Cretolamna", minScore: 20, scale: 125, file: "/o-cretolamna.png" },  
   { name: "Dunkleosteus", minScore: 50, scale: 150, file: "/dunkleosteus.png" },                       //  Set to 50!
   { name: "Helicoprion", minScore: 100, scale: 170, file: "/helicoprion-bes.png" }
 ]
@@ -181,12 +182,14 @@ setChatMessages((p) => [...p, {
       return; //  Force exits the hook early so no evolutionary level-ups can ever process
     }
 
-if (activeTierIndex === 0 && score >= 10) {          //  Match Stethacanthus (10)
-  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1)
-} else if (activeTierIndex === 1 && score >= 50) {   // 🧪 Match Dunkleosteus (50)
-  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
-} else if (activeTierIndex === 2 && score >= 100) {  //  Match Helicoprion (100)
-  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
+if (activeTierIndex === 0 && score >= 10) {
+  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) // Evolve from Sacabambaspis (0) to Stethacanthus (1)
+} else if (activeTierIndex === 1 && score >= 20) {
+  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) // Evolve from Stethacanthus (1) to Cretolamna (2)
+} else if (activeTierIndex === 2 && score >= 50) {
+  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3) // Evolve from Cretolamna (2) to Dunkleosteus (3)
+} else if (activeTierIndex === 3 && score >= 100) {
+  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4) // Evolve from Dunkleosteus (3) to Helicoprion (4)
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
