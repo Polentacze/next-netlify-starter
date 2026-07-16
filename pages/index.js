@@ -76,16 +76,15 @@ export default function Home() {
   
   const [clanInputTemp, setClanInputTemp] = useState("") 
 const evoTiers = [
-  { name: "Sacabambaspis", minScore: 0, scale: 10, file: "/sacabambaspis.png" },
+  { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
   { name: "Stethacanthus altonensis", minScore: 20, scale: 115, file: "/Stethacanthus-altonensis.png" }, //  Set to 10!
   { name: "Dunkleosteus", minScore: 50, scale: 150, file: "/dunkleosteus.png" },                       //  Set to 50!
-  { name: "Helicoprion", minScore: 100, scale: 170, file: "/helicoprion-bes.png" },
-  { name: "Xiphiorhynchus", minScore: 200, scale: 170, file: "/Xiphiorhynchus-kimblalocki.png" }    //  Added new tier!
-]
+  { name: "Helicoprion", minScore: 70, scale: 170, file: "/helicoprion-bes.png" }
+  { name: "Helicoprion", minScore: 100, scale: 170, file: "/Xiphiorhynchus-kimblalocki.png" }  
 ]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
-  const [isChatOpen, setIsChatOpen] = useState(true) // 🔥 Add this line right here!
+  const [isChatOpen, setIsChatOpen] = useState(true) //  Add this line right here!
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
     { user: "System", text: "Prehistooio loaded! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" }
@@ -130,7 +129,7 @@ const cleanTags = (str) => {
     e.preventDefault() 
     if (!chatInput.trim()) return 
     
-    //  Dynamically matches colors to whoever sent it
+    // 🏷️ Dynamically matches colors to whoever sent it
     let messageColor = detectTextColor(chatInput) 
     if (messageColor === "#FFFFFF") messageColor = detectTextColor(username) 
     
@@ -172,25 +171,24 @@ setChatMessages((p) => [...p, {
     }) 
   }, [isPlaying]) 
 
-  //  BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
+  //  EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
   useEffect(() => { 
     if (!isPlaying) return 
     
-    //  UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever!
+    //  UNDEAD ISOLATION: If the player is a secret Ghoul, hard-lock their growth forever!
     const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
     if (isSecretGhoul) {
-//  COMMENT THESE LINES OUT:
-// if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); 
-// return; 
-// }
+      if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
+      return; //  Force exits the hook early so no evolutionary level-ups can ever process
+    }
 
-if (activeTierIndex === 0 && score >= 20) {           // To Stethacanthus
+if (activeTierIndex === 0 && score >= 20) {          //  Match Stethacanthus (10)
   if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1)
-} else if (activeTierIndex === 1 && score >= 50) {    // To Dunkleosteus
+} else if (activeTierIndex === 1 && score >= 50) {   // 🧪 Match Dunkleosteus (50)
   if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
-} else if (activeTierIndex === 2 && score >= 70) {    // To Helicoprion
+} else if (activeTierIndex === 2 && score >= 70) {  //  Match Helicoprion (100)
   if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
-} else if (activeTierIndex === 3 && score >= 100) {   //  Changed from 4 to 3! To Xiphiorhynchus
+} else if (activeTierIndex === 4 && score >= 100) {  //  Match xiphiorhynchus (100)
   if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4)
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
@@ -286,7 +284,7 @@ if (activeTierIndex === 0 && score >= 20) {           // To Stethacanthus
         return { x: cx, y: cy }
       })
 
-// 🍏 Hardcore Scarce Food Respawning (Tiny clumps & solitary dots)
+//  Scarce Food Respawning (Tiny clumps & solitary dots)
       setFoodPellets((current) => {
         let active = current.filter(f => !f.isEaten);
         
@@ -353,7 +351,7 @@ if (activeTierIndex === 0 && score >= 20) {           // To Stethacanthus
         });
       });
 
-      // 🥩 Clam Meat Loop
+      // Clam Meat Loop
       setClamMeats((prev) => prev.map((m) => {
         if (m.isEaten) return m
         if (Math.sqrt((cx - m.x) ** 2 + (cy - m.y) ** 2) < 35) {
@@ -708,32 +706,35 @@ if (activeTierIndex === 0 && score >= 20) {           // To Stethacanthus
         />
 
 {/* PASSWORD INPUT HOUSING */}
-        <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
+<div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
 <input
   type={username ? "text" : "password"} //  only show password plain-text if already logged in
   disabled={!!username}                 //  only freeze the field if they are logged in
   value={signInPassword}
   onChange={(e) => setSignInPassword(e.target.value)}
-            style={{
-              width: '100%',
-              height: '100%',
-              background: 'transparent',
-              border: 'none',
-              outline: 'none',
-              fontSize: '1.2rem',
-              color: '#1a4fff',
-              fontFamily: 'sans-serif',
-              fontWeight: 'bold',
-              opacity: signInName ? 0.7 : 1
-            }}
-          />
+style={{
+  width: '100%',
+  height: '100%',
+  background: 'transparent',
+  border: 'none',
+  outline: 'none',
+  fontSize: '1.2rem',
+  color: '#1a4fff',
+  fontFamily: 'sans-serif',
+  fontWeight: 'bold',
+  opacity: signInName ? 0.7 : 1,
+  
+  //  THESE TWO LINES TO AUTO-FILL BLUE BLOCKS:
+  WebkitBoxShadow: '0 0 0px 1000px transparent inset',
+  transition: 'background-color 5000s ease-in-out 0s',
+}}          />
         </div>
         {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
         <button type="submit" style={{ display: 'none' }} />
       </form>
     </div>
 
-    {/* ERROR AND CONTROLS: Placed safely underneath the graphic card */}
+    {/* ERROR AND CONTROLS: placed safely underneath the graphic card */}
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '20px', width: '600px' }}>
       
       {authError && (
@@ -782,7 +783,7 @@ if (activeTierIndex === 0 && score >= 20) {           // To Stethacanthus
     </div>
   </div>
 )}
-{/* YOUR EXISTING WIKI BUTTON */}
+{/* EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
           <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
