@@ -539,60 +539,6 @@ const bannerHTML = `
 </div>
 </div>
 
-{/* ANCIENT MARKET BUTTON OVERLAY */}
-<div style={{
-  position: 'fixed',
-  bottom: '20px', 
-  right: '20px', // Snaps it firmly back to the right edge
-  transform: 'translateY(-400px)', // Blasts it way higher up the screen
-  zIndex: 9999
-}}>
-  <img 
-    src="/ancient-market.png" 
-    alt="Ancient Market" 
-    style={{ 
-      width: '180px', 
-      height: 'auto',
-      cursor: 'pointer',
-      transition: 'transform 0.1s ease'
-    }}
-    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1.0)'}
-    onClick={() => setShowVariations(true)} 
-  />
-</div>
-
-{/* VARIATIONS POPUP MODAL */}
-{showVariations && (
-  <div 
-    onClick={() => setShowVariations(false)} 
-    style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: 'rgba(0, 0, 0, 0.85)', 
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 99999, 
-      cursor: 'pointer'
-    }}
-  >
-    <div style={{ position: 'relative', width: '80%', maxWidth: '800px' }} onClick={(e) => e.stopPropagation()}>
-      <img 
-        src="/variations-selection.png" 
-        alt="Variations" 
-        style={{ width: '100%', height: 'auto', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.7)' }} 
-      />
-      <div style={{ color: '#fff', textAlign: 'center', marginTop: '15px', fontFamily: 'sans-serif', fontSize: '1rem', fontWeight: 'bold' }}>
-        Click anywhere to close
-      </div>
-    </div>
-  </div>
-)}
-
 
 {/* YOUR EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
