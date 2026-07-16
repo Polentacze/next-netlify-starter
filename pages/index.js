@@ -2,51 +2,6 @@ import Head from 'next/head'
 import { useState, useEffect, useRef } from 'react'
 
 export default function Home() {
-  const [showSignIn, setShowSignIn] = useState(false);
-  const [signInName, setSignInName] = useState("");
-  const [signInPassword, setSignInPassword] = useState("");
-  const [authError, setAuthError] = useState("");
-  const [showVariations, setShowVariations] = useState(false);
-  
-  const handleSignInSubmit = (e) => {
-    e.preventDefault();
-    setAuthError("");
-
-    // Enforce your exact character length rules
-    if (signInName.length > 19) {
-      setAuthError("Name cannot exceed 19 characters.");
-      return;
-    }
-    if (signInPassword.length > 24) {
-      setAuthError("Password cannot exceed 24 characters.");
-      return;
-    }
-    if (signInName.trim() === "") {
-      setAuthError("Name cannot be empty.");
-      return;
-    }
-
-    // Save credentials to browser memory
-    localStorage.setItem("prehistooio_name", signInName.trim());
-    localStorage.setItem("prehistooio_password", signInPassword);
-    
-    // Log them into the game automatically
-    setUsername(signInName.trim());
-    setShowSignIn(false);
-  };
-
-  useEffect(() => {
-    const savedName = localStorage.getItem("prehistooio_name");
-    const savedPassword = localStorage.getItem("prehistooio_password");
-    
-    if (savedName) {
-      setUsername(savedName);
-      setSignInName(savedName);
-    }
-    if (savedPassword) {
-      setSignInPassword(savedPassword);
-    }
-  }, []);
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
   const [username, setUsername] = useState("")
@@ -83,12 +38,13 @@ const evoTiers = [
   { name: "Dunkleosteus", minScore: 9800, scale: 150, file: "/dunkleosteus.png" },                       //  Set to 50!
   { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" }
 ]
+
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
-  const [isChatOpen, setIsChatOpen] = useState(true) //  Add this line right here!
+  const [isChatOpen, setIsChatOpen] = useState(true) // 🔥 Add this line right here!
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Prehistooio loaded! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" }
+    { user: "System", text: "Welcome to Prehistooio, explore the ancient sea", colorCode: "#00FF1A" }
   ])
   const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
@@ -106,7 +62,18 @@ const detectTextColor = (targetString) => {
 
   return '#FFFFFF';
 }
-//  CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
+    }
+
+    // Standard cosmetic modifiers fallback
+    if (cleanStr.includes("(RED)")) return "#ff4d4d" 
+    if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
+    if (cleanStr.includes("(GREEN)")) return "#00FF1A" 
+    if (cleanStr.includes("(CYAN)")) return "#00ffff" 
+    if (cleanStr.includes("(PURPLE)")) return "#a855f7" 
+    if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
+    return "#FFFFFF" 
+  } 
+// 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
   let result = str
@@ -122,7 +89,7 @@ const cleanTags = (str) => {
     }
   }
 
-  //  CRITICAL FIX: This line MUST be here to send the cleaned text back to the game!
+  // 🎯 CRITICAL FIX: This line MUST be here to send the cleaned text back to the game!
   return result
 }
 
@@ -172,15 +139,15 @@ setChatMessages((p) => [...p, {
     }) 
   }, [isPlaying]) 
 
-  //  EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
+  //  BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul
   useEffect(() => { 
     if (!isPlaying) return 
     
-    //  UNDEAD ISOLATION: If the player is a secret Ghoul, hard-lock their growth forever!
+    // 🧟 UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever!
     const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
     if (isSecretGhoul) {
       if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
-      return; //  Force exits the hook early so no evolutionary level-ups can ever process
+      return; // Force exits the hook early so no evolutionary level-ups can ever process
     }
 
 if (activeTierIndex === 0 && score >= 0) {
@@ -196,7 +163,8 @@ if (activeTierIndex === 0 && score >= 0) {
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
-  //  AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
+
+  // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
   useEffect(() => {
     if (!isPlaying) {
       setClamMeats([])
@@ -224,7 +192,7 @@ if (activeTierIndex === 0 && score >= 0) {
     return () => clearInterval(meatTimer)
   }, [isPlaying])
 
-//  PRIMARY GAME ENGINE LOOP EFFECT HOOK
+// ⏱️ PRIMARY GAME ENGINE LOOP EFFECT HOOK
   useEffect(() => {
     if (!isPlaying) return
 
@@ -238,7 +206,7 @@ if (activeTierIndex === 0 && score >= 0) {
       if (document.activeElement.tagName === "INPUT") return
 
       if (e.key.toLowerCase() === 'e') {
-        //  TIER 1 (Stethacanthus Speed Surge)
+        // 🦕 TIER 1 (Stethacanthus Speed Surge)
         if (activeTierIndex === 1) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
@@ -247,7 +215,7 @@ if (activeTierIndex === 0 && score >= 0) {
           return
         }
 
-        //  TIER 2 (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
+        // 🦈 TIER 2 (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
         if (activeTierIndex === 2) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
@@ -287,7 +255,7 @@ if (activeTierIndex === 0 && score >= 0) {
         return { x: cx, y: cy }
       })
 
-//  Scarce Food Respawning (Tiny clumps & solitary dots)
+// 🍏 Hardcore Scarce Food Respawning (Tiny clumps & solitary dots)
       setFoodPellets((current) => {
         let active = current.filter(f => !f.isEaten);
         
@@ -354,7 +322,7 @@ if (activeTierIndex === 0 && score >= 0) {
         });
       });
 
-      // Clam Meat Loop
+      // 🥩 Clam Meat Loop
       setClamMeats((prev) => prev.map((m) => {
         if (m.isEaten) return m
         if (Math.sqrt((cx - m.x) ** 2 + (cy - m.y) ** 2) < 35) {
@@ -398,12 +366,11 @@ if (activeTierIndex === 0 && score >= 0) {
             setTimeout(() => { setIsBoosting(false) }, 320)
           }}
         >
-<div style={{ position: 'fixed', top: '12px', left: '15px', fontFamily: 'sans-serif', fontSize: '0.75rem', opacity: 0.8, pointerEvents: 'none', zIndex: 9999 }}>
-  <strong style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>TROPICAL SEA v1.0</strong><br />
-  <span style={{ fontSize: '0.95rem', color: '#00FF1A', fontWeight: 'bold' }}>XP: {score}</span><br />
-  <span style={{ fontSize: '0.7rem', color: '#FFD000', textTransform: 'uppercase', opacity: 0.9 }}>SPECIES: {username && username.replace(/\s+/g, '').toUpperCase().includes("(GHOUL)") ? "UNKNOWN" : (evoTiers[activeTierIndex]?.name || "Unknown").toUpperCase()}</span>
-</div>
-
+          <div style={{ position: 'absolute', top: '15px', left: '20px', fontFamily: 'sans-serif', fontSize: '0.9rem', opacity: 0.7, zIndex: 10, textAlign: 'left', lineHeight: '1.4' }}>
+            <strong>PREHISTOOIO ARENA v1.0</strong><br />
+            <span style={{ fontSize: '1.2rem', color: '#00FF1A', fontWeight: 'bold' }}>SCORE: {score}</span><br />
+            <span style={{ fontSize: '0.85rem', color: '#FFD700', textTransform: 'uppercase' }}>SPECIES: {(username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "UNKNOWN" : evoTiers[activeTierIndex].name}</span>
+          </div>
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
           {pendingEvolutionIndex !== null && (
@@ -439,7 +406,7 @@ if (activeTierIndex === 0 && score >= 0) {
                 ))}
               </div>
               <form onSubmit={handleSendChat}>
-                <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
+                <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type in chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={47} />
               </form>
             </div>
           ) : (
@@ -510,7 +477,7 @@ if (activeTierIndex === 0 && score >= 0) {
               <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}>
 <img src={username && username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
 
-{/* 🦕 Stethacanthus Ability Layer (Index 1) */}
+{/*  Stethacanthus Ability Layer (Index 1) */}
 {isAbilityActive && activeTierIndex === 1 && (
   <img 
     src="/steth-ability.png" 
@@ -520,7 +487,7 @@ if (activeTierIndex === 0 && score >= 0) {
   />
 )}
 
-{/* 🛡️ Dunkleosteus Ability Layer (Index 2) */}
+{/*  Dunkleosteus Ability Layer (Index 2) */}
 {isAbilityActive && activeTierIndex === 2 && (
   <img 
     src="/dunk-ability.png" 
@@ -544,40 +511,7 @@ if (activeTierIndex === 0 && score >= 0) {
             style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
             onClick={() => setIsClanOpen(true)} 
           />
-{/* SIGN IN LINK */}
-      <div 
-        onClick={() => {
-          if (typeof setAuthError === 'function') setAuthError("");
-          setShowSignIn(true);
-        }}
-        style={{
-          position: 'fixed',
-          top: '30px',
-          right: '40px', // Moves it out from behind the logo over to the top-right
-          cursor: 'pointer',
-          zIndex: 100000
-        }}
-      >
-        {signInName ? (
-          /* Profile Square Mode (Once logged in) */
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: 'rgba(0,0,0,0.6)', padding: '5px 12px', borderRadius: '8px' }}>
-            <img 
-              src="/base-account.png" 
-              alt="Account Profile" 
-              style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} 
-            />
-            <span style={{ color: '#ffffff', fontFamily: 'sans-serif', fontWeight: 'bold', fontSize: '1.1rem' }}>
-              {signInName}
-            </span>
-          </div>
-        ) : (
-          /* Clean Link Mode (Before logging in) */
-          <span style={{ color: '#ffffff', fontFamily: 'sans-serif', fontWeight: 'bold', fontSize: '1.2rem', textDecoration: 'underline', textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-            Sign In
-          </span>
-        )}
-      </div>
-   {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
+   {/*  FIXED MAIN MENU UPDATE BANNER */}
 <div style={{ 
   display: 'flex', 
   justifyContent: 'center', 
@@ -593,13 +527,16 @@ if (activeTierIndex === 0 && score >= 0) {
     boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
     width: '220px'
   }}>
-    <h3 style={{ color: '#ffffff', margin: '0 0 2px 0', fontSize: '1rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-      New update!
-    </h3>
-    <p style={{ color: '#00FF1A', margin: 0, fontSize: '0.9rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-      - Rising up
-    </p>
-  </div>
+<div>
+const bannerHTML = `
+  <h3 style="color: #ffffff; margin: 0 0 2px 0; font-size: 1rem; font-weight: bold; font-family: sans-serif;">
+    New update!
+  </h3>
+  <p style="color: #00FF1A; margin: 0; font-size: 0.9rem; font-weight: bold; font-family: sans-serif;">
+    - In Progress...
+  </p>
+`;
+</div>
 </div>
 
 {/* ANCIENT MARKET BUTTON OVERLAY */}
@@ -655,138 +592,9 @@ if (activeTierIndex === 0 && score >= 0) {
     </div>
   </div>
 )}
-{/* SIGN IN SCREEN POPUP MODAL */}
-{showSignIn && (
-  <div 
-    style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: 'rgba(0, 0, 0, 0.75)', 
-      display: 'flex',
-      flexDirection: 'column', // Stack card and buttons vertically
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 999999, 
-    }}
-  >
-    {/* The Core Image Card Container */}
-    <div 
-      style={{ 
-        position: 'relative', 
-        width: '600px',  // Adjusted to match standard landscape aspect ratio
-        height: '337px', 
-        backgroundImage: 'url("/sign-in-screen.png")',
-        backgroundSize: '100% 100%',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
-<form onSubmit={handleSignInSubmit}>
 
-        {/* NAME INPUT: positioned precisely over the top white slot */}
-        <input 
-          type="text"
-          disabled={!!username} // locks field once account exists
-          value={signInName}
-          onChange={(e) => setSignInName(e.target.value)}
-          style={{
-            position: 'absolute',
-            left: '185px',     // pushes the text cursor right past the "Name:" text
-            top: '178px',      // aligns vertically inside the first white slot
-            width: '360px',    // stretches to fill the rest of the white box
-            height: '42px',
-            background: 'transparent',
-            border: 'none',
-            outline: 'none',
-            fontSize: '1.2rem',
-            color: '#1a4fff',  // matches dark blue ui text color theme
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold'
-          }}
-        />
 
-{/* PASSWORD INPUT HOUSING */}
-<div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
-<input
-  type={username ? "text" : "password"} //  only show password plain-text if already logged in
-  disabled={!!username}                 //  only freeze the field if they are logged in
-  value={signInPassword}
-  onChange={(e) => setSignInPassword(e.target.value)}
-style={{
-  width: '100%',
-  height: '100%',
-  background: 'transparent',
-  border: 'none',
-  outline: 'none',
-  fontSize: '1.2rem',
-  color: '#1a4fff',
-  fontFamily: 'sans-serif',
-  fontWeight: 'bold',
-  opacity: signInName ? 0.7 : 1,
-  
-  //  THESE TWO LINES TO AUTO-FILL BLUE BLOCKS:
-  WebkitBoxShadow: '0 0 0px 1000px transparent inset',
-  transition: 'background-color 5000s ease-in-out 0s',
-}}          />
-        </div>
-        {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
-        <button type="submit" style={{ display: 'none' }} />
-      </form>
-    </div>
-
-    {/* ERROR AND CONTROLS: placed safely underneath the graphic card */}
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '20px', width: '600px' }}>
-      
-      {authError && (
-        <div style={{ color: '#ff4d4d', textAlign: 'center', fontWeight: 'bold', fontFamily: 'sans-serif', fontSize: '1rem', backgroundColor: 'rgba(0,0,0,0.8)', padding: '6px 16px', borderRadius: '8px' }}>
-          {authError}
-        </div>
-      )}
-
-      <div style={{ display: 'flex', gap: '20px', width: '100%' }}>
-        <button 
-          onClick={handleSignInSubmit}
-          style={{
-            flex: 1,
-            padding: '12px',
-            backgroundColor: '#28a745',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '12px',
-            fontWeight: 'bold',
-            fontSize: '1.1rem',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.2)'
-          }}
-        >
-          Save & Close
-        </button>
-        
-        <button 
-          type="button"
-          onClick={() => { setShowSignIn(false); setAuthError(""); }}
-          style={{
-            padding: '12px 25px',
-            backgroundColor: '#dc3545',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '12px',
-            fontWeight: 'bold',
-            fontSize: '1.1rem',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.2)'
-          }}
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-{/* EXISTING WIKI BUTTON */}
+{/* YOUR EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
           <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
