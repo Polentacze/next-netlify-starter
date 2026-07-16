@@ -60,9 +60,7 @@ const chatNameColor = (str) => {
   if (cleanStr.includes("(ORANGE)")) return "#FF6600" // Make sure your orange is here!
 
   return '#FFFFFF';
-}
-    }
-
+    
     // Standard cosmetic modifiers fallback
     if (cleanStr.includes("(RED)")) return "#ff4d4d"
     if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
