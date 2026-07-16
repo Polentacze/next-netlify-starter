@@ -76,7 +76,7 @@ export default function Home() {
   
   const [clanInputTemp, setClanInputTemp] = useState("") 
 const evoTiers = [
-  { name: "Pikaia", minScore: 0, scale: 70, file: "/pikaia.png" },
+  { name: "Pikaia", minScore: 0, scale: 75, file: "/pikaia.png" },
   { name: "Sacabambaspis", minScore: 1, scale: 80, file: "/sacabambaspis.png" },
   { name: "Stethacanthus altonensis", minScore: 10, scale: 115, file: "/Stethacanthus-altonensis.png" }, //  Set to 10!
   { name: "Cretolamna", minScore: 20, scale: 125, file: "/o-cretolamna.png" },  
@@ -184,15 +184,15 @@ setChatMessages((p) => [...p, {
     }
 
 if (activeTierIndex === 0 && score >= 0) {
-  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) // Evolve from pikaia (0) to sacabambaspis (1)
-} else if (activeTierIndex === 2 && score >= 1) {
-  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(1) // Evolve from Sacabambaspis (0) to Stethacanthus (1)
-} else if (activeTierIndex === 3 && score >= 20) {
-  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(2) // Evolve from Stethacanthus (1) to Cretolamna (2)
-} else if (activeTierIndex === 4 && score >= 50) {
-  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(3) // Evolve from Cretolamna (2) to Dunkleosteus (3)
-} else if (activeTierIndex === 5 && score >= 100) {
-  if (pendingEvolutionIndex !== 5) setPendingEvolutionIndex(4) // Evolve from Dunkleosteus (3) to Helicoprion (4)
+  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) // Evolve Pikaia (0) -> Sacabambaspis (1)
+} else if (activeTierIndex === 1 && score >= 1) {
+  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) // Evolve Sacabambaspis (1) -> Stethacanthus (2)
+} else if (activeTierIndex === 2 && score >= 20) {
+  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3) // Evolve Stethacanthus (2) -> Cretolamna (3)
+} else if (activeTierIndex === 3 && score >= 50) {
+  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4) // Evolve Cretolamna (3) -> Dunkleosteus (4)
+} else if (activeTierIndex === 4 && score >= 100) {
+  if (pendingEvolutionIndex !== 5) setPendingEvolutionIndex(5) // Evolve Dunkleosteus (4) -> Helicoprion (5)
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
