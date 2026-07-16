@@ -584,7 +584,9 @@ setChatMessages((p) => [...p, {
             </form>
           </main>
         </>
-      )}
-    </div>
-  )
+    )}
+  </div>
+)
 }
+
+export default YourComponentName
