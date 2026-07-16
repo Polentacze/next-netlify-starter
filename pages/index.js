@@ -591,11 +591,12 @@ const bannerHTML = `
               </div>
               <button type="submit" className="play-btn">
                 <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
-              </button>
-            </form>
-          </main>
-        </>
-      )}
-    </div>
-  )
-}
+return (
+  <div>
+    {someCondition ? (
+      <>              // <- make sure this opening fragment exists
+        <main> ... </main>
+      </>             // <- the closing fragment on line 597
+    ) : null}
+  </div>
+)
