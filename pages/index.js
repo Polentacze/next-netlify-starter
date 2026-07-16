@@ -719,31 +719,15 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
   `}</style>
 
 {/* PASSWORD INPUT HOUSING */}
-<div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
-  
-  {/* 🦆 DECOY INPUT: Steals the browser's aggressive autofill overlay */}
-  <input 
-    type="password" 
-    tabIndex={-1} 
-    autoComplete="new-password"
-    style={{
-      position: 'absolute',
-      left: '-9999px',
-      top: '-9999px',
-      width: '1px',
-      height: '1px',
-      opacity: 0,
-    }} 
-  />
-
-  {/* password function */}
+<div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center', zIndex: 10 }}>
   <input
-    id="signin-password-input"
-    type={username ? "text" : "password"}
+    id="xyz-secure-entry-box"
+    name="entryBoxVal"
+    type="text" 
     disabled={!!username}
     value={signInPassword}
     onChange={(e) => setSignInPassword(e.target.value)}
-    autoComplete="new-password" // browser to treat this as a clean field
+    autoComplete="new-password"
     style={{
       width: '100%',
       height: '100%',
@@ -755,6 +739,8 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
       fontFamily: 'sans-serif',
       fontWeight: 'bold',
       opacity: signInName ? 0.7 : 1,
+      WebkitTextSecurity: 'disc', 
+      textSecurity: 'disc',
     }}
   />
 </div>
