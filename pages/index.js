@@ -50,17 +50,15 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
 const detectTextColor = (targetString) => {
-  const cleanStr = (targetString || "").toUpperCase()
-
-  if (cleanStr.includes("(RED)")) return "#ff4d4d"
-  if (cleanStr.includes("(BLUE)")) return "#3b82f6"
-  if (cleanStr.includes("(GREEN)")) return "#00FF1A"
-  if (cleanStr.includes("(CYAN)")) return "#00ffff"
-  if (cleanStr.includes("(PURPLE)")) return "#a855f7"
-  if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af"
-  if (cleanStr.includes("(ORANGE)")) return "#FF6600" // Make sure your orange is here!
-
-  return '#FFFFFF';
+const getColorFromTags = (cleanStr) => {
+  if (!cleanStr) return "#FFFFFF";
+  if (cleanStr.includes("(RED)")) return "#ff4d4d";
+  if (cleanStr.includes("(BLUE)")) return "#3b82f6";
+  if (cleanStr.includes("(GREEN)")) return "#00FF1A";
+  if (cleanStr.includes("(CYAN)")) return "#00ffff";
+  if (cleanStr.includes("(PURPLE)")) return "#a855f7";
+  if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af";
+  return "#FFFFFF";
 }
     }
 
@@ -533,7 +531,7 @@ const bannerHTML = `
     New update!
   </h3>
   <p style="color: #00FF1A; margin: 0; font-size: 0.9rem; font-weight: bold; font-family: sans-serif;">
-    - In Progress...
+    - Rising up
   </p>
 `;
 </div>
