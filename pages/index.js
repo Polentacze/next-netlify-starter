@@ -715,30 +715,44 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
 
 {/* PASSWORD INPUT HOUSING */}
 <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
-<input
-  id="signin-password-input"
-  type={username ? "text" : "password"} //  only show password plain-text if already logged in
-  disabled={!!username}                 //  only freeze the field if they are logged in
-  value={signInPassword}
-  onChange={(e) => setSignInPassword(e.target.value)}
-style={{
-  width: '100%',
-  height: '100%',
-  background: 'transparent',
-  border: 'none',
-  outline: 'none',
-  fontSize: '1.2rem',
-  color: '#1a4fff',
-  fontFamily: 'sans-serif',
-  fontWeight: 'bold',
-  opacity: signInName ? 0.7 : 1,
+  
+  {/* 🦆 DECOY INPUT: Steals the browser's aggressive autofill overlay */}
+  <input 
+    type="password" 
+    tabIndex={-1} 
+    autoComplete="new-password"
+    style={{
+      position: 'absolute',
+      left: '-9999px',
+      top: '-9999px',
+      width: '1px',
+      height: '1px',
+      opacity: 0,
+    }} 
+  />
 
-  // 🛡️ DEFEAT ALL BROWSER AUTOFILL STYLES:
-  WebkitTextFillColor: '#1a4fff', // Prevents browser from forcing black/white text
-  WebkitBoxShadow: '0 0 0px 1000px rgba(0,0,0,0) inset', // Forces transparent shadow over autofill color
-  transition: 'background-color 5000000s ease-in-out 0s, color 5000000s ease-in-out 0s', // Delays background color rendering indefinitely
-}}        
-/>
+  {/* password function */}
+  <input
+    id="signin-password-input"
+    type={username ? "text" : "password"}
+    disabled={!!username}
+    value={signInPassword}
+    onChange={(e) => setSignInPassword(e.target.value)}
+    autoComplete="new-password" // browser to treat this as a clean field
+    style={{
+      width: '100%',
+      height: '100%',
+      background: 'transparent',
+      border: 'none',
+      outline: 'none',
+      fontSize: '1.2rem',
+      color: '#1a4fff',
+      fontFamily: 'sans-serif',
+      fontWeight: 'bold',
+      opacity: signInName ? 0.7 : 1,
+    }}
+  />
+</div>
         </div>
         {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
         <button type="submit" style={{ display: 'none' }} />
