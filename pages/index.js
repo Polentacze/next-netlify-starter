@@ -188,8 +188,12 @@ if (activeTierIndex === 0 && score >= 20) {          //  Match Stethacanthus (10
   if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
 } else if (activeTierIndex === 2 && score >= 70) {  //  Match Helicoprion (100)
   if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
-} else if (activeTierIndex === 4 && score >= 100) {  //  Match xiphiorhynchus (100)
-  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4)
+} else if (activeTierIndex === 2 && score >= 70) { // Match Helicoprion
+    if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
+    
+//  CHANGE activeTierIndex FROM 4 TO 3 :
+} else if (activeTierIndex === 3 && score >= 100) { // Match xiphiorhynchus (100)
+    if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4)
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
