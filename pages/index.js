@@ -689,17 +689,21 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
     onChange={(e) => setSignInName(e.target.value)} //  Changed to setSignInName
     autoComplete="off" 
     style={{
-      width: '100%',
-      height: '100%',
-      background: 'transparent',
-      border: 'none',
-      outline: 'none',
-      fontSize: '1.2rem',
-      color: '#1a4fff',
-      fontFamily: 'sans-serif',
-      fontWeight: 'bold',
-      opacity: signInName ? 0.7 : 1,
-    }}
+    width: '100%',
+    height: '100%',
+    background: 'transparent',
+    border: 'none',
+    outline: 'none',
+    fontSize: '1.2rem',
+    color: '#1a4fff',
+    fontFamily: 'sans-serif',
+    fontWeight: 'bold',
+    opacity: signInName ? 0.7 : 1,
+
+    //  FORCE AUTOFILL BACKGROUND TO BE WHITE:
+    WebkitBoxShadow: '0 0 0px 1000px #ffffff inset',
+    WebkitTextFillColor: '#1a4fff',
+  }}
   />    
     // 🛡️ THE MAGIC PASSWORD MASK:
     // This instantly turns text characters into solid dots on Chrome, Safari, and Edge!
@@ -729,20 +733,24 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
     value={signInPassword}
     onChange={(e) => setSignInPassword(e.target.value)}
     autoComplete="new-password"
-    style={{
-      width: '100%',
-      height: '100%',
-      background: 'transparent',
-      border: 'none',
-      outline: 'none',
-      fontSize: '1.2rem',
-      color: '#104e8bff',
-      fontFamily: 'sans-serif',
-      fontWeight: 'bold',
-      opacity: signInName ? 0.7 : 1,
-      WebkitTextSecurity: 'disc', 
-      textSecurity: 'disc',
-    }}
+style={{
+    width: '100%',
+    height: '100%',
+    background: 'transparent',
+    border: 'none',
+    outline: 'none',
+    fontSize: '1.2rem',
+    color: '#1a4fff',
+    fontFamily: 'sans-serif',
+    fontWeight: 'bold',
+    opacity: signInName ? 0.7 : 1,
+    WebkitTextSecurity: 'disc', 
+    textSecurity: 'disc',
+
+    // FORCE AUTOFILL BACKGROUND TO BE WHITE:
+    WebkitBoxShadow: '0 0 0px 1000px #ffffff inset',
+    WebkitTextFillColor: '#1a4fff',
+  }}
   />
 </div>
         </div>
