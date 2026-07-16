@@ -79,7 +79,7 @@ const evoTiers = [
   { name: "Sacabambaspis", minScore: 0, scale: 10, file: "/sacabambaspis.png" },
   { name: "Stethacanthus altonensis", minScore: 20, scale: 115, file: "/Stethacanthus-altonensis.png" }, //  Set to 10!
   { name: "Dunkleosteus", minScore: 50, scale: 150, file: "/dunkleosteus.png" },                       //  Set to 50!
-  { name: "Helicoprion", minScore: 100, scale: 170, file: "/helicoprion-bes.png" }
+  { name: "Helicoprion", minScore: 100, scale: 170, file: "/helicoprion-bes.png" },
   { name: "Xiphiorhynchus", minScore: 200, scale: 170, file: "/Xiphiorhynchus-kimblalocki.png" }    //  Added new tier!
 ]
 ]
@@ -183,13 +183,13 @@ setChatMessages((p) => [...p, {
       return; //  Force exits the hook early so no evolutionary level-ups can ever process
     }
 
-if (activeTierIndex === 0 && score >= 20) {           // Match Stethacanthus (10)
+if (activeTierIndex === 0 && score >= 20) {           // To Stethacanthus
   if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1)
-} else if (activeTierIndex === 1 && score >= 50) {    // Match Dunkleosteus (50)
+} else if (activeTierIndex === 1 && score >= 50) {    // To Dunkleosteus
   if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
-} else if (activeTierIndex === 2 && score >= 100) {   // Match Helicoprion (100)
+} else if (activeTierIndex === 2 && score >= 70) {    // To Helicoprion
   if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
-} else if (activeTierIndex === 3 && score >= 200) {   // 🌟 Match Xiphiorhynchus
+} else if (activeTierIndex === 3 && score >= 100) {   // 🌟 Changed from 4 to 3! To Xiphiorhynchus
   if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4)
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
