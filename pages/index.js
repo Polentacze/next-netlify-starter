@@ -79,7 +79,8 @@ const evoTiers = [
   { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" },
   { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" }, //  Set to 10!
   { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" },                       //  Set to 50!
-  { name: "Helicoprion", minScore: 19000, scale: 170, file: "/helicoprion-bes.png" }                     //  Set to 100!
+  { name: "Helicoprion", minScore: 19000, scale: 170, file: "/helicoprion-bes.png" }
+  { name: "Helicoprion", minScore: 26000, scale: 170, file: "/Xiphiorhynchus-kimblalocki.png" }  
 ]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
@@ -181,12 +182,13 @@ setChatMessages((p) => [...p, {
       return; //  Force exits the hook early so no evolutionary level-ups can ever process
     }
 
-if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanthus (10)
+if (activeTierIndex === 0 && score >= 4500) {          //  Match Stethacanthus (10)
   if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1)
 } else if (activeTierIndex === 1 && score >= 9500) {   // 🧪 Match Dunkleosteus (50)
   if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2)
-} else if (activeTierIndex === 2 && score >= 19000) {  // 🧪 Match Helicoprion (100)
+} else if (activeTierIndex === 2 && score >= 19000) {  //  Match Helicoprion (100)
   if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3)
+} else if (activeTierIndex === 4 && score >= 26000) {  //  Match xiphiorhynchus (100)
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
@@ -680,79 +682,51 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
     >
 <form onSubmit={handleSignInSubmit}>
 
-{/* NAME INPUT: positioned precisely over the top slot */}
-  <input
-    id="signin-name-input" //  Changed to name input
-    type="text" 
-    disabled={!!username}
-    value={signInName} //  Changed from signInPassword to signInName
-    onChange={(e) => setSignInName(e.target.value)} //  Changed to setSignInName
-    autoComplete="off" 
-    style={{
-    width: '100%',
-    height: '100%',
-    background: 'transparent',
-    border: 'none',
-    outline: 'none',
-    fontSize: '1.2rem',
-    color: '#1a4fff',
-    fontFamily: 'sans-serif',
-    fontWeight: 'bold',
-    opacity: signInName ? 0.7 : 1,
-
-    //  FORCE AUTOFILL BACKGROUND TO BE WHITE:
-    WebkitBoxShadow: '0 0 0px 1000px #ffffff inset',
-    WebkitTextFillColor: '#1a4fff',
-  }}
-  />    
-    // 🛡️ THE MAGIC PASSWORD MASK:
-    // This instantly turns text characters into solid dots on Chrome, Safari, and Edge!
-    WebkitTextSecurity: 'disc', 
-    textSecurity: 'disc',
-  }}
-/>
-          
-  <style>{`
-    input#signin-password-input::selection {
-      background: transparent !important;
-      color: #104e8bff !important;
-    }
-    input#signin-password-input::-moz-selection {
-      background: transparent !important;
-      color: #104e8bff !important;
-    }
-  `}</style>
+        {/* NAME INPUT: positioned precisely over the top white slot */}
+        <input 
+          type="text"
+          disabled={!!username} // locks field once account exists
+          value={signInName}
+          onChange={(e) => setSignInName(e.target.value)}
+          style={{
+            position: 'absolute',
+            left: '185px',     // pushes the text cursor right past the "Name:" text
+            top: '178px',      // aligns vertically inside the first white slot
+            width: '360px',    // stretches to fill the rest of the white box
+            height: '42px',
+            background: 'transparent',
+            border: 'none',
+            outline: 'none',
+            fontSize: '1.2rem',
+            color: '#1a4fff',  // matches dark blue ui text color theme
+            fontFamily: 'sans-serif',
+            fontWeight: 'bold'
+          }}
+        />
 
 {/* PASSWORD INPUT HOUSING */}
-<div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center', zIndex: 10 }}>
-  <input
-    id="xyz-secure-entry-box"
-    name="entryBoxVal"
-    type="text" 
-    disabled={!!username}
-    value={signInPassword}
-    onChange={(e) => setSignInPassword(e.target.value)}
-    autoComplete="new-password"
+<div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
+<input
+  type={username ? "text" : "password"} //  only show password plain-text if already logged in
+  disabled={!!username}                 //  only freeze the field if they are logged in
+  value={signInPassword}
+  onChange={(e) => setSignInPassword(e.target.value)}
 style={{
-    width: '100%',
-    height: '100%',
-    background: 'transparent',
-    border: 'none',
-    outline: 'none',
-    fontSize: '1.2rem',
-    color: '#1a4fff',
-    fontFamily: 'sans-serif',
-    fontWeight: 'bold',
-    opacity: signInName ? 0.7 : 1,
-    WebkitTextSecurity: 'disc', 
-    textSecurity: 'disc',
-
-    // FORCE AUTOFILL BACKGROUND TO BE WHITE:
-    WebkitBoxShadow: '0 0 0px 1000px #ffffff inset',
-    WebkitTextFillColor: '#1a4fff',
-  }}
-  />
-</div>
+  width: '100%',
+  height: '100%',
+  background: 'transparent',
+  border: 'none',
+  outline: 'none',
+  fontSize: '1.2rem',
+  color: '#1a4fff',
+  fontFamily: 'sans-serif',
+  fontWeight: 'bold',
+  opacity: signInName ? 0.7 : 1,
+  
+  //  THESE TWO LINES TO AUTO-FILL BLUE BLOCKS:
+  WebkitBoxShadow: '0 0 0px 1000px transparent inset',
+  transition: 'background-color 5000s ease-in-out 0s',
+}}          />
         </div>
         {/* Hidden submit trigger so pressing 'Enter' saves automatically */}
         <button type="submit" style={{ display: 'none' }} />
