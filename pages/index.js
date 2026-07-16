@@ -695,7 +695,7 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
     border: 'none',
     outline: 'none',
     fontSize: '1.2rem',
-    color: '#1a4fff',
+    color: '#104e8bff',
     fontFamily: 'sans-serif',
     fontWeight: 'bold',
     opacity: signInName ? 0.7 : 1,
@@ -710,11 +710,11 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
   <style>{`
     input#signin-password-input::selection {
       background: transparent !important;
-      color: #1a4fff !important;
+      color: #104e8bff !important;
     }
     input#signin-password-input::-moz-selection {
       background: transparent !important;
-      color: #1a4fff !important;
+      color: #104e8bff !important;
     }
   `}</style>
 
@@ -735,7 +735,7 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
       border: 'none',
       outline: 'none',
       fontSize: '1.2rem',
-      color: '#1a4fff',
+      color: '#104e8bff',
       fontFamily: 'sans-serif',
       fontWeight: 'bold',
       opacity: signInName ? 0.7 : 1,
