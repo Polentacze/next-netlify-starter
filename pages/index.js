@@ -30,35 +30,33 @@ export default function Home() {
   })      
   
   const [clanInputTemp, setClanInputTemp] = useState("") 
-const evoTiers = [
-  { name: "Pikaia", minScore: 0, scale: 75, file: "/pikaia.png" },
-  { name: "Sacabambaspis", minScore: 2400, scale: 78, file: "/sacabambaspis.png" },
-  { name: "Cephalaspis", minScore: 4200, scale: 110, file: "/cephalaspis.png" }, 
-  { name: "Stethacanthus altonensis", minScore: 6600, scale: 115, file: "/Stethacanthus-altonensis.png" }, //  Set to 10! 
-  { name: "Dunkleosteus", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       //  Set to 50!
-  { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" }
-]
-
+  const evoTiers = [ 
+    { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
+    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
+    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // 🧬 Balanced Tier 3 landmark addition
+  ] 
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const [isChatOpen, setIsChatOpen] = useState(true) // 🔥 Add this line right here!
   const [chatInput, setChatInput] = useState("")
   const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Welcome to Prehistooio, explore the ancient sea", colorCode: "#00FF1A" }
+    { user: "System", text: "Prehistooio loaded! Press E with 2 boosts for your aligned surge!", colorCode: "#00FF1A" }
   ])
   const slots = ["Megalodon", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
 const detectTextColor = (targetString) => {
-const getColorFromTags = (cleanStr) => {
-  if (!cleanStr) return "#FFFFFF";
-  if (cleanStr.includes("(RED)")) return "#ff4d4d";
-  if (cleanStr.includes("(BLUE)")) return "#3b82f6";
-  if (cleanStr.includes("(GREEN)")) return "#00FF1A";
-  if (cleanStr.includes("(CYAN)")) return "#00ffff";
-  if (cleanStr.includes("(PURPLE)")) return "#a855f7";
-  if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af";
-  return "#FFFFFF";
+  const cleanStr = (targetString || "").toUpperCase()
+
+  if (cleanStr.includes("(RED)")) return "#ff4d4d"
+  if (cleanStr.includes("(BLUE)")) return "#3b82f6"
+  if (cleanStr.includes("(GREEN)")) return "#00FF1A"
+  if (cleanStr.includes("(CYAN)")) return "#00ffff"
+  if (cleanStr.includes("(PURPLE)")) return "#a855f7"
+  if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af"
+  if (cleanStr.includes("(ORANGE)")) return "#FF6600" // Make sure your orange is here!
+
+  return '#FFFFFF';
 }
     }
 
@@ -71,7 +69,7 @@ const getColorFromTags = (cleanStr) => {
     if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
     return "#FFFFFF" 
   } 
-//  CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
+// 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
   let result = str
@@ -137,7 +135,7 @@ setChatMessages((p) => [...p, {
     }) 
   }, [isPlaying]) 
 
-  //  BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul
+  // 🧬 BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
   useEffect(() => { 
     if (!isPlaying) return 
     
@@ -145,22 +143,16 @@ setChatMessages((p) => [...p, {
     const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
     if (isSecretGhoul) {
       if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
-      return; // Force exits the hook early so no evolutionary level-ups can ever process
+      return; // 🛑 Force exits the hook early so no evolutionary level-ups can ever process
     }
 
-if (activeTierIndex === 0 && score >= 2400) {
-  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) // Evolve Pikaia (0) -> Sacabambaspis (1)
-} else if (activeTierIndex === 1 && score >= 4200) {
-  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) // Evolve Sacabambaspis (1) -> Cephalaspis (2)
-} else if (activeTierIndex === 2 && score >= 6600) {
-  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3) // Evolve Cephalaspis (2) -> Stethacanthus (3)
-} else if (activeTierIndex === 3 && score >= 9900) {
-  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4) // Evolve Stethacanthus (3) -> Dunkleosteus (4)
-} else if (activeTierIndex === 4 && score >= 21000) {
-  if (pendingEvolutionIndex !== 5) setPendingEvolutionIndex(5) // Evolve Dunkleosteus (4) -> Helicoprion (5)
-}
-  }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
-
+    // Standard progression checkpoints for normal fish tiers
+    if (activeTierIndex === 0 && score >= 4500) { 
+      if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) 
+    } else if (activeTierIndex === 1 && score >= 9500) { 
+      if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) 
+    } 
+  }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) // 🌟 Added username monitoring to track the secret name check!
 
   // 🦪 AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
   useEffect(() => {
@@ -404,7 +396,7 @@ if (activeTierIndex === 0 && score >= 2400) {
                 ))}
               </div>
               <form onSubmit={handleSendChat}>
-                <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type in chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={47} />
+                <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
               </form>
             </div>
           ) : (
@@ -475,7 +467,7 @@ if (activeTierIndex === 0 && score >= 2400) {
               <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.04s linear', background: 'transparent', backgroundColor: 'transparent' }}>
 <img src={username && username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
 
-{/*  Stethacanthus Ability Layer (Index 1) */}
+{/* 🦕 Stethacanthus Ability Layer (Index 1) */}
 {isAbilityActive && activeTierIndex === 1 && (
   <img 
     src="/steth-ability.png" 
@@ -485,7 +477,7 @@ if (activeTierIndex === 0 && score >= 2400) {
   />
 )}
 
-{/*  Dunkleosteus Ability Layer (Index 2) */}
+{/* 🛡️ Dunkleosteus Ability Layer (Index 2) */}
 {isAbilityActive && activeTierIndex === 2 && (
   <img 
     src="/dunk-ability.png" 
@@ -509,7 +501,7 @@ if (activeTierIndex === 0 && score >= 2400) {
             style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
             onClick={() => setIsClanOpen(true)} 
           />
-   {/*  FIXED MAIN MENU UPDATE BANNER */}
+   {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
 <div style={{ 
   display: 'flex', 
   justifyContent: 'center', 
@@ -525,18 +517,14 @@ if (activeTierIndex === 0 && score >= 2400) {
     boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
     width: '220px'
   }}>
-<div>
-const bannerHTML = `
-  <h3 style="color: #ffffff; margin: 0 0 2px 0; font-size: 1rem; font-weight: bold; font-family: sans-serif;">
-    New update!
-  </h3>
-  <p style="color: #00FF1A; margin: 0; font-size: 0.9rem; font-weight: bold; font-family: sans-serif;">
-    - Rising up
-  </p>
-`;
+    <h3 style={{ color: '#ffffff', margin: '0 0 2px 0', fontSize: '1rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
+      New update!
+    </h3>
+    <p style={{ color: '#00FF1A', margin: 0, fontSize: '0.9rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
+      - Rising up
+    </p>
+  </div>
 </div>
-</div>
-
 
 {/* YOUR EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
@@ -591,15 +579,11 @@ const bannerHTML = `
               </div>
               <button type="submit" className="play-btn">
                 <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
-{someCondition ? (
-  <>
-return (
-  <div>
-    {condition ? (
-      <>
-        <main> ... </main>
-      </>
-    ) : null}
-  </div>
-)
+              </button>
+            </form>
+          </main>
+        </>
+      )}
+    </div>
+  )
 }
