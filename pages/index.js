@@ -150,14 +150,14 @@ setChatMessages((p) => [...p, {
       return; // Force exits the hook early so no evolutionary level-ups can ever process
     }
 
-if (activeTierIndex === 0 && score >= 0) {
+if (activeTierIndex === 0 && score >= 2400) {
   if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) // Evolve Pikaia (0) -> Sacabambaspis (1)
-} else if (activeTierIndex === 1 && score >= 1000) {
-  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) // Evolve Sacabambaspis (1) -> cephalaspis (2)
-} else if (activeTierIndex === 2 && score >= 3500) {
-  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3) // Evolve Stethacanthus (2) -> stethacanthus (3)
-} else if (activeTierIndex === 3 && score >= 9800) {
-  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4) // Evolve Cretolamna (3) -> Dunkleosteus (4)
+} else if (activeTierIndex === 1 && score >= 4200) {
+  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) // Evolve Sacabambaspis (1) -> Cephalaspis (2)
+} else if (activeTierIndex === 2 && score >= 6600) {
+  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3) // Evolve Cephalaspis (2) -> Stethacanthus (3)
+} else if (activeTierIndex === 3 && score >= 9900) {
+  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4) // Evolve Stethacanthus (3) -> Dunkleosteus (4)
 } else if (activeTierIndex === 4 && score >= 21000) {
   if (pendingEvolutionIndex !== 5) setPendingEvolutionIndex(5) // Evolve Dunkleosteus (4) -> Helicoprion (5)
 }
