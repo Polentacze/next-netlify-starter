@@ -80,7 +80,7 @@ const evoTiers = [
   { name: "Stethacanthus altonensis", minScore: 20, scale: 115, file: "/Stethacanthus-altonensis.png" }, //  Set to 10!
   { name: "Dunkleosteus", minScore: 50, scale: 150, file: "/dunkleosteus.png" },                       //  Set to 50!
   { name: "Helicoprion", minScore: 70, scale: 170, file: "/helicoprion-bes.png" }
-  { name: "Helicoprion", minScore: 100, scale: 170, file: "/Xiphiorhynchus-kimblalocki.png" }  
+  { name: "Xiphiorhynchus", minScore: 100, scale: 170, file: "/Xiphiorhynchus-kimblalocki.png" }  
 ]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
