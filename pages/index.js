@@ -593,8 +593,12 @@ const bannerHTML = `
                 <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
 {someCondition ? (
   <>
-    <main> ... </main>
-  </>
-) : null}
+return (
+  <div>
+    {condition ? (
+      <>
+        <main> ... </main>
+      </>
+    ) : null}
   </div>
 )
