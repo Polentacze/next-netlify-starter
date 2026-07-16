@@ -701,10 +701,22 @@ if (activeTierIndex === 0 && score >= 4500) {          // 🧪 Match Stethacanth
             fontWeight: 'bold'
           }}
         />
+          
+  <style>{`
+    input#signin-password-input::selection {
+      background: transparent !important;
+      color: #1a4fff !important;
+    }
+    input#signin-password-input::-moz-selection {
+      background: transparent !important;
+      color: #1a4fff !important;
+    }
+  `}</style>
 
 {/* PASSWORD INPUT HOUSING */}
 <div style={{ position: 'absolute', left: '235px', top: '243px', width: '310px', height: '42px', display: 'flex', alignItems: 'center' }}>
 <input
+  id="signin-password-input"
   type={username ? "text" : "password"} //  only show password plain-text if already logged in
   disabled={!!username}                 //  only freeze the field if they are logged in
   value={signInPassword}
