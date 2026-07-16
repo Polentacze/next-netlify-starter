@@ -32,9 +32,9 @@ export default function Home() {
   const [clanInputTemp, setClanInputTemp] = useState("") 
 const evoTiers = [
   { name: "Pikaia", minScore: 0, scale: 75, file: "/pikaia.png" },
-  { name: "Sacabambaspis", minScore: 2200, scale: 78, file: "/sacabambaspis.png" },
-  { name: "Cephalaspis", minScore: 4000, scale: 110, file: "/cephalaspis.png" }, 
-  { name: "Stethacanthus altonensis", minScore: 6000, scale: 115, file: "/Stethacanthus-altonensis.png" }, //  Set to 10! 
+  { name: "Sacabambaspis", minScore: 2400, scale: 78, file: "/sacabambaspis.png" },
+  { name: "Cephalaspis", minScore: 4200, scale: 110, file: "/cephalaspis.png" }, 
+  { name: "Stethacanthus altonensis", minScore: 6600, scale: 115, file: "/Stethacanthus-altonensis.png" }, //  Set to 10! 
   { name: "Dunkleosteus", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       //  Set to 50!
   { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" }
 ]
