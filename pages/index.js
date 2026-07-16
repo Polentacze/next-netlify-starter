@@ -32,10 +32,10 @@ export default function Home() {
   const [clanInputTemp, setClanInputTemp] = useState("") 
 const evoTiers = [
   { name: "Pikaia", minScore: 0, scale: 75, file: "/pikaia.png" },
-  { name: "Sacabambaspis", minScore: 1000, scale: 78, file: "/sacabambaspis.png" },
-  { name: "Cephalaspis", minScore: 3500, scale: 110, file: "/cephalaspis.png" }, 
-  { name: "Stethacanthus altonensis", minScore: 5500, scale: 115, file: "/Stethacanthus-altonensis.png" }, //  Set to 10! 
-  { name: "Dunkleosteus", minScore: 9800, scale: 150, file: "/dunkleosteus.png" },                       //  Set to 50!
+  { name: "Sacabambaspis", minScore: 2200, scale: 78, file: "/sacabambaspis.png" },
+  { name: "Cephalaspis", minScore: 4000, scale: 110, file: "/cephalaspis.png" }, 
+  { name: "Stethacanthus altonensis", minScore: 6000, scale: 115, file: "/Stethacanthus-altonensis.png" }, //  Set to 10! 
+  { name: "Dunkleosteus", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       //  Set to 50!
   { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" }
 ]
 
@@ -73,7 +73,7 @@ const detectTextColor = (targetString) => {
     if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
     return "#FFFFFF" 
   } 
-// 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
+//  CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
   let result = str
