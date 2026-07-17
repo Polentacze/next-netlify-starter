@@ -10,3 +10,12 @@ body,
   background-color: #104E8B;
   color: #FFFFFF;
 }
+
+main, 
+.launch-form, 
+.play-btn {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
