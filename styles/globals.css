@@ -29,3 +29,9 @@ form button {
   box-shadow: none !important;
   border: none !important;
 }
+
+.launch-form * {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
