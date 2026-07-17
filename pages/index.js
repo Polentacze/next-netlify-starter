@@ -587,6 +587,8 @@ setChatMessages((p) => [...p, {
     )}
   </div>
 )
-}
+export default YourComponentName;
 
-export default YourComponentName
+export default function YourComponentName() {
+  return ( /* JSX */ );
+}
