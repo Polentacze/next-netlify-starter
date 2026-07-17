@@ -30,11 +30,14 @@ export default function Home() {
   })      
   
   const [clanInputTemp, setClanInputTemp] = useState("") 
-  const evoTiers = [ 
-    { name: "Sacabambaspis", minScore: 0, scale: 80, file: "/sacabambaspis.png" }, 
-    { name: "Stethacanthus altonensis", minScore: 4500, scale: 115, file: "/Stethacanthus-altonensis.png" },
-    { name: "Dunkleosteus", minScore: 9500, scale: 150, file: "/dunkleosteus.png" } // 🧬 Balanced Tier 3 landmark addition
-  ] 
+const evoTiers = [
+  { name: "Pikaia", minScore: 0, scale: 75, file: "/pikaia.png" },                                      // Index 0 (Starts at 0 points)
+  { name: "Sacabambaspis", minScore: 2400, scale: 78, file: "/sacabambaspis.png" },                     // Index 1 (Unlocked at 2400)
+  { name: "Cephalaspis", minScore: 4200, scale: 110, file: "/cephalaspis.png" },                        // Index 2 (Unlocked at 4200)
+  { name: "Stethacanthus altonensis", minScore: 6600, scale: 115, file: "/Stethacanthus-altonensis.png" }, // Index 3 (Unlocked at 6600)
+  { name: "Dunkleosteus", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       // Index 4 (Unlocked at 9900)
+  { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" }                     // Index 5 (Unlocked at 21000)
+]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const [isChatOpen, setIsChatOpen] = useState(true) //  Add this line right here
@@ -146,11 +149,17 @@ const cleanTags = (str) => {
     }
 
     // Standard progression checkpoints for normal fish tiers
-    if (activeTierIndex === 0 && score >= 4500) { 
-      if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) 
-    } else if (activeTierIndex === 1 && score >= 9500) { 
-      if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) 
-    } 
+if (activeTierIndex === 0 && score >= 2400) {
+  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) // Evolve Pikaia (0) -> Sacabambaspis (1)
+} else if (activeTierIndex === 1 && score >= 4200) {
+  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) // Evolve Sacabambaspis (1) -> Cephalaspis (2)
+} else if (activeTierIndex === 2 && score >= 6600) {
+  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3) // Evolve Cephalaspis (2) -> Stethacanthus (3)
+} else if (activeTierIndex === 3 && score >= 9900) {
+  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4) // Evolve Stethacanthus (3) -> Dunkleosteus (4)
+} else if (activeTierIndex === 4 && score >= 21000) {
+  if (pendingEvolutionIndex !== 5) setPendingEvolutionIndex(5) // Evolve Dunkleosteus (4) -> Helicoprion (5)
+}
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
   //  AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
