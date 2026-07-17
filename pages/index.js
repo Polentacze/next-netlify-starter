@@ -267,7 +267,7 @@ if (activeTierIndex === 0 && score >= 2400) {
           
           // 🎲 Roll the dice for spawn size: 60% chance for a single/double dot, 40% chance for a tiny clump
           const spawnChance = Math.random();
-          let itemsToSpawn = 1; 
+          let itemsToSpawn = 2; 
           
           if (spawnChance > 0.8) {
             itemsToSpawn = 4; // Tiny clump maximum size
