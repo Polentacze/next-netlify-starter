@@ -10,12 +10,3 @@ body,
   background-color: #104E8B;
   color: #FFFFFF;
 }
-
-body {
-  background-image: url('/ocean-background-2.png') !important;
-  background-size: cover !important;
-  background-position: bottom center !important;
-  background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
-  margin: 0;
-}
