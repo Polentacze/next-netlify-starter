@@ -270,9 +270,9 @@ if (activeTierIndex === 0 && score >= 2400) {
           let itemsToSpawn = 1; 
           
           if (spawnChance > 0.8) {
-            itemsToSpawn = 3; // Tiny clump maximum size
+            itemsToSpawn = 4; // Tiny clump maximum size
           } else if (spawnChance > 0.4) {
-            itemsToSpawn = 2; // Double dot
+            itemsToSpawn = 3; // Double dot
           }
 
           for (let i = 0; i < itemsToSpawn; i++) {
@@ -526,10 +526,10 @@ if (activeTierIndex === 0 && score >= 2400) {
     width: '220px'
   }}>
     <h3 style={{ color: '#ffffff', margin: '0 0 2px 0', fontSize: '1rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-      New update!
+      Prehistooio
     </h3>
     <p style={{ color: '#00FF1A', margin: 0, fontSize: '0.9rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-      - Rising up
+      - West Ocean Company
     </p>
   </div>
 </div>
