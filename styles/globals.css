@@ -19,3 +19,13 @@ main,
   box-shadow: none !important;
   border: none !important;
 }
+
+.input-wrap,
+.play-btn,
+.launch-form div,
+form button {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
