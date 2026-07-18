@@ -398,7 +398,7 @@ if (activeTierIndex === 0 && score >= 2400) {
               
               <div className="chat-scroll-view" style={{ marginTop: '20px' }}>
                 {chatMessages.map((m, i) => (
-<div key={i} className="chat-msg-row" style={{ color: (m.colorCode === '#FFFFFF' || !m.colorCode) ? '#FFD700' : m.colorCode }}>
+<div key={i} className="chat-msg-row" style={{ color: (m.colorCode === '#FFFFFF' || !m.colorCode) ? '#FFFFFF' : m.colorCode }}>
     <strong style={{ 
         color: detectTextColor(m.user) !== '#FFFFFF' 
             ? detectTextColor(m.user) 
