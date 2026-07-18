@@ -51,12 +51,10 @@ form button {
 
 .lobby-critter-one,
 .lobby-critter-two {
-  /* Force sharp pixel rendering */
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-
-  /* Ensure no smoothing filters are applied */
+  /* This tells the browser to use high-quality smoothing for vector/rounded art */
+  image-rendering: auto !important;
+  
+  /* Wipes out any weird filters or blend mode leftovers */
   filter: none !important;
+  mix-blend-mode: normal !important;
 }
