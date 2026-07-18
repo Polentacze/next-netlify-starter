@@ -541,7 +541,7 @@ if (activeTierIndex === 0 && score >= 2400) {
       New update!
     </h3>
     <p style={{ color: '#00FF1A', margin: 0, fontSize: '0.9rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-      - Rising up
+      - Banner and Evolutions
     </p>
   </div>
 </div>
