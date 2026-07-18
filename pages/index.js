@@ -500,19 +500,32 @@ if (activeTierIndex === 0 && score >= 2400) {
         </div>
       ) : (
         <>
-        <img 
-  src="/trilobite.png?v=4" 
+<img 
+  src="/trilobite.png?v=5" 
   className="lobby-critter-one" 
-  onError={(e) => { e.target.src = "/prehistoric-skeleton.png?v=4" }} 
+  onError={(e) => { e.target.src = "/prehistoric-skeleton.png?v=5" }} 
   alt="critter" 
-  style={{ imageRendering: 'auto', width: '70px', height: 'auto' }}
+  style={{ 
+    imageRendering: 'auto', 
+    width: '70px', 
+    height: 'auto',
+    position: 'relative',
+    zIndex: 1,
+    filter: 'contrast(1.2) brightness(0.9)' /* Brings back the deep brown tones */
+  }}
 />
 <img 
-  src="/ammonite.png?v=4" 
+  src="/ammonite.png?v=5" 
   className="lobby-critter-two" 
-  onError={(e) => { e.target.src = "/prehistoric-skeleton.png?v=4" }} 
+  onError={(e) => { e.target.src = "/prehistoric-skeleton.png?v=5" }} 
   alt="critter" 
-  style={{ imageRendering: 'auto', width: '70px', height: 'auto' }}
+  style={{ 
+    imageRendering: 'auto', 
+    width: '70px', 
+    height: 'auto',
+    position: 'relative',
+    zIndex: 1
+  }}
 />
           <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
           <img 
