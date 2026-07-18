@@ -51,11 +51,14 @@ form button {
 
 .lobby-critter-one,
 .lobby-critter-two {
-  /* Forces the browser to prioritize geometric precision and crisp rendering for curves */
-  image-rendering: -webkit-optimize-contrast !important;
-  image-rendering: crisp-edges !important;
-  
-  /* Restrict the size so it doesn't blow up and get blurry */
-  width: 64px !important;  /* Adjust this size if they need to be bigger or smaller */
+  /* Tells the browser to use its highest quality smooth smoothing algorithm */
+  image-rendering: auto !important;
+  -ms-interpolation-mode: bicubic !important; /* Smooth scaling for older browsers */
+
+  /* Set a clean, defined size so the browser doesn't stretch and blur the artwork */
+  width: 70px !important; 
   height: auto !important;
+  
+  /* Clear out any weird filter leftovers */
+  filter: none !important;
 }
