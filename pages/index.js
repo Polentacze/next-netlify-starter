@@ -501,17 +501,18 @@ if (activeTierIndex === 0 && score >= 2400) {
       ) : (
         <>
 <img 
-  src="/trilobite.png?v=5" 
+  src="/trilobite.png?v=7" 
   className="lobby-critter-one" 
-  onError={(e) => { e.target.src = "/prehistoric-skeleton.png?v=5" }} 
+  onError={(e) => { e.target.src = "/prehistoric-skeleton.png?v=7" }} 
   alt="critter" 
   style={{ 
     imageRendering: 'auto', 
     width: '70px', 
     height: 'auto',
-    position: 'relative',
-    zIndex: 1,
-    filter: 'contrast(1.2) brightness(0.9)' /* Brings back the deep brown tones */
+    /* Force the browser to kill ALL color/grayscale filters and blend modes */
+    filter: 'none',
+    mixBlendMode: 'normal',
+    opacity: 1
   }}
 />
 <img 
