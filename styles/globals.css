@@ -35,3 +35,8 @@ form button {
   background-color: transparent !important;
   box-shadow: none !important;
 }
+
+.lobby-critter-one,
+.lobby-critter-two {
+  mix-blend-mode: screen !important;
+}
