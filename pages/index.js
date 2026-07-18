@@ -501,8 +501,8 @@ if (activeTierIndex === 0 && score >= 2400) {
       ) : (
         <>
           <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
-         <img src="/prehistoric-skeleton.png" className="lobby-critter-one" alt="critter" />
-         <img src="/prehistoric-skeleton.png" className="lobby-critter-two" alt="critter" />
+          <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
+          <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
           <img 
             src="/clan-button.png" 
             alt="Clan Button" 
@@ -581,12 +581,12 @@ if (activeTierIndex === 0 && score >= 2400) {
             <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} />
             <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p>
          <form className="launch-form" style={{ background: 'transparent', boxShadow: 'none' }} onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}>              <div className="input-wrap">
-    <div className="input-wrap">
-      <input type="text" className="field-text" placeholder="Enter Username..." value={username} onChange={(e) => setUsername(e.target.value)} maxLength={26} required />
-    </div>
-    <button type="submit" className="play-btn">
-      Play Game!
-    </button>
+                <img src="/input-box.png" alt="Input field" style={{ width: '100%' }} />
+                <input type="text" className="field-text" placeholder="Enter Username..." value={username} onChange={(e) => setUsername(e.target.value)} maxLength={26} required />
+              </div>
+              <button type="submit" className="play-btn">
+                <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
+              </button>
             </form>
           </main>
         </>
