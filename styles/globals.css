@@ -45,12 +45,12 @@ form button {
 }
 
 .lobby-critter-one {
-  /* This kills any active grayscale or color-stripping filters in the stylesheet */
+  /* Keep this to ensure it stays brown and doesn't turn gray */
   filter: none !important;
   -webkit-filter: none !important;
   
-  /* Restores full opacity so the blue background stops bleeding through it */
-  opacity: 1 !important;
+  /* REMOVE OR COMMENT OUT THIS LINE: */
+  /* opacity: 1 !important; */
 }
 .lobby-critter-two {
   /* Restores the high-quality smooth curves */
