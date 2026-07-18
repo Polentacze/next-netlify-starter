@@ -49,7 +49,14 @@ form button {
   border: none !important;
 }
 
-.lobby-critter-one,
+.lobby-critter-one {
+  /* This kills any active grayscale or color-stripping filters in the stylesheet */
+  filter: none !important;
+  -webkit-filter: none !important;
+  
+  /* Restores full opacity so the blue background stops bleeding through it */
+  opacity: 1 !important;
+}
 .lobby-critter-two {
   /* Restores the high-quality smooth curves */
   image-rendering: auto !important;
