@@ -51,8 +51,12 @@ form button {
 
 .lobby-critter-one,
 .lobby-critter-two {
-  image-rendering: -moz-crisp-edges;         
-  image-rendering: -webkit-crisp-edges;      
-  image-rendering: pixelated;               
-  image-rendering: crisp-edges;             
+  /* Force sharp pixel rendering */
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+
+  /* Ensure no smoothing filters are applied */
+  filter: none !important;
 }
