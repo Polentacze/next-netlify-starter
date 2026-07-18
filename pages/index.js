@@ -501,8 +501,8 @@ if (activeTierIndex === 0 && score >= 2400) {
       ) : (
         <>
           <img src="/trilobite.png" className="lobby-critter-one" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
-          <img src="/ammonite.png" className="lobby-critter-two" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="critter" />
-          <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
+         <img src="/prehistoric-skeleton.png" className="lobby-critter-one" alt="critter" />
+         <img src="/prehistoric-skeleton.png" className="lobby-critter-two" alt="critter" />
           <img 
             src="/clan-button.png" 
             alt="Clan Button" 
