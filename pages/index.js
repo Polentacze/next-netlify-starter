@@ -398,9 +398,10 @@ if (activeTierIndex === 0 && score >= 2400) {
               
               <div className="chat-scroll-view" style={{ marginTop: '20px' }}>
                 {chatMessages.map((m, i) => (
-                  <div key={i} className="chat-msg-row" style={{ color: m.colorCode || '#FFFFFF' }}>
-                    <strong style={{ color: detectTextColor(m.user) !== '#FFFFFF' ? detectTextColor(m.user) : m.user === "System" ? "#00FF1A" : "#FFD700" }}>{m.user}:</strong>{" "}{m.text}
-                  </div>
+<div key={i} className="chat-msg-row" style={{ color: (m.colorCode === '#FFFFFF' || !m.colorCode) ? '#FFD700' : m.colorCode }}>
+    <strong style={{ color: detectTextColor(m.user) !== '#FFFFFF' ? detectTextColor(m.user) : m.user === "System" ? "#00FF1A" : "#FFD700" }}>{m.user}: </strong>
+    {m.text}
+</div>
                 ))}
               </div>
               <form onSubmit={handleSendChat}>
