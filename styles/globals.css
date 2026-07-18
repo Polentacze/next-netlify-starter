@@ -51,14 +51,15 @@ form button {
 
 .lobby-critter-one,
 .lobby-critter-two {
-  /* Tells the browser to use its highest quality smooth smoothing algorithm */
+  /* Restores the high-quality smooth curves */
   image-rendering: auto !important;
-  -ms-interpolation-mode: bicubic !important; /* Smooth scaling for older browsers */
 
-  /* Set a clean, defined size so the browser doesn't stretch and blur the artwork */
-  width: 70px !important; 
-  height: auto !important;
-  
-  /* Clear out any weird filter leftovers */
-  filter: none !important;
+  /* Fixes GPU blur caused by scaling/transforms */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
+
+  /* Force the browser's graphics processor to use high-quality rendering */
+  -webkit-font-smoothing: subpixel-antialiased;
 }
