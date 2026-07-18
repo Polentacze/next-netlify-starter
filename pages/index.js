@@ -500,12 +500,18 @@ if (activeTierIndex === 0 && score >= 2400) {
         </div>
       ) : (
         <>
-        <img 
-  src="/trilobite.png?v=4" 
-  className="lobby-critter-one" 
-  onError={(e) => { e.target.src = "/prehistoric-skeleton.png?v=4" }} 
-  alt="critter" 
-  style={{ imageRendering: 'auto', width: '70px', height: 'auto' }}
+<img
+  src="/trilobite.png?v=4"
+  className="lobby-critter-one"
+  onError={(e) => { e.target.src = "/prehistoric-skeleton.png?v=4" }}
+  alt="critter"
+  style={{ 
+    imageRendering: 'auto', 
+    width: '70px', 
+    height: 'auto',
+    // Saturates the color heavily to fight the opacity and background bleed
+    filter: 'saturate(3) brightness(0.8) contrast(1.2)' 
+  }}
 />
 <img 
   src="/ammonite.png?v=4" 
