@@ -1,14 +1,17 @@
 @import url('https://googleapis.com');
 
-html,
-body,
+/* This applies to the layout wrapper elements only */
+html, body {
+    background-color: #104E8B;
+    color: #FFFFFF;
+}
+
+/* This applies safely to everything without breaking transparency */
 * {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  font-family: 'Montserrat', sans-serif !important;
-  background-color: #104E8B;
-  color: #FFFFFF;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: Montserrat, sans-serif !important;
 }
 
 main, 
