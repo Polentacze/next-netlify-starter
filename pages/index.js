@@ -375,15 +375,21 @@ if (activeTierIndex === 0 && score >= 2400) {
   <div 
     className="evolution-prompt-clickable-hud-box" 
     onClick={(e) => { e.stopPropagation(); setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Evolved into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]) }}
+    style={{ background: 'none', backgroundColor: 'transparent' }}
   >
-    <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
+    <img 
+      src="/animal-evo.png" 
+      alt="frame" 
+      style={{ width: '100%', background: 'none', backgroundColor: 'transparent' }} 
+    />
     <img 
       src={evoTiers[pendingEvolutionIndex].file} 
       className="evolution-preview-avatar-inside-hud" 
       onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
       alt="avatar" 
+      style={{ background: 'none', backgroundColor: 'transparent' }}
     />
-    <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
+    <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap', background: 'none', backgroundColor: 'transparent' }}>CLICK TO EVOLVE</span>
   </div>
 )}
 
