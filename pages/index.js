@@ -442,33 +442,6 @@ if (activeTierIndex === 0 && score >= 2400) {
                 <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
               </form>
             </div>
-{showInfoBox && (
-  <div style={{
-    position: 'fixed',
-    bottom: '24px',
-    right: '24px',
-    width: '280px',
-    backgroundColor: 'rgba(40, 44, 52, 0.95)',
-    border: '2px solid #5c6370',
-    borderRadius: '12px',
-    padding: '16px',
-    boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-    color: '#ffffff',
-    fontFamily: 'Montserrat, sans-serif',
-    zIndex: 99999, 
-    pointerEvents: 'auto'
-  }}>
-    <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', color: '#00FF1A', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-      {activeTierIndex !== null && evoTiers && evoTiers[activeTierIndex] ? evoTiers[activeTierIndex].name : "Testing Box"}
-    </h3>
-    <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: '1.4', color: '#e0e6ed' }}>
-      {activeTierIndex !== null && evoTiers && evoTiers[activeTierIndex] ? evoTiers[activeTierIndex].description : "If you see this, it is in the game screen section!"}
-    </p>
-    <div style={{ marginTop: '10px', fontSize: '0.65rem', color: '#a0aec0', textAlign: 'right', fontStyle: 'italic' }}>
-      Press 'I' to close
-    </div>
-  </div>
-)}
           ) : (
             /* Small Open Chat Button in Bottom Left Corner */
             <button 
@@ -478,6 +451,35 @@ if (activeTierIndex === 0 && score >= 2400) {
               💬 Open Chat
             </button>
           )}
+            {/* Absolute screen overlay container pinning it to the viewport */}
+<div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 999999 }}>
+  {showInfoBox && (
+    <div style={{
+      position: 'absolute',
+      bottom: '24px',
+      right: '24px',
+      width: '280px',
+      backgroundColor: 'rgba(40, 44, 52, 0.95)',
+      border: '2px solid #5c6370',
+      borderRadius: '12px',
+      padding: '16px',
+      boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+      color: '#ffffff',
+      fontFamily: 'Montserrat, sans-serif',
+      pointerEvents: 'auto'
+    }}>
+      <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', color: '#00FF1A', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        {activeTierIndex !== null && evoTiers && evoTiers[activeTierIndex] ? evoTiers[activeTierIndex].name : "Testing Box"}
+      </h3>
+      <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: '1.4', color: '#e0e6ed' }}>
+        {activeTierIndex !== null && evoTiers && evoTiers[activeTierIndex] ? evoTiers[activeTierIndex].description : "If you see this, it is perfectly placed in the game viewport!"}
+      </p>
+      <div style={{ marginTop: '10px', fontSize: '0.65rem', color: '#a0aec0', textAlign: 'right', fontStyle: 'italic' }}>
+        Press 'I' to close
+      </div>
+    </div>
+  )}
+</div>
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
