@@ -580,33 +580,6 @@ if (activeTierIndex === 0 && score >= 2400) {
     </p>
   </div>
 </div>
-{showInfoBox && (
-  <div style={{
-    position: 'fixed',
-    bottom: '24px',
-    right: '24px',
-    width: '280px',
-    backgroundColor: 'rgba(40, 44, 52, 0.95)',
-    border: '2px solid #5c6370',
-    borderRadius: '12px',
-    padding: '16px',
-    boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-    color: '#ffffff',
-    fontFamily: 'Montserrat, sans-serif',
-    zIndex: 9999, // Bumped up significantly to force it over everything
-    pointerEvents: 'auto'
-  }}>
-    <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', color: '#00FF1A', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-      {activeTierIndex !== null && evoTiers[activeTierIndex] ? evoTiers[activeTierIndex].name : "Testing Box"}
-    </h3>
-    <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: '1.4', color: '#e0e6ed' }}>
-      {activeTierIndex !== null && evoTiers[activeTierIndex] ? evoTiers[activeTierIndex].description : "If you see this, the 'I' key toggle is working!"}
-    </p>
-    <div style={{ marginTop: '10px', fontSize: '0.65rem', color: '#a0aec0', textAlign: 'right', fontStyle: 'italic' }}>
-      Press 'I' to close
-    </div>
-  </div>
-)}
 
 {/* YOUR EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
@@ -648,6 +621,33 @@ if (activeTierIndex === 0 && score >= 2400) {
               </div>
             </div> 
           </div>
+     {showInfoBox && (
+  <div style={{
+    position: 'fixed',
+    bottom: '24px',
+    right: '24px',
+    width: '280px',
+    backgroundColor: 'rgba(40, 44, 52, 0.95)',
+    border: '2px solid #5c6370',
+    borderRadius: '12px',
+    padding: '16px',
+    boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+    color: '#ffffff',
+    fontFamily: 'Montserrat, sans-serif',
+    zIndex: 99999, 
+    pointerEvents: 'auto'
+  }}>
+    <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', color: '#00FF1A', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+      {activeTierIndex !== null && evoTiers && evoTiers[activeTierIndex] ? evoTiers[activeTierIndex].name : "Testing Box"}
+    </h3>
+    <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: '1.4', color: '#e0e6ed' }}>
+      {activeTierIndex !== null && evoTiers && evoTiers[activeTierIndex] ? evoTiers[activeTierIndex].description : "If you see this, the box is rendering in a safe zone!"}
+    </p>
+    <div style={{ marginTop: '10px', fontSize: '0.65rem', color: '#a0aec0', textAlign: 'right', fontStyle: 'italic' }}>
+      Press 'I' to close
+    </div>
+  </div>
+)}               
 
           <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
             <h1 className="ocean-title" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Prehistooio</h1>
