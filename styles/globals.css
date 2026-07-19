@@ -83,3 +83,13 @@ form button {
     <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
   </div>
 )}
+
+.evolution-prompt-clickable-hud-box {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+.evolution-preview-avatar-inside-hud {
+    background: transparent !important;
+    background-color: transparent !important;
+}
