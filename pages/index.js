@@ -19,6 +19,24 @@ export default function Home() {
   const [isAbilityActive, setIsAbilityActive] = useState(false)
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
   const [clamMeats, setClamMeats] = useState([])
+  // 1. Add the state right near your other useState hooks
+const [showInfoBox, setShowInfoBox] = useState(false);
+
+// 2. Add the keydown listener
+useEffect(() => {
+  const handleKeyDown = (e) => {
+    if (e.key.toLowerCase() === 'i') {
+      // Check if the user is typing in chat so it doesn't accidentally trigger
+      if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+        return;
+      }
+      setShowInfoBox(prev => !prev);
+    }
+  };
+
+  window.addEventListener('keydown', handleKeyDown);
+  return () => window.removeEventListener('keydown', handleKeyDown);
+}, []);
   const [isClanOpen, setIsClanOpen] = useState(false) 
   
   //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
@@ -38,6 +56,14 @@ const evoTiers = [
   { name: "Dunkleosteus", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       // Index 4 (Unlocked at 9900)
   { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" }                     // Index 5 (Unlocked at 21000)
 ]
+  const evoTiers = [
+  { name: "Pikaia", file: "/pikaia.png", description: "The ancestor of all cordates including reptiles, mammals and fish." },
+  { name: "Sacabambaspis", file: "/sacabambaspis.png", description: "A prehistoric, jawless fish from the Ordovician period." },
+  { name: "Cephalaspis", file: "/cephalaspis.png", description: "While a simple yet armored fish, Cephalaspis has a special sensing techinque to ambushes from predators." },
+  { name: "Stethacanthus", file: "/stethacanthus.png", description: "This ancient shark is one of complex origins, and also a unique anvil on it's head." },
+  { name: "Dunkleosteus", file: "/dunkleosteus.png", description: "The apex predator of the Devonian, chomping it's way through competition with it's strong jaws and teeth." },
+  { name: "Helicoprion", file: "/helicoprion-bes.png", description: "This death machine has a buzzsaw for a lower jaw! it also is not a shark, it is related to modern-day ratfish." },
+];
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const [isChatOpen, setIsChatOpen] = useState(true) //  Add this line right here
@@ -554,6 +580,33 @@ if (activeTierIndex === 0 && score >= 2400) {
     </p>
   </div>
 </div>
+   {showInfoBox && activeTierIndex !== null && evoTiers[activeTierIndex] && (
+         <div style={{
+           position: 'fixed',
+           bottom: '24px',
+           right: '24px',
+           width: '280px',
+           backgroundColor: 'rgba(40, 44, 52, 0.95)',
+           border: '2px solid #5c6370',
+           borderRadius: '12px',
+           padding: '16px',
+           boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+           color: '#ffffff',
+           fontFamily: 'Montserrat, sans-serif',
+           zIndex: 1000,
+           pointerEvents: 'auto'
+         }}>
+           <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', color: '#00FF1A', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+             {evoTiers[activeTierIndex].name}
+           </h3>
+           <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: '1.4', color: '#e0e6ed' }}>
+             {evoTiers[activeTierIndex].description || "No description available for this ancient creature."}
+           </p>
+           <div style={{ marginTop: '10px', fontSize: '0.65rem', color: '#a0aec0', textAlign: 'right', fontStyle: 'italic' }}>
+             Press 'I' to close
+           </div>
+         </div>
+       )}
 
 {/* YOUR EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
