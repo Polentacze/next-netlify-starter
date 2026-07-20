@@ -19,7 +19,6 @@ export default function Home() {
   const [isAbilityActive, setIsAbilityActive] = useState(false)
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
   const [clamMeats, setClamMeats] = useState([])
-  const [showInfoBox, setShowInfoBox] = useState(true);
   const [isClanOpen, setIsClanOpen] = useState(false) 
   
   //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
@@ -39,15 +38,6 @@ const evoTiers = [
   { name: "Dunkleosteus", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       // Index 4 (Unlocked at 9900)
   { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" }                     // Index 5 (Unlocked at 21000)
 ]
-    const evoTiers = [
-  { name: "Pikaia", file: "/pikaia.png", description: "The ancestor of all chordates including reptiles, mammals and fish." },
-  { name: "Sacabambaspis", file: "/sacabambaspis.png", description: "A prehistoric, jawless fish from the Ordovician period." },
-  { name: "Cephalaspis", file: "/cephalaspis.png", description: "While a simple yet armored fish, Cephalaspis has a special sensing technique to ambushes from predators." },
-  { name: "Stethacanthus", file: "/stethacanthus.png", description: "This ancient shark is one of complex origins, and also a unique anvil on its head." },
-  { name: "Dunkleosteus", file: "/dunkleosteus.png", description: "The apex predator of the Devonian, chomping its way through competition with its strong jaws and teeth." },
-  { name: "Helicoprion", file: "/helicoprion-bes.png", description: "This death machine has a buzzsaw for a lower jaw! it also is not a shark, it is related to modern-day ratfish." },
-];
-
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const [isChatOpen, setIsChatOpen] = useState(true) //  Add this line right here
@@ -426,33 +416,6 @@ if (activeTierIndex === 0 && score >= 2400) {
                 <input type="text" className="chat-input-bar-inner" placeholder="Press Enter to type chat..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} maxLength={45} />
               </form>
             </div>
-{showInfoBox && activeTierIndex !== null && activeTierIndex !== undefined && evoTiers && evoTiers[activeTierIndex] && (
-         <div style={{
-           position: 'fixed',
-           bottom: '24px',
-           right: '24px',
-           width: '280px',
-           backgroundColor: 'rgba(40, 44, 52, 0.95)',
-           border: '2px solid #5c6370',
-           borderRadius: '12px',
-           padding: '16px',
-           boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-           color: '#ffffff',
-           fontFamily: 'Montserrat, sans-serif',
-           zIndex: 9999,
-           pointerEvents: 'auto'
-         }}>
-           <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem', color: '#00FF1A', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-             {evoTiers[activeTierIndex].name}
-           </h3>
-           <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: '1.4', color: '#e0e6ed' }}>
-             {evoTiers[activeTierIndex].description || "No description available for this ancient creature."}
-           </p>
-           <div style={{ marginTop: '10px', fontSize: '0.65rem', color: '#a0aec0', textAlign: 'right', fontStyle: 'italic' }}>
-             Press 'I' to close
-           </div>
-         </div>
-       )}
           ) : (
             /* Small Open Chat Button in Bottom Left Corner */
             <button 
