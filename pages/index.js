@@ -45,7 +45,7 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const [chatMessages, setChatMessages] = useState([
     { user: "System", text: "Welcome to the Tropical sea, waters here are calm", colorCode: "#00FF1A" }
   ])
-  const slots = ["Megalodon000000", "Shastasaurus", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
+  const slots = ["Otodus Megalodon was a colossal prehistoric mackrel shark that was the apex predator of it's cenozoic oceans.", "Shastasaurus Pacificus is a giant marine reptile (icthyosaur) from the mesozoic era. It surpassed many predators in size and remains one of the largest animals ever found in history", "Pliosaurus", "Helicoprion", "Xiphiorhynchus", "Liopleurodon", "Stethacanthus", "Squalicorax"]
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
 const detectTextColor = (targetString) => {
