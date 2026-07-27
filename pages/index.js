@@ -36,7 +36,7 @@ const evoTiers = [
   { name: "Cephalaspis", minScore: 4200, scale: 110, file: "/cephalaspis.png" },                        // Index 2 (Unlocked at 4200)
   { name: "Stethacanthus altonensis", minScore: 6600, scale: 115, file: "/Stethacanthus-altonensis.png" }, // Index 3 (Unlocked at 6600)
   { name: "Dunkleosteus", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       // Index 4 (Unlocked at 9900)
-  { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" }                     // Index 5 (Unlocked at 21000)
+  { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" },                     // Index 5 (Unlocked at 21000)
   { name: "Squalicorax", minScore: 22000, scale: 173, file: "/Squalicorax-Pristodontus.png" }            // Index 6 (Unlocked at 22000)
 ]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
