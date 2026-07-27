@@ -37,7 +37,7 @@ const evoTiers = [
   { name: "Stethacanthus altonensis", minScore: 6600, scale: 115, file: "/Stethacanthus-altonensis.png" }, // Index 3 (Unlocked at 6600)
   { name: "Dunkleosteus", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       // Index 4 (Unlocked at 9900)
   { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" },                     // Index 5 (Unlocked at 21000)
-  { name: "Squalicorax", minScore: 22000, scale: 173, file: "/Squalicorax-Pristodontus.png" }            // Index 6 (Unlocked at 22000)
+  { name: "Squalicorax", minScore: 30000, scale: 173, file: "/Squalicorax-Pristodontus.png" }            // Index 6 (Unlocked at 30000)
 ]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
@@ -160,7 +160,7 @@ if (activeTierIndex === 0 && score >= 2400) {
   if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4) // Stethacanthus (3) -> Dunkleosteus (4)
 } else if (activeTierIndex === 4 && score >= 21000) {
   if (pendingEvolutionIndex !== 5) setPendingEvolutionIndex(5) // Dunkleosteus (4) -> Helicoprion (5)
-} else if (activeTierIndex === 5 && score >= 22000) {
+} else if (activeTierIndex === 5 && score >= 30000) {
   if (pendingEvolutionIndex !== 6) setPendingEvolutionIndex(6) // Helicoprion (5) -> Squalicorax (6)
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
