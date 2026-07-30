@@ -74,6 +74,6 @@ style={{
   transform: `translate(-50%, -50%) rotate(${npc.angle}deg)`,
   pointerEvents: 'none',
   zIndex: 5,
-  mixBlendMode: 'screen', // Drops the dark background blue while preserving bright fish pixels!
+  mixBlendMode: 'screen', 
   transition: 'transform 0.05s linear'
 }}
