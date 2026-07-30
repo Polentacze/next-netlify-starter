@@ -22,13 +22,60 @@ export default function Home() {
   const [isClanOpen, setIsClanOpen] = useState(false)
   
 const [knightiaNpcs, setKnightiaNpcs] = useState([
-  { id: 1, spawnX: 400, spawnY: 200, x: 400, y: 200, angle: 0, speed: 2, scale: 38 },
-  { id: 2, spawnX: 450, spawnY: 220, x: 450, y: 220, angle: 90, speed: 2.5, scale: 38 },
-  { id: 3, spawnX: 380, spawnY: 180, x: 380, y: 180, angle: 180, speed: 1.8, scale: 38 },
-  { id: 4, spawnX: 420, spawnY: 240, x: 420, y: 240, angle: 270, speed: 2.2, scale: 38 },
-  { id: 5, spawnX: 460, spawnY: 190, x: 460, y: 190, angle: 45, speed: 2.0, scale: 38 },
-  { id: 6, spawnX: 390, spawnY: 230, x: 390, y: 230, angle: 135, speed: 2.4, scale: 38 },
+  { id: 1, spawnX: 400, spawnY: 200, x: 400, y: 200, angle: 0, speed: 2, scale: 36 },
+  { id: 2, spawnX: 450, spawnY: 220, x: 450, y: 220, angle: 90, speed: 2.5, scale: 36 },
+  { id: 3, spawnX: 380, spawnY: 180, x: 380, y: 180, angle: 180, speed: 1.8, scale: 36 },
+  { id: 4, spawnX: 420, spawnY: 240, x: 420, y: 240, angle: 270, speed: 2.2, scale: 36 },
+  { id: 5, spawnX: 460, spawnY: 190, x: 460, y: 190, angle: 45, speed: 2.0, scale: 36 },
+  { id: 6, spawnX: 390, spawnY: 230, x: 390, y: 230, angle: 135, speed: 2.4, scale: 36 },
 ]);
+
+  // --- KNIGHTIA MOVEMENT & COLLISION TICK ---
+useEffect(() => {
+  if (!isPlaying) return;
+
+  const interval = setInterval(() => {
+    setKnightiaNpcs(prevNpcs =>
+      prevNpcs.map(npc => {
+        let newAngle = npc.angle;
+
+        // Robotic behavior: 20% chance each tick to snap to a new sharp angle
+        if (Math.random() < 0.2) {
+          const angles = [0, 45, 90, 135, 180, 225, 270, 315];
+          newAngle = angles[Math.floor(Math.random() * angles.length)];
+        }
+
+const rad = (newAngle * Math.PI) / 180;
+        let nextX = npc.x + Math.cos(rad) * npc.speed;
+        let nextY = npc.y + Math.sin(rad) * npc.speed;
+
+        // Tether rule: Stay within 120px of spawn origin
+        const distFromSpawn = Math.hypot(nextX - npc.spawnX, nextY - npc.spawnY);
+        if (distFromSpawn > 120) {
+          newAngle = (Math.atan2(npc.spawnY - npc.y, npc.spawnX - npc.x) * 180) / Math.PI;
+          nextX = npc.x + Math.cos((newAngle * Math.PI) / 180) * npc.speed;
+          nextY = npc.y + Math.sin((newAngle * Math.PI) / 180) * npc.speed;
+        }
+
+        // Solid Hitbox Collision against Player
+        const distToPlayer = Math.hypot(playerPosition.x - nextX, playerPosition.y - nextY);
+        const collisionThreshold = 25;
+
+        if (distToPlayer < collisionThreshold) {
+          const pushAngle = Math.atan2(playerPosition.y - nextY, playerPosition.x - nextX);
+          setPlayerPosition(prev => ({
+            x: prev.x + Math.cos(pushAngle) * 4,
+            y: prev.y + Math.sin(pushAngle) * 4
+          }));
+        }
+
+        return { ...npc, x: nextX, y: nextY, angle: newAngle };
+      })
+    );
+  }, 50);
+
+  return () => clearInterval(interval);
+}, [isPlaying, playerPosition]); // <-- CRITICAL: Dependency array closes here
   
   //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
   const [activeClan, setActiveClan] = useState(() => {
@@ -463,7 +510,7 @@ if (activeTierIndex === 0 && score >= 2400) {
                 />
               );
             })}
-{/* QUICK KNIGHTIA VISUAL TEST */}
+{/* KNIGHTIA NPCS */}
 {knightiaNpcs.map(npc => (
   <img
     key={npc.id}
@@ -474,9 +521,12 @@ if (activeTierIndex === 0 && score >= 2400) {
       left: `${npc.x}px`,
       top: `${npc.y}px`,
       width: `${npc.scale}px`,
-      transform: 'translate(-50%, -50%)',
+      transform: `translate(-50%, -50%) rotate(${npc.angle}deg)`,
       pointerEvents: 'none',
-      zIndex: 5
+      zIndex: 5,
+      mixBlendMode: 'multiply', // Removes the blue box background
+      opacity: 0.85,            // Adds slight natural transparency
+      transition: 'transform 0.1s linear'
     }}
   />
 ))}
