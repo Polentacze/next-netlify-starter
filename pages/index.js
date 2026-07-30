@@ -22,12 +22,12 @@ export default function Home() {
   const [isClanOpen, setIsClanOpen] = useState(false)
   
 const [knightiaNpcs, setKnightiaNpcs] = useState([
-  { id: 1, spawnX: 400, spawnY: 200, x: 400, y: 200, angle: 0, speed: 20, scale: 36 },
-  { id: 2, spawnX: 450, spawnY: 220, x: 450, y: 220, angle: 90, speed: 20, scale: 36 },
-  { id: 3, spawnX: 380, spawnY: 180, x: 380, y: 180, angle: 180, speed: 20, scale: 36 },
-  { id: 4, spawnX: 420, spawnY: 240, x: 420, y: 240, angle: 270, speed: 20, scale: 36 },
-  { id: 5, spawnX: 460, spawnY: 190, x: 460, y: 190, angle: 45, speed: 20, scale: 36 },
-  { id: 6, spawnX: 390, spawnY: 230, x: 390, y: 230, angle: 135, speed: 20, scale: 36 },
+  { id: 1, spawnX: 400, spawnY: 200, x: 400, y: 200, angle: 0, speed: 9, scale: 36 },
+  { id: 2, spawnX: 450, spawnY: 220, x: 450, y: 220, angle: 90, speed: 9, scale: 36 },
+  { id: 3, spawnX: 380, spawnY: 180, x: 380, y: 180, angle: 180, speed: 9, scale: 36 },
+  { id: 4, spawnX: 420, spawnY: 240, x: 420, y: 240, angle: 270, speed: 9, scale: 36 },
+  { id: 5, spawnX: 460, spawnY: 190, x: 460, y: 190, angle: 45, speed: 9, scale: 36 },
+  { id: 6, spawnX: 390, spawnY: 230, x: 390, y: 230, angle: 135, speed: 9, scale: 36 },
 ]);
 
 // --- KNIGHTIA MOVEMENT & COLLISION TICK ---
