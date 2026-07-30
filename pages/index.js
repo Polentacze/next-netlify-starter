@@ -22,12 +22,12 @@ export default function Home() {
   const [isClanOpen, setIsClanOpen] = useState(false)
   
 const [knightiaNpcs, setKnightiaNpcs] = useState([
-  { id: 1, spawnX: 400, spawnY: 200, x: 400, y: 200, angle: 0, speed: 2, scale: 76 },
-  { id: 2, spawnX: 450, spawnY: 220, x: 450, y: 220, angle: 90, speed: 2.5, scale: 76 },
-  { id: 3, spawnX: 380, spawnY: 180, x: 380, y: 180, angle: 180, speed: 1.8, scale: 76 },
-  { id: 4, spawnX: 420, spawnY: 240, x: 420, y: 240, angle: 270, speed: 2.2, scale: 76 },
-  { id: 5, spawnX: 460, spawnY: 190, x: 460, y: 190, angle: 45, speed: 2.0, scale: 76 },
-  { id: 6, spawnX: 390, spawnY: 230, x: 390, y: 230, angle: 135, speed: 2.4, scale: 76 },
+  { id: 1, spawnX: 400, spawnY: 200, x: 400, y: 200, angle: 0, speed: 2, scale: 38 },
+  { id: 2, spawnX: 450, spawnY: 220, x: 450, y: 220, angle: 90, speed: 2.5, scale: 38 },
+  { id: 3, spawnX: 380, spawnY: 180, x: 380, y: 180, angle: 180, speed: 1.8, scale: 38 },
+  { id: 4, spawnX: 420, spawnY: 240, x: 420, y: 240, angle: 270, speed: 2.2, scale: 38 },
+  { id: 5, spawnX: 460, spawnY: 190, x: 460, y: 190, angle: 45, speed: 2.0, scale: 38 },
+  { id: 6, spawnX: 390, spawnY: 230, x: 390, y: 230, angle: 135, speed: 2.4, scale: 38 },
 ]);
   
   //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
