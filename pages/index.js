@@ -19,7 +19,16 @@ export default function Home() {
   const [isAbilityActive, setIsAbilityActive] = useState(false)
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
   const [clamMeats, setClamMeats] = useState([])
-  const [isClanOpen, setIsClanOpen] = useState(false) 
+  const [isClanOpen, setIsClanOpen] = useState(false)
+  
+const [knightiaNpcs, setKnightiaNpcs] = useState([
+  { id: 1, spawnX: 400, spawnY: 200, x: 400, y: 200, angle: 0, speed: 2, scale: 76 },
+  { id: 2, spawnX: 450, spawnY: 220, x: 450, y: 220, angle: 90, speed: 2.5, scale: 76 },
+  { id: 3, spawnX: 380, spawnY: 180, x: 380, y: 180, angle: 180, speed: 1.8, scale: 76 },
+  { id: 4, spawnX: 420, spawnY: 240, x: 420, y: 240, angle: 270, speed: 2.2, scale: 76 },
+  { id: 5, spawnX: 460, spawnY: 190, x: 460, y: 190, angle: 45, speed: 2.0, scale: 76 },
+  { id: 6, spawnX: 390, spawnY: 230, x: 390, y: 230, angle: 135, speed: 2.4, scale: 76 },
+]);
   
   //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
   const [activeClan, setActiveClan] = useState(() => {
@@ -454,6 +463,23 @@ if (activeTierIndex === 0 && score >= 2400) {
                 />
               );
             })}
+{/* QUICK KNIGHTIA VISUAL TEST */}
+{knightiaNpcs.map(npc => (
+  <img
+    key={npc.id}
+    src="/knightia.png"
+    alt="Knightia NPC"
+    style={{
+      position: 'absolute',
+      left: `${npc.x}px`,
+      top: `${npc.y}px`,
+      width: `${npc.scale}px`,
+      transform: 'translate(-50%, -50%)',
+      pointerEvents: 'none',
+      zIndex: 5
+    }}
+  />
+))}
 
             {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
