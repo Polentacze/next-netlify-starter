@@ -1,7 +1,41 @@
 import Head from 'next/head'
 import { useState, useEffect, useRef } from 'react'
 
+// 1. Helper function goes OUTSIDE the main component at the top
+const getPlayerDamage = (tierIndex) => {
+  switch (tierIndex) {
+    case 0: // Pikaia
+    case 1: // Sacabambaspis
+      return 20;
+    case 2: // Cephalaspis
+    case 3: // Stethacanthus
+      return 40;
+    case 4: // Dunkleosteus
+    case 5: // Helicoprion
+      return 60;
+    case 6: // Squalicorax
+      return 70;
+    default:
+      return 20;
+  }
+};
+
+// Line 23: Your actual main component function (Home or Game)
 export default function Home() {
+  // Single, clean list of useState hooks (no duplicates!)
+  const [activeTierIndex, setActiveTierIndex] = useState(0);
+  const [damagePopups, setDamagePopups] = useState([]);
+  const [knightiaNpcs, setKnightiaNpcs] = useState([...]);
+  const [isWikiOpen, setIsWikiOpen] = useState(false);
+  const [hoveredAnimal, setHoveredAnimal] = useState("");
+  const [username, setUsername] = useState("");
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playerPosition, setPlayerPosition] = useState({ x: 1500, y: 1000 });
+    // ...
+  }, [isPlaying, playerPosition, activeTierIndex]);
+
+  // ...
+}
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
   const [username, setUsername] = useState("")
@@ -20,24 +54,6 @@ export default function Home() {
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
   const [clamMeats, setClamMeats] = useState([])
   const [isClanOpen, setIsClanOpen] = useState(false)
-  
-const getPlayerDamage = (tierIndex) => {
-  switch (tierIndex) {
-    case 0: // Pikaia
-    case 1: // Sacabambaspis
-      return 20;
-    case 2: // Cephalaspis
-    case 3: // Stethacanthus
-      return 40;
-    case 4: // Dunkleosteus
-    case 5: // Helicoprion
-      return 60;
-    case 6: // Squalicorax
-      return 70;
-    default:
-      return 20;
-  }
-};
   
 const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 1, spawnX: 400, spawnY: 200, x: 400, y: 200, angle: 0, speed: 2, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
