@@ -39,25 +39,31 @@ useEffect(() => {
       prevNpcs.map(npc => {
         let newAngle = npc.angle;
 
-        // 20% chance to pick a new directional heading
-        if (Math.random() < 0.2) {
-          const angles = [0, 45, 90, 135, 180, 225, 270, 315];
-          newAngle = angles[Math.floor(Math.random() * angles.length)];
+        // Reduce direction change chance to 3% per tick (much smoother, natural swims)
+        if (Math.random() < 0.03) {
+          // Smooth rotation: nudge angle by -45, 0, or +45 degrees instead of snapping randomly
+          const turns = [-45, 0, 45];
+          const turnChoice = turns[Math.floor(Math.random() * turns.length)];
+          newAngle = (npc.angle + turnChoice + 360) % 360;
         }
 
         const rad = (newAngle * Math.PI) / 180;
         let nextX = npc.x + Math.cos(rad) * npc.speed;
         let nextY = npc.y + Math.sin(rad) * npc.speed;
 
-        // Tether: Keep within 120px of spawn
+        // Tether: Return toward spawn if swimming too far (150px)
         const distFromSpawn = Math.hypot(nextX - npc.spawnX, nextY - npc.spawnY);
-        if (distFromSpawn > 120) {
+        if (distFromSpawn > 150) {
+          // Calculate heading back to spawn point
           newAngle = (Math.atan2(npc.spawnY - npc.y, npc.spawnX - npc.x) * 180) / Math.PI;
-          nextX = npc.x + Math.cos((newAngle * Math.PI) / 180) * npc.speed;
-          nextY = npc.y + Math.sin((newAngle * Math.PI) / 180) * npc.speed;
+          if (newAngle < 0) newAngle += 360;
+          
+          const returnRad = (newAngle * Math.PI) / 180;
+          nextX = npc.x + Math.cos(returnRad) * npc.speed;
+          nextY = npc.y + Math.sin(returnRad) * npc.speed;
         }
 
-        // Hitbox collision against player using functional state to prevent re-triggering timer
+        // Hitbox collision against player
         setPlayerPosition(prevPlayer => {
           const distToPlayer = Math.hypot(prevPlayer.x - nextX, prevPlayer.y - nextY);
           if (distToPlayer < 25) {
@@ -76,7 +82,7 @@ useEffect(() => {
   }, 50);
 
   return () => clearInterval(interval);
-}, [isPlaying]); // ONLY depends on isPlaying so interval never gets destroyed mid-tick
+}, [isPlaying]);
   
   //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
   const [activeClan, setActiveClan] = useState(() => {
@@ -522,12 +528,10 @@ if (activeTierIndex === 0 && score >= 2400) {
       left: `${npc.x}px`,
       top: `${npc.y}px`,
       width: `${npc.scale}px`,
-      transform: `translate(-50%, -50%) rotate(${npc.angle}deg)`,
+      transform: `translate(-50%, -50%) rotate(${npc.angle + 90}deg)`, // +90 aligns upward sprite with movement angle
       pointerEvents: 'none',
       zIndex: 5,
-      backgroundColor: 'transparent',
-      background: 'none',
-      transition: 'transform 0.05s linear'
+      transition: 'transform 0.1s ease-out'
     }}
   />
 ))}
