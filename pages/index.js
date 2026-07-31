@@ -531,6 +531,8 @@ if (activeTierIndex === 0 && score >= 2400) {
       transform: `translate(-50%, -50%) rotate(${npc.angle + 90}deg)`, // +90 aligns upward sprite with movement angle
       pointerEvents: 'none',
       zIndex: 5,
+      backgroundColor: 'transparent', 
+      background: 'none',
       transition: 'transform 0.1s ease-out'
     }}
   />
