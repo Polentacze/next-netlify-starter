@@ -1,6 +1,24 @@
 import Head from 'next/head'
 import { useState, useEffect, useRef } from 'react'
 
+const getPlayerDamage = (tierIndex) => {
+  switch (tierIndex) {
+    case 0: // Pikaia
+    case 1: // Sacabambaspis
+      return 20;
+    case 2: // Cephalaspis
+    case 3: // Stethacanthus
+      return 40;
+    case 4: // Dunkleosteus
+    case 5: // Helicoprion
+      return 60;
+    case 6: // Squalicorax
+      return 70;
+    default:
+      return 20;
+  }
+};
+
 export default function Home() {
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
@@ -30,59 +48,68 @@ const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 6, spawnX: 390, spawnY: 830, x: 390, y: 830, angle: 135, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
 ]);
 
-// --- KNIGHTIA MOVEMENT & COLLISION TICK ---
 useEffect(() => {
   if (!isPlaying) return;
 
+  const now = Date.now();
+
   const interval = setInterval(() => {
     setKnightiaNpcs(prevNpcs =>
-      prevNpcs.map(npc => {
-        let newAngle = npc.angle;
+      prevNpcs
+        .map(npc => {
+          // --- 1. MOVEMENT LOGIC ---
+          let newAngle = npc.angle;
 
-        // Reduce direction change chance to 3% per tick (much smoother, natural swims)
-        if (Math.random() < 0.03) {
-          // Smooth rotation: nudge angle by -45, 0, or +45 degrees instead of snapping randomly
-          const turns = [-45, 0, 45];
-          const turnChoice = turns[Math.floor(Math.random() * turns.length)];
-          newAngle = (npc.angle + turnChoice + 360) % 360;
-        }
-
-        const rad = (newAngle * Math.PI) / 180;
-        let nextX = npc.x + Math.cos(rad) * npc.speed;
-        let nextY = npc.y + Math.sin(rad) * npc.speed;
-
-        // Tether: Return toward spawn if swimming too far (150px)
-        const distFromSpawn = Math.hypot(nextX - npc.spawnX, nextY - npc.spawnY);
-        if (distFromSpawn > 150) {
-          // Calculate heading back to spawn point
-          newAngle = (Math.atan2(npc.spawnY - npc.y, npc.spawnX - npc.x) * 180) / Math.PI;
-          if (newAngle < 0) newAngle += 360;
-          
-          const returnRad = (newAngle * Math.PI) / 180;
-          nextX = npc.x + Math.cos(returnRad) * npc.speed;
-          nextY = npc.y + Math.sin(returnRad) * npc.speed;
-        }
-
-        // Hitbox collision against player
-        setPlayerPosition(prevPlayer => {
-          const distToPlayer = Math.hypot(prevPlayer.x - nextX, prevPlayer.y - nextY);
-          if (distToPlayer < 25) {
-            const pushAngle = Math.atan2(prevPlayer.y - nextY, prevPlayer.x - nextX);
-            return {
-              x: prevPlayer.x + Math.cos(pushAngle) * 4,
-              y: prevPlayer.y + Math.sin(pushAngle) * 4
-            };
+          if (Math.random() < 0.03) {
+            const turns = [-45, 0, 45];
+            const turnChoice = turns[Math.floor(Math.random() * turns.length)];
+            newAngle = (npc.angle + turnChoice + 360) % 360;
           }
-          return prevPlayer;
-        });
 
-        return { ...npc, x: nextX, y: nextY, angle: newAngle };
-      })
+          const rad = (newAngle * Math.PI) / 180;
+          let nextX = npc.x + Math.cos(rad) * npc.speed;
+          let nextY = npc.y + Math.sin(rad) * npc.speed;
+
+          // Swim radius limit (300px tether)
+          const distFromSpawn = Math.hypot(nextX - npc.spawnX, nextY - npc.spawnY);
+          if (distFromSpawn > 300) {
+            newAngle = (Math.atan2(npc.spawnY - npc.y, npc.spawnX - npc.x) * 180) / Math.PI;
+            if (newAngle < 0) newAngle += 360;
+
+            const returnRad = (newAngle * Math.PI) / 180;
+            nextX = npc.x + Math.cos(returnRad) * npc.speed;
+            nextY = npc.y + Math.sin(returnRad) * npc.speed;
+          }
+
+          // --- 2. SIMPLE DAMAGE LOGIC ---
+          let currentHp = npc.hp;
+          let updatedLastHit = npc.lastHit;
+
+          // Check distance to player
+          const distToPlayer = Math.hypot(playerPosition.x - nextX, playerPosition.y - nextY);
+
+          // If colliding (within 30px) and cooldown has passed (500ms)
+          if (distToPlayer < 30 && now - npc.lastHit > 500) {
+            const dmg = getPlayerDamage(activeTierIndex);
+            currentHp = Math.max(0, npc.hp - dmg); // Reduce HP
+            updatedLastHit = now; // Reset hit timer
+          }
+
+          return {
+            ...npc,
+            x: nextX,
+            y: nextY,
+            angle: newAngle,
+            hp: currentHp,
+            lastHit: updatedLastHit
+          };
+        })
+        .filter(npc => npc.hp > 0) // Remove NPC when HP reaches 0
     );
   }, 50);
 
   return () => clearInterval(interval);
-}, [isPlaying]);
+}, [isPlaying, playerPosition, activeTierIndex]);
   
   //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
   const [activeClan, setActiveClan] = useState(() => {
