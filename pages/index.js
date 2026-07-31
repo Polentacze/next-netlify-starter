@@ -21,68 +21,103 @@ export default function Home() {
   const [clamMeats, setClamMeats] = useState([])
   const [isClanOpen, setIsClanOpen] = useState(false)
   
+  const getPlayerDamage = (species) => {
+  const type = species?.toLowerCase() || '';
+  if (['pikaia', 'sacabambaspis'].includes(type)) return 20;
+  if (['cephalaspis', 'stethacanthus', 'stehacanthus'].includes(type)) return 40;
+  if (['helicoprion', 'dunkleosteus', 'dunkleosetus'].includes(type)) return 60;
+  if (type === 'squalicorax') return 70;
+  return 20; // Default fallback damage
+};
+  
 const [knightiaNpcs, setKnightiaNpcs] = useState([
-  { id: 1, spawnX: 400, spawnY: 200, x: 400, y: 200, angle: 0, speed: 9, scale: 36 },
-  { id: 2, spawnX: 450, spawnY: 220, x: 450, y: 220, angle: 90, speed: 9, scale: 36 },
-  { id: 3, spawnX: 380, spawnY: 180, x: 380, y: 180, angle: 180, speed: 9, scale: 36 },
-  { id: 4, spawnX: 420, spawnY: 240, x: 420, y: 240, angle: 270, speed: 9, scale: 36 },
-  { id: 5, spawnX: 460, spawnY: 190, x: 460, y: 190, angle: 45, speed: 9, scale: 36 },
-  { id: 6, spawnX: 390, spawnY: 230, x: 390, y: 230, angle: 135, speed: 9, scale: 36 },
+  { id: 1, spawnX: 400, spawnY: 200, x: 400, y: 200, angle: 0, speed: 2, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 2, spawnX: 450, spawnY: 220, x: 450, y: 220, angle: 90, speed: 6, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 3, spawnX: 380, spawnY: 180, x: 380, y: 180, angle: 180, speed: 6, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 4, spawnX: 420, spawnY: 240, x: 420, y: 240, angle: 270, speed: 6, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 5, spawnX: 460, spawnY: 190, x: 460, y: 190, angle: 45, speed: 6, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 6, spawnX: 390, spawnY: 230, x: 390, y: 230, angle: 135, speed: 6, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
 ]);
 
-// --- KNIGHTIA MOVEMENT & COLLISION TICK ---
+// Track active floating damage numbers: { id, x, y, damage, opacity }
+const [damagePopups, setDamagePopups] = useState([]);
+
+// --- KNIGHTIA MOVEMENT, COMBAT & COLLISION TICK ---
 useEffect(() => {
   if (!isPlaying) return;
 
+  const now = Date.now();
+
   const interval = setInterval(() => {
+    // 1. Move Damage Popups Upwards and Fade Out
+    setDamagePopups(prev =>
+      prev
+        .map(p => ({ ...p, y: p.y - 1, opacity: p.opacity - 0.05 }))
+        .filter(p => p.opacity > 0)
+    );
+
+    // 2. Update NPCs
     setKnightiaNpcs(prevNpcs =>
-      prevNpcs.map(npc => {
-        let newAngle = npc.angle;
+      prevNpcs
+        .map(npc => {
+          let newAngle = npc.angle;
 
-        // Reduce direction change chance to 3% per tick (much smoother, natural swims)
-        if (Math.random() < 0.03) {
-          // Smooth rotation: nudge angle by -45, 0, or +45 degrees instead of snapping randomly
-          const turns = [-45, 0, 45];
-          const turnChoice = turns[Math.floor(Math.random() * turns.length)];
-          newAngle = (npc.angle + turnChoice + 360) % 360;
-        }
-
-        const rad = (newAngle * Math.PI) / 180;
-        let nextX = npc.x + Math.cos(rad) * npc.speed;
-        let nextY = npc.y + Math.sin(rad) * npc.speed;
-
-        // Tether: Return toward spawn if swimming too far (150px)
-        const distFromSpawn = Math.hypot(nextX - npc.spawnX, nextY - npc.spawnY);
-        if (distFromSpawn > 150) {
-          // Calculate heading back to spawn point
-          newAngle = (Math.atan2(npc.spawnY - npc.y, npc.spawnX - npc.x) * 180) / Math.PI;
-          if (newAngle < 0) newAngle += 360;
-          
-          const returnRad = (newAngle * Math.PI) / 180;
-          nextX = npc.x + Math.cos(returnRad) * npc.speed;
-          nextY = npc.y + Math.sin(returnRad) * npc.speed;
-        }
-
-        // Hitbox collision against player
-        setPlayerPosition(prevPlayer => {
-          const distToPlayer = Math.hypot(prevPlayer.x - nextX, prevPlayer.y - nextY);
-          if (distToPlayer < 25) {
-            const pushAngle = Math.atan2(prevPlayer.y - nextY, prevPlayer.x - nextX);
-            return {
-              x: prevPlayer.x + Math.cos(pushAngle) * 4,
-              y: prevPlayer.y + Math.sin(pushAngle) * 4
-            };
+          if (Math.random() < 0.03) {
+            const turns = [-45, 0, 45];
+            const turnChoice = turns[Math.floor(Math.random() * turns.length)];
+            newAngle = (npc.angle + turnChoice + 360) % 360;
           }
-          return prevPlayer;
-        });
 
-        return { ...npc, x: nextX, y: nextY, angle: newAngle };
-      })
+          const rad = (newAngle * Math.PI) / 180;
+          let nextX = npc.x + Math.cos(rad) * npc.speed;
+          let nextY = npc.y + Math.sin(rad) * npc.speed;
+
+          // INCREASED SWIM RADIUS: Stay within 350px of spawn origin (was 150px)
+          const distFromSpawn = Math.hypot(nextX - npc.spawnX, nextY - npc.spawnY);
+          if (distFromSpawn > 350) {
+            newAngle = (Math.atan2(npc.spawnY - npc.y, npc.spawnX - npc.x) * 180) / Math.PI;
+            if (newAngle < 0) newAngle += 360;
+
+            const returnRad = (newAngle * Math.PI) / 180;
+            nextX = npc.x + Math.cos(returnRad) * npc.speed;
+            nextY = npc.y + Math.sin(returnRad) * npc.speed;
+          }
+
+          let currentHp = npc.hp;
+          let updatedLastHit = npc.lastHit;
+
+          // Combat Hitbox against Player
+          const distToPlayer = Math.hypot(playerPosition.x - nextX, playerPosition.y - nextY);
+          if (distToPlayer < 30) {
+            // Push player back
+            const pushAngle = Math.atan2(playerPosition.y - nextY, playerPosition.x - nextX);
+            setPlayerPosition(prev => ({
+              x: prev.x + Math.cos(pushAngle) * 5,
+              y: prev.y + Math.sin(pushAngle) * 5
+            }));
+
+            // Apply Damage if hit cooldown has passed (500ms hit delay)
+            if (now - npc.lastHit > 500) {
+              const dmg = getPlayerDamage(playerSpecies);
+              currentHp = Math.max(0, npc.hp - dmg);
+              updatedLastHit = now;
+
+              // Spawn floating red damage text (-20, -40, etc.)
+              setDamagePopups(popups => [
+                ...popups,
+                { id: Math.random(), x: nextX + 15, y: nextY - 10, damage: dmg, opacity: 1 }
+              ]);
+            }
+          }
+
+          return { ...npc, x: nextX, y: nextY, angle: newAngle, hp: currentHp, lastHit: updatedLastHit };
+        })
+        .filter(npc => npc.hp > 0) // Remove dead Knightia
     );
   }, 50);
 
   return () => clearInterval(interval);
-}, [isPlaying]);
+}, [isPlaying, playerPosition, playerSpecies]);
   
   //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
   const [activeClan, setActiveClan] = useState(() => {
@@ -517,25 +552,85 @@ if (activeTierIndex === 0 && score >= 2400) {
                 />
               );
             })}
-{/* KNIGHTIA NPCS */}
-{knightiaNpcs.map(npc => (
-  <img
-    key={npc.id}
-    src="/knightia.png"
-    alt="Knightia NPC"
+{/* KNIGHTIA NPCS WITH HEALTH BARS */}
+{knightiaNpcs.map(npc => {
+  const hpPercent = (npc.hp / npc.maxHp) * 100;
+  const isDamaged = npc.hp < npc.maxHp;
+
+  return (
+    <div
+      key={npc.id}
+      style={{
+        position: 'absolute',
+        left: `${npc.x}px`,
+        top: `${npc.y}px`,
+        transform: 'translate(-50%, -50%)',
+        pointerEvents: 'none',
+        zIndex: 5
+      }}
+    >
+      {/* HEALTH BAR (Shows when taking damage) */}
+      {isDamaged && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '-22px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '32px',
+            height: '8px',
+            backgroundColor: '#8b0000',
+            borderRadius: '2px',
+            border: '1px solid #000',
+            overflow: 'hidden'
+          }}
+        >
+          <div
+            style={{
+              width: `${hpPercent}%`,
+              height: '100%',
+              backgroundColor: '#00e600',
+              transition: 'width 0.1s ease'
+            }}
+          />
+        </div>
+      )}
+
+      {/* FISH SPRITE */}
+      <img
+        src="/knightia.png"
+        alt="Knightia NPC"
+        style={{
+          width: `${npc.scale}px`,
+          transform: `rotate(${npc.angle + 90}deg)`,
+          backgroundColor: 'transparent',
+          background: 'none',
+          transition: 'transform 0.1s ease-out'
+        }}
+      />
+    </div>
+  );
+})}
+
+{/* FLOATING DAMAGE POPUPS (-20, -40, ETC.) */}
+{damagePopups.map(popup => (
+  <div
+    key={popup.id}
     style={{
       position: 'absolute',
-      left: `${npc.x}px`,
-      top: `${npc.y}px`,
-      width: `${npc.scale}px`,
-      transform: `translate(-50%, -50%) rotate(${npc.angle + 90}deg)`, // +90 aligns upward sprite with movement angle
+      left: `${popup.x}px`,
+      top: `${popup.y}px`,
+      color: '#ff0000',
+      fontWeight: 'bold',
+      fontSize: '14px',
+      textShadow: '1px 1px 0px #000',
+      opacity: popup.opacity,
       pointerEvents: 'none',
-      zIndex: 5,
-      backgroundColor: 'transparent', 
-      background: 'none',
-      transition: 'transform 0.1s ease-out'
+      zIndex: 10
     }}
-  />
+  >
+    -{popup.damage}
+  </div>
 ))}
 
             {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />}
@@ -558,7 +653,7 @@ if (activeTierIndex === 0 && score >= 2400) {
                   zIndex: 27, 
                   pointerEvents: 'none',
                   backgroundColor: 'transparent',
-                  background: 'transparent',
+                  background: 'none',
                   display: 'block'
                 }} 
                 onError={(e) => { e.currentTarget.style.display = 'none' }} 
