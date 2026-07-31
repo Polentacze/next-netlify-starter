@@ -525,7 +525,8 @@ if (activeTierIndex === 0 && score >= 2400) {
       transform: `translate(-50%, -50%) rotate(${npc.angle}deg)`,
       pointerEvents: 'none',
       zIndex: 5,
-      opacity: 0.9,
+      backgroundColor: 'transparent',
+      background: 'none',
       transition: 'transform 0.05s linear'
     }}
   />
