@@ -66,10 +66,3 @@ form button {
   -webkit-font-smoothing: subpixel-antialiased;
 }
 
-.infinite-ocean-world {
-  position: absolute;
-  width: 3000px;
-  height: 3000px;
-  background-color: #0b355e;
-  transition: transform 0.1s ease-out;
-}
