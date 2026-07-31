@@ -21,13 +21,22 @@ export default function Home() {
   const [clamMeats, setClamMeats] = useState([])
   const [isClanOpen, setIsClanOpen] = useState(false)
   
-  const getPlayerDamage = (species) => {
-  const type = species?.toLowerCase() || '';
-  if (['pikaia', 'sacabambaspis'].includes(type)) return 20;
-  if (['cephalaspis', 'stethacanthus', 'stehacanthus'].includes(type)) return 40;
-  if (['helicoprion', 'dunkleosteus', 'dunkleosetus'].includes(type)) return 60;
-  if (type === 'squalicorax') return 70;
-  return 20; // Default fallback damage
+const getPlayerDamage = (tierIndex) => {
+  switch (tierIndex) {
+    case 0: // Pikaia
+    case 1: // Sacabambaspis
+      return 20;
+    case 2: // Cephalaspis
+    case 3: // Stethacanthus
+      return 40;
+    case 4: // Dunkleosteus
+    case 5: // Helicoprion
+      return 60;
+    case 6: // Squalicorax
+      return 70;
+    default:
+      return 20;
+  }
 };
   
 const [knightiaNpcs, setKnightiaNpcs] = useState([
@@ -98,7 +107,7 @@ useEffect(() => {
 
             // Apply Damage if hit cooldown has passed (500ms hit delay)
             if (now - npc.lastHit > 500) {
-              const dmg = getPlayerDamage(playerSpecies);
+              const dmg = getPlayerDamage(activeTierIndex);
               currentHp = Math.max(0, npc.hp - dmg);
               updatedLastHit = now;
 
@@ -117,7 +126,7 @@ useEffect(() => {
   }, 50);
 
   return () => clearInterval(interval);
-}, [isPlaying, playerPosition, playerSpecies]);
+}, [isPlaying, playerPosition, activeTierIndex]);
   
   //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
   const [activeClan, setActiveClan] = useState(() => {
