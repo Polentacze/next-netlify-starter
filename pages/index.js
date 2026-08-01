@@ -696,14 +696,34 @@ if (activeTierIndex === 0 && score >= 2400) {
             <p className="ocean-sub" style={{ fontSize: '1.1rem', opacity: '0.8', marginBottom: '1.5rem' }}>Made by Polentacze - Inspired by Deeeepio</p>
             <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} />
             <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p>
-         <form className="launch-form" style={{ background: 'transparent', boxShadow: 'none' }} onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}>              <div className="input-wrap">
-                <img src="/input-box.png" alt="Input field" style={{ width: '100%' }} />
-                <input type="text" className="field-text" placeholder="Enter Username..." value={username} onChange={(e) => setUsername(e.target.value)} maxLength={26} required />
-              </div>
-  <button type="submit" className="play-btn" style={{ marginTop: '-20px' }}>
-                <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
-              </button>
-            </form>
+<form 
+  className="launch-form" 
+  style={{ 
+    background: 'transparent', 
+    boxShadow: 'none',
+    display: 'flex',          // 1. 
+    flexDirection: 'row',     // 2. 
+    alignItems: 'center',     // 3. 
+    justifyContent: 'center', // 4. 
+    gap: '12px'               // 5. 
+  }} 
+  onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}
+>
+  <div style={{ position: 'relative', width: '280px' }}>
+    <img src="/input-box.png" alt="Input field" style={{ width: '100%' }} />
+    <input 
+      type="text" 
+      className="field-text" 
+      placeholder="Enter Username..." 
+      value={username} 
+      onChange={(e) => setUsername(e.target.value)} 
+    />
+  </div>
+
+  <button type="submit" className="play-btn" style={{ margin: 0, width: '160px' }}>
+    <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
+  </button>
+</form>
           </main>
         </>
       )}
