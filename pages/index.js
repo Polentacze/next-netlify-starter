@@ -684,7 +684,7 @@ if (activeTierIndex === 0 && score >= 2400) {
 
           <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
                     <img 
-  src="/prehistoo-title.png" 
+  src="/prehistoo-titlee.png" 
   alt="Prehistooio" 
   style={{ 
     maxWidth: '400px', 
