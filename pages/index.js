@@ -30,6 +30,7 @@ export default function Home() {
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
   const [clamMeats, setClamMeats] = useState([])
   const [isClanOpen, setIsClanOpen] = useState(false)
+  const currentAngleRef = useRef(0);
   
 const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 1, spawnX: 400, spawnY: 800, x: 400, y: 800, angle: 0, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
@@ -40,52 +41,39 @@ const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 6, spawnX: 390, spawnY: 830, x: 390, y: 830, angle: 135, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
 ]);
 
-  // Inside Home
-useEffect(() => {
-  if (!isPlaying) return;
-
-  let animationFrameId;
-
 const updateLoop = () => {
-      //  Get the current mouse coordinates from mousePos ref
-      const { x: mx, y: my } = mousePos.current;
+  const { x: mx, y: my } = mousePos.current;
+  const centerX = typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
+  const centerY = typeof window !== 'undefined' ? window.innerHeight / 2 : 0;
+  const dx = mx - centerX;
+  const dy = my - centerY;
 
-      //  Calculate center screen target offset (assuming camera tracks player)
-      // Or calculate angle based on mouse distance from screen center
-const { x: mx, y: my } = mousePos.current;
-const centerX = typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
-const centerY = typeof window !== 'undefined' ? window.innerHeight / 2 : 0;
-const dx = mx - centerX;
-const dy = my - centerY;
+  // 1. Calculate raw target angle in degrees (-180 to 180)
+  let targetAngle = Math.atan2(dy, dx) * (180 / Math.PI);
 
-      //  Compute target angle in degrees
-      const targetAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+  // 2. Continuous Angle Normalization (Fixes the 180/-180 degree flip stutter)
+  let diff = targetAngle - currentAngleRef.current;
+  while (diff < -180) diff += 360;
+  while (diff > 180) diff -= 360;
 
-      //  Calculate target movement step based on distance from center
-      const distance = Math.hypot(dx, dy);
-      const speed = Math.min(distance * 0.05, 17); // Adjust max speed (8) 
+  // 3. Smooth rotation interpolation
+  currentAngleRef.current += diff * 0.15; // 0.15 controls turning weight/speed
+  setPlayerRotation(currentAngleRef.current);
 
-      //  Smoothly rotate player towards cursor
-      setPlayerRotation(prevAngle => lerpAngle(prevAngle, targetAngle, 0.15));
+  // 4. Movement forward along the smoothed current angle
+  const distance = Math.hypot(dx, dy);
+  const speed = Math.min(distance * 0.05, 8); // Max speed limit
 
-      //  Smoothly move player forward in the direction of targetAngle
-      setPlayerPosition(prev => {
-        const rad = (targetAngle * Math.PI) / 180;
-        const targetX = prev.x + Math.cos(rad) * speed;
-        const targetY = prev.y + Math.sin(rad) * speed;
-
-        return {
-          x: lerp(prev.x, targetX, 0.2),
-          y: lerp(prev.y, targetY, 0.2)
-        };
-      });
-
-      animationFrameId = requestAnimationFrame(updateLoop);
+  setPlayerPosition(prev => {
+    const rad = (currentAngleRef.current * Math.PI) / 180;
+    return {
+      x: prev.x + Math.cos(rad) * speed,
+      y: prev.y + Math.sin(rad) * speed
     };
+  });
 
   animationFrameId = requestAnimationFrame(updateLoop);
-  return () => cancelAnimationFrame(animationFrameId);
-}, [isPlaying]);
+};
 
 // --- KNIGHTIA MOVEMENT & COLLISION TICK ---
 useEffect(() => {
