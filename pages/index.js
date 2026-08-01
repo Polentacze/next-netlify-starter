@@ -1,8 +1,6 @@
 import Head from 'next/head'
 import { useState, useEffect, useRef } from 'react'
 
-  const MAX_BOOSTS_PER_TIER = [1, 1, 2, 2, 3, 3, 3];
-
 export default function Home() {
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
@@ -22,11 +20,7 @@ export default function Home() {
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
   const [clamMeats, setClamMeats] = useState([])
   const [isClanOpen, setIsClanOpen] = useState(false)
-
-  const [activeTierIndex, setActiveTierIndex] = useState(0)
-
-    const maxBoosts = MAX_BOOSTS_PER_TIER[activeTierIndex] ?? 3;
-
+  
 const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 1, spawnX: 400, spawnY: 800, x: 400, y: 800, angle: 0, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
   { id: 2, spawnX: 450, spawnY: 820, x: 450, y: 820, angle: 90, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
@@ -449,18 +443,13 @@ if (activeTierIndex === 0 && score >= 2400) {
               <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="avatar" />
               <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
             </div>
-<div className="hud-boost-ammunition-deck">
-  {Array.from({ length: maxBoosts }).map((_, i) => (
-    <div
-      key={i}
-      className="individual-energy-slice"
-      style={{
-        backgroundColor: boostBars >= i + 1 ? '#00FF1A' : 'rgba(255, 255, 255, 0.12)',
-        boxShadow: boostBars >= i + 1 ? '0 0 10px #00FF1A' : 'none'
-      }}
-    />
-  ))}
-</div>
+          )}
+
+          <div className="hud-boost-ammunition-deck">
+            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
+            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 2 ? '0 0 8px #00FF1A' : 'none' }} />
+            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 3 ? '0 0 8px #00FF1A' : 'none' }} />
+          </div>
 
 {/* 💬 DYNAMIC HUD CHAT SYSTEM */}
           {isChatOpen ? (
