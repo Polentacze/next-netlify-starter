@@ -20,21 +20,6 @@ export default function Home() {
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
   const [clamMeats, setClamMeats] = useState([])
   const [isClanOpen, setIsClanOpen] = useState(false)
-  const [clanInputTemp, setClanInputTemp] = useState("");
-  const [activeTierIndex, setActiveTierIndex] = useState(0);
-  const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null);
-  const [isChatOpen, setIsChatOpen] = useState(true);
-  const [chatInput, setChatInput] = useState("")
-  const [chatMessages, setChatMessages] = useState([
-    { user: "System", text: "Welcome to the Tropical sea, waters here are calm", colorCode: "#00FFFF" }
-  ])
-
-  const [activeClan, setActiveClan] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('prehistooio_clan') || "";
-    }
-    return "";
-  });
   
 const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 1, spawnX: 400, spawnY: 800, x: 400, y: 800, angle: 0, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
@@ -45,64 +30,69 @@ const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 6, spawnX: 390, spawnY: 830, x: 390, y: 830, angle: 135, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
 ]);
 
+// --- KNIGHTIA MOVEMENT & COLLISION TICK ---
 useEffect(() => {
-    if (!isPlaying) return;
+  if (!isPlaying) return;
 
-    const now = Date.now();
+  const interval = setInterval(() => {
+    setKnightiaNpcs(prevNpcs =>
+      prevNpcs.map(npc => {
+        let newAngle = npc.angle;
 
-    const interval = setInterval(() => {
-      setKnightiaNpcs(prevNpcs =>
-        prevNpcs
-          .map(npc => {
-            // Movement logic
-            let newAngle = npc.angle;
-            if (Math.random() < 0.03) {
-              const turns = [-45, 0, 45];
-              newAngle = (npc.angle + turns[Math.floor(Math.random() * turns.length)] + 360) % 360;
-            }
+        // Reduce direction change chance to 3% per tick (much smoother, natural swims)
+        if (Math.random() < 0.03) {
+          // Smooth rotation: nudge angle by -45, 0, or +45 degrees instead of snapping randomly
+          const turns = [-45, 0, 45];
+          const turnChoice = turns[Math.floor(Math.random() * turns.length)];
+          newAngle = (npc.angle + turnChoice + 360) % 360;
+        }
 
-            const rad = (newAngle * Math.PI) / 180;
-            let nextX = npc.x + Math.cos(rad) * npc.speed;
-            let nextY = npc.y + Math.sin(rad) * npc.speed;
+        const rad = (newAngle * Math.PI) / 180;
+        let nextX = npc.x + Math.cos(rad) * npc.speed;
+        let nextY = npc.y + Math.sin(rad) * npc.speed;
 
-            // Swim radius tether (300px)
-            const distFromSpawn = Math.hypot(nextX - npc.spawnX, nextY - npc.spawnY);
-            if (distFromSpawn > 300) {
-              newAngle = (Math.atan2(npc.spawnY - npc.y, npc.spawnX - npc.x) * 180) / Math.PI;
-              if (newAngle < 0) newAngle += 360;
+        // Tether: Return toward spawn if swimming too far (150px)
+        const distFromSpawn = Math.hypot(nextX - npc.spawnX, nextY - npc.spawnY);
+        if (distFromSpawn > 150) {
+          // Calculate heading back to spawn point
+          newAngle = (Math.atan2(npc.spawnY - npc.y, npc.spawnX - npc.x) * 180) / Math.PI;
+          if (newAngle < 0) newAngle += 360;
+          
+          const returnRad = (newAngle * Math.PI) / 180;
+          nextX = npc.x + Math.cos(returnRad) * npc.speed;
+          nextY = npc.y + Math.sin(returnRad) * npc.speed;
+        }
 
-              const returnRad = (newAngle * Math.PI) / 180;
-              nextX = npc.x + Math.cos(returnRad) * npc.speed;
-              nextY = npc.y + Math.sin(returnRad) * npc.speed;
-            }
-
-            // Simple Damage Check
-            let currentHp = npc.hp;
-            let updatedLastHit = npc.lastHit;
-            const distToPlayer = Math.hypot(playerPosition.x - nextX, playerPosition.y - nextY);
-
-            if (distToPlayer < 30 && now - npc.lastHit > 500) {
-              const dmg = getPlayerDamage(activeTierIndex);
-              currentHp = Math.max(0, npc.hp - dmg);
-              updatedLastHit = now;
-            }
-
+        // Hitbox collision against player
+        setPlayerPosition(prevPlayer => {
+          const distToPlayer = Math.hypot(prevPlayer.x - nextX, prevPlayer.y - nextY);
+          if (distToPlayer < 25) {
+            const pushAngle = Math.atan2(prevPlayer.y - nextY, prevPlayer.x - nextX);
             return {
-              ...npc,
-              x: nextX,
-              y: nextY,
-              angle: newAngle,
-              hp: currentHp,
-              lastHit: updatedLastHit
+              x: prevPlayer.x + Math.cos(pushAngle) * 4,
+              y: prevPlayer.y + Math.sin(pushAngle) * 4
             };
-          })
-          .filter(npc => npc.hp > 0) // Despawn when dead
-      );
-    }, 50);
+          }
+          return prevPlayer;
+        });
 
-    return () => clearInterval(interval);
-  }, [isPlaying, playerPosition, activeTierIndex]);
+        return { ...npc, x: nextX, y: nextY, angle: newAngle };
+      })
+    );
+  }, 50);
+
+  return () => clearInterval(interval);
+}, [isPlaying]);
   
+  //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
+  const [activeClan, setActiveClan] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('prehistooio_clan') || ""
+    }
+    return ""
+  })      
+  
+  const [clanInputTemp, setClanInputTemp] = useState("") 
 const evoTiers = [
   { name: "Pikaia", minScore: 0, scale: 75, file: "/pikaia.png" },                                      // Index 0 (Starts at 0 points)
   { name: "Sacabambaspis", minScore: 2400, scale: 78, file: "/sacabambaspis.png" },                     // Index 1 (Unlocked at 2400)
@@ -112,7 +102,13 @@ const evoTiers = [
   { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" },                     // Index 5 (Unlocked at 21000)
   { name: "Squalicorax", minScore: 30000, scale: 173, file: "/Squalicorax-Pristodontus.png" }            // Index 6 (Unlocked at 30000)
 ]
-
+  const [activeTierIndex, setActiveTierIndex] = useState(0)
+const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
+  const [isChatOpen, setIsChatOpen] = useState(true) //  Add this line right here
+  const [chatInput, setChatInput] = useState("")
+  const [chatMessages, setChatMessages] = useState([
+    { user: "System", text: "Welcome to the Tropical sea, waters here are calm", colorCode: "#00FFFF" }
+  ])
   const slots = ["Otodus Megalodon was a colossal prehistoric mackrel shark that was the apex predator of it's cenozoic oceans. Being around 80ft long or 24m", "Shastasaurus Pacificus is a giant marine reptile (icthyosaur) from the mesozoic era. It surpassed many predators in size and remains one of the largest animals ever found in history", "Pliosaurus Funkei is a Pliosaur that was recently discovered in the arctic. It was found to be massive and a deadly hunter from the Jurassic", "Helicoprion Bessonowi was not a shark, rather a type of ratfish. With a unique buzzsaw jaw used for slicing prey", "Xiphiorhynchus Kimblalocki from the Eocene all the way to the Micocene. This giant Swordfish is unique for having two long bills instead of one long pointed sword like modern Swordfish", "Liopleurodon Ferox became popular from the 1999 show Walking with Dinosaurs. Despite being drastically under sized it still was not a weak pliosaur, being the size of a Great white and having long sharp teeth.", "Stethacanthus Altonensis also known as the Anvil shark. Getting that name from it's unique anvil protruding rom it's head", "Squalicorax Pristodontus is a giant mackrel shark from the Cretaceous (Western interior Seaway) being larger than the Great white of modern day. It battled with of the other predators of the Seaway including Mosasaurus, Tylosaurus, Xiphactinus and more"]
   const slotPositions = [{ t: "16%", l: "13.5%" }, { t: "16%", l: "24.7%" }, { t: "16%", l: "35.9%" }, { t: "16%", l: "47.1%" }, { t: "16%", l: "58.3%" }, { t: "16%", l: "69.5%" }, { t: "48%", l: "13.5%" }, { t: "48%", l: "24.7%" }]
 
