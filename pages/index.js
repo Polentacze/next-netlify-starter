@@ -41,39 +41,56 @@ const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 6, spawnX: 390, spawnY: 830, x: 390, y: 830, angle: 135, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
 ]);
 
-const updateLoop = () => {
-  const { x: mx, y: my } = mousePos.current;
-  const centerX = typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
-  const centerY = typeof window !== 'undefined' ? window.innerHeight / 2 : 0;
-  const dx = mx - centerX;
-  const dy = my - centerY;
+useEffect(() => {
+    if (!isPlaying) return;
 
-  // 1. Calculate raw target angle in degrees (-180 to 180)
-  let targetAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+    let animationFrameId;
 
-  // 2. Continuous Angle Normalization (Fixes the 180/-180 degree flip stutter)
-  let diff = targetAngle - currentAngleRef.current;
-  while (diff < -180) diff += 360;
-  while (diff > 180) diff -= 360;
+    const updateLoop = () => {
+      // 1. Calculate target angle directly from your mousePos offset
+      const targetRad = Math.atan2(mousePos.current.y, mousePos.current.x);
+      let targetAngle = targetRad * (180 / Math.PI);
 
-  // 3. Smooth rotation interpolation
-  currentAngleRef.current += diff * 0.15; // 0.15 controls turning weight/speed
-  setPlayerRotation(currentAngleRef.current);
+      // 2. Prevent 180°/-180° rotation snapping (continuous angle math)
+      let diff = targetAngle - currentAngleRef.current;
+      while (diff < -180) diff += 360;
+      while (diff > 180) diff -= 360;
 
-  // 4. Movement forward along the smoothed current angle
-  const distance = Math.hypot(dx, dy);
-  const speed = Math.min(distance * 0.05, 8); // Max speed limit
+      // 3. Smoothly turn toward the target angle
+      currentAngleRef.current += diff * 0.18; // Adjust 0.18 for turning speed
+      setPlayerRotation(currentAngleRef.current);
 
-  setPlayerPosition(prev => {
-    const rad = (currentAngleRef.current * Math.PI) / 180;
-    return {
-      x: prev.x + Math.cos(rad) * speed,
-      y: prev.y + Math.sin(rad) * speed
+      // 4. Distance & Speed Math (using your exact game logic!)
+      const dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2);
+      
+      let maxSpeed = 4.8;
+      if (isAbilityActive && activeTierIndex !== 2) maxSpeed = 9.6;
+
+      let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0;
+
+      if (isBoosting) {
+        if (activeTierIndex === 2) {
+          spd = 18;
+        } else {
+          spd = isAbilityActive ? 24 : 18;
+        }
+      }
+
+      // 5. Move player forward along the SMOOTHED current angle
+      setPlayerPosition(prev => {
+        const smoothRad = (currentAngleRef.current * Math.PI) / 180;
+        return {
+          x: prev.x + Math.cos(smoothRad) * spd,
+          y: prev.y + Math.sin(smoothRad) * spd
+        };
+      });
+
+      animationFrameId = requestAnimationFrame(updateLoop);
     };
-  });
 
-  animationFrameId = requestAnimationFrame(updateLoop);
-};
+    animationFrameId = requestAnimationFrame(updateLoop);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isPlaying, isBoosting, isAbilityActive, activeTierIndex]);
 
 // --- KNIGHTIA MOVEMENT & COLLISION TICK ---
 useEffect(() => {
