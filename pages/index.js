@@ -1,6 +1,16 @@
 import Head from 'next/head'
 import { useState, useEffect, useRef } from 'react'
 
+// Add outside Home() in index.js
+const lerpAngle = (start, end, amount) => {
+  let diff = (end - start) % 360;
+  if (diff < -180) diff += 360;
+  if (diff > 180) diff -= 360;
+  return start + diff * amount;
+};
+
+const lerp = (start, end, factor) => start + (end - start) * factor;
+
 export default function Home() {
   const [isWikiOpen, setIsWikiOpen] = useState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
@@ -29,6 +39,53 @@ const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 5, spawnX: 460, spawnY: 790, x: 460, y: 790, angle: 45, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
   { id: 6, spawnX: 390, spawnY: 830, x: 390, y: 830, angle: 135, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
 ]);
+
+  // Inside Home
+useEffect(() => {
+  if (!isPlaying) return;
+
+  let animationFrameId;
+
+const updateLoop = () => {
+      //  Get the current mouse coordinates from mousePos ref
+      const { x: mx, y: my } = mousePos.current;
+
+      //  Calculate center screen target offset (assuming camera tracks player)
+      // Or calculate angle based on mouse distance from screen center
+const { x: mx, y: my } = mousePos.current;
+const centerX = typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
+const centerY = typeof window !== 'undefined' ? window.innerHeight / 2 : 0;
+const dx = mx - centerX;
+const dy = my - centerY;
+
+      //  Compute target angle in degrees
+      const targetAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+      //  Calculate target movement step based on distance from center
+      const distance = Math.hypot(dx, dy);
+      const speed = Math.min(distance * 0.05, 17); // Adjust max speed (8) 
+
+      //  Smoothly rotate player towards cursor
+      setPlayerRotation(prevAngle => lerpAngle(prevAngle, targetAngle, 0.15));
+
+      //  Smoothly move player forward in the direction of targetAngle
+      setPlayerPosition(prev => {
+        const rad = (targetAngle * Math.PI) / 180;
+        const targetX = prev.x + Math.cos(rad) * speed;
+        const targetY = prev.y + Math.sin(rad) * speed;
+
+        return {
+          x: lerp(prev.x, targetX, 0.2),
+          y: lerp(prev.y, targetY, 0.2)
+        };
+      });
+
+      animationFrameId = requestAnimationFrame(updateLoop);
+    };
+
+  animationFrameId = requestAnimationFrame(updateLoop);
+  return () => cancelAnimationFrame(animationFrameId);
+}, [isPlaying]);
 
 // --- KNIGHTIA MOVEMENT & COLLISION TICK ---
 useEffect(() => {
@@ -84,7 +141,7 @@ useEffect(() => {
   return () => clearInterval(interval);
 }, [isPlaying]);
   
-  //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
+  //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load
   const [activeClan, setActiveClan] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('prehistooio_clan') || ""
