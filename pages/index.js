@@ -700,7 +700,7 @@ if (activeTierIndex === 0 && score >= 2400) {
                 <img src="/input-box.png" alt="Input field" style={{ width: '100%' }} />
                 <input type="text" className="field-text" placeholder="Enter Username..." value={username} onChange={(e) => setUsername(e.target.value)} maxLength={26} required />
               </div>
-              <button type="submit" className="play-btn">
+  <button type="submit" className="play-btn" style={{ marginTop: '-20px' }}>
                 <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
               </button>
             </form>
