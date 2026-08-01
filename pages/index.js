@@ -1,15 +1,7 @@
 import Head from 'next/head'
 import { useState, useEffect, useRef } from 'react'
 
-// Add outside Home() in index.js
-const lerpAngle = (start, end, amount) => {
-  let diff = (end - start) % 360;
-  if (diff < -180) diff += 360;
-  if (diff > 180) diff -= 360;
-  return start + diff * amount;
-};
-
-const lerp = (start, end, factor) => start + (end - start) * factor;
+  const MAX_BOOSTS_PER_TIER = [1, 1, 2, 2, 3, 3, 3];
 
 export default function Home() {
   const [isWikiOpen, setIsWikiOpen] = useState(false)
@@ -30,8 +22,11 @@ export default function Home() {
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
   const [clamMeats, setClamMeats] = useState([])
   const [isClanOpen, setIsClanOpen] = useState(false)
-  const currentAngleRef = useRef(0);
-  
+
+  const [activeTierIndex, setActiveTierIndex] = useState(0)
+
+    const maxBoosts = MAX_BOOSTS_PER_TIER[activeTierIndex] ?? 3;
+
 const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 1, spawnX: 400, spawnY: 800, x: 400, y: 800, angle: 0, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
   { id: 2, spawnX: 450, spawnY: 820, x: 450, y: 820, angle: 90, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
@@ -40,57 +35,6 @@ const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 5, spawnX: 460, spawnY: 790, x: 460, y: 790, angle: 45, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
   { id: 6, spawnX: 390, spawnY: 830, x: 390, y: 830, angle: 135, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
 ]);
-
-useEffect(() => {
-    if (!isPlaying) return;
-
-    let animationFrameId;
-
-    const updateLoop = () => {
-      // 1. Calculate target angle directly from your mousePos offset
-      const targetRad = Math.atan2(mousePos.current.y, mousePos.current.x);
-      let targetAngle = targetRad * (180 / Math.PI);
-
-      // 2. Prevent 180°/-180° rotation snapping (continuous angle math)
-      let diff = targetAngle - currentAngleRef.current;
-      while (diff < -180) diff += 360;
-      while (diff > 180) diff -= 360;
-
-      // 3. Smoothly turn toward the target angle
-      currentAngleRef.current += diff * 0.18; // Adjust 0.18 for turning speed
-      setPlayerRotation(currentAngleRef.current);
-
-      // 4. Distance & Speed Math (using your exact game logic!)
-      const dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2);
-      
-      let maxSpeed = 4.8;
-      if (isAbilityActive && activeTierIndex !== 2) maxSpeed = 9.6;
-
-      let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0;
-
-      if (isBoosting) {
-        if (activeTierIndex === 2) {
-          spd = 18;
-        } else {
-          spd = isAbilityActive ? 24 : 18;
-        }
-      }
-
-      // 5. Move player forward along the SMOOTHED current angle
-      setPlayerPosition(prev => {
-        const smoothRad = (currentAngleRef.current * Math.PI) / 180;
-        return {
-          x: prev.x + Math.cos(smoothRad) * spd,
-          y: prev.y + Math.sin(smoothRad) * spd
-        };
-      });
-
-      animationFrameId = requestAnimationFrame(updateLoop);
-    };
-
-    animationFrameId = requestAnimationFrame(updateLoop);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [isPlaying, isBoosting, isAbilityActive, activeTierIndex]);
 
 // --- KNIGHTIA MOVEMENT & COLLISION TICK ---
 useEffect(() => {
@@ -146,7 +90,7 @@ useEffect(() => {
   return () => clearInterval(interval);
 }, [isPlaying]);
   
-  //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load
+  //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
   const [activeClan, setActiveClan] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('prehistooio_clan') || ""
@@ -505,13 +449,18 @@ if (activeTierIndex === 0 && score >= 2400) {
               <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="avatar" />
               <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
             </div>
-          )}
-
-          <div className="hud-boost-ammunition-deck">
-            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
-            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 2 ? '0 0 8px #00FF1A' : 'none' }} />
-            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 3 ? '0 0 8px #00FF1A' : 'none' }} />
-          </div>
+<div className="hud-boost-ammunition-deck">
+  {Array.from({ length: maxBoosts }).map((_, i) => (
+    <div
+      key={i}
+      className="individual-energy-slice"
+      style={{
+        backgroundColor: boostBars >= i + 1 ? '#00FF1A' : 'rgba(255, 255, 255, 0.12)',
+        boxShadow: boostBars >= i + 1 ? '0 0 10px #00FF1A' : 'none'
+      }}
+    />
+  ))}
+</div>
 
 {/* 💬 DYNAMIC HUD CHAT SYSTEM */}
           {isChatOpen ? (
