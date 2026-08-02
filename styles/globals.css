@@ -66,3 +66,11 @@ form button {
   -webkit-font-smoothing: subpixel-antialiased;
 }
 
+.gravel-seafloor-bed {
+  position: absolute;
+  top: 2740px; /* Replaces bottom: 0px */
+  left: 0px;
+  width: 3400px;
+  height: 260px;
+  background-color: #5C4033;
+}
