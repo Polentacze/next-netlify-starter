@@ -74,3 +74,5 @@ form button {
   height: 1150px;
   background-color: #5C4033;
 }
+
+.scrolling-trex-prop{position:absolute;transform:translate(-50%, -100%);z-index:28;pointer-events:none;background:transparent!important}
