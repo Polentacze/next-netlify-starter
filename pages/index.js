@@ -12,7 +12,13 @@ export default function Home() {
   const viewRef = useRef(null)
   const [score, setScore] = useState(0)
   const [foodPellets, setFoodPellets] = useState([])
-  const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
+  const [propsList, setPropsList] = useState({ 
+  kelp: [], 
+  volcano: null, 
+  bigRock: null, 
+  bigClam: null, 
+  reefRock: null 
+})
   const [boostBars, setBoostBars] = useState(3)
   const [foodEatenCount, setFoodEatenCount] = useState(0)
   const [isBoosting, setIsBoosting] = useState(false)
@@ -188,17 +194,18 @@ const cleanTags = (str) => {
       for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
     } 
     setFoodPellets(pellets) 
-    setPropsList({ 
-      kelp: [
-        { x: 600, y: 1740, h: 230, type: 'kelp' },        
-        { x: 1200, y: 1740, h: 85, type: 'coral' },       
-        { x: 1800, y: 1740, h: 85, type: 'coral' },       
-        { x: 2400, y: 1740, h: 230, type: 'kelp' }        
-      ], 
-      volcano: { x: 900, y: 1765, w: 110 }, 
-      bigRock: { x: 2100, y: 1755, w: 160 },
-      bigClam: { x: 1500, y: 1740, w: 170 }
-    }) 
+setPropsList({
+  kelp: [
+    { x: 600, y: 1740, h: 230, type: 'kelp' },
+    { x: 1200, y: 1740, h: 85, type: 'coral' },
+    { x: 1800, y: 1740, h: 85, type: 'coral' },
+    { x: 2400, y: 1740, h: 230, type: 'kelp' }
+  ],
+  volcano: { x: 900, y: 1765, w: 110 },
+  bigRock: { x: 2100, y: 1755, w: 160 },
+  bigClam: { x: 1500, y: 1740, w: 170 },
+  reefRock: { x: 2800, y: 1750, w: 160 } 
+})
   }, [isPlaying]) 
 
   // 🧬 BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
@@ -539,6 +546,19 @@ if (activeTierIndex === 0 && score >= 2400) {
 
             {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
+{propsList.reefRock && (
+  <img 
+    src="/reef-rock.png" 
+    alt="reef-rock" 
+    className="scrolling-rock-prop" 
+    style={{ 
+      position: 'absolute',
+      top: propsList.reefRock.y, 
+      left: propsList.reefRock.x, 
+      width: propsList.reefRock.w 
+    }} 
+  />
+)}
             {propsList.bigClam && <img src="/big-clam.png" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
             
