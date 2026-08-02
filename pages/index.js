@@ -26,7 +26,10 @@ export default function Home() {
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
   const [clamMeats, setClamMeats] = useState([])
   const [isClanOpen, setIsClanOpen] = useState(false)
-  const [chaychanusNpcs, setChaychanusNpcs] = useState([]);
+  const [chaychanusNpcs, setChaychanusNpcs] = useState([
+  { id: 'chaychanus-0', x: 2750, y: 1680, angle: 45, speed: 2, scale: 35 },
+  { id: 'chaychanus-1', x: 2830, y: 1710, angle: 210, speed: 1.8, scale: 35 }
+]);
   
 const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 1, spawnX: 400, spawnY: 800, x: 400, y: 800, angle: 0, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
@@ -117,9 +120,9 @@ useEffect(() => {
     return ""
   })      
 
-  setChaychanusNpcs(prevNpcs =>
-  prevNpcs.map(npc => {
-    // Reuses the exact same swim movement as Knightia
+setChaychanusNpcs(prevNpcs => {
+  const current = prevNpcs.length > 0 ? prevNpcs : chaychanusNpcs;
+  return current.map(npc => {
     let newX = npc.x + Math.cos((npc.angle * Math.PI) / 180) * npc.speed;
     let newY = npc.y + Math.sin((npc.angle * Math.PI) / 180) * npc.speed;
     let newAngle = npc.angle;
@@ -129,8 +132,8 @@ useEffect(() => {
     if (newY < 1600 || newY > 1730) newAngle = (newAngle + 180) % 360;
 
     return { ...npc, x: newX, y: newY, angle: newAngle };
-  })
-);
+  });
+});
   
   const [clanInputTemp, setClanInputTemp] = useState("") 
 const evoTiers = [
