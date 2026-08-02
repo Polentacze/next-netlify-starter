@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useState, useEffect, useRef } from 'react'
 
 export default function Home() {
-  const [isWikiOpen, setIsWikiOpen] = useState(false)
+  const [isWikiOpen, setIsWikiOpen] = uFseState(false)
   const [hoveredAnimal, setHoveredAnimal] = useState("")
   const [username, setUsername] = useState("")
   const [isPlaying, setIsPlaying] = useState(false)
@@ -544,8 +544,8 @@ if (activeTierIndex === 0 && score >= 2400) {
   />
 ))}
 
-            {propsList.trexhead && <img src="/trex-head" alt="trexhead" className="scrolling-trexhead-prop" style={{ top: propsList.trexhead.y, left: propsList.trexhead.x, width: propsList.trexhead.w }} onError={(e) => { e.target.style.display = 'none' }} />}
-            {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
+{propsList.trex && <img src="/trex-head.png" alt="trexhead" className="scrolling-trex-prop" style={{ top: `${propsList.trex.y}px`, left: `${propsList.trex.x}px`, width: `${propsList.trex.w}px` }} onError={(e) => { e.target.style.display = 'none' }} />}
+{propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
 {propsList.reefRock && (
   <img 
     src="/reef-rock.png" 
