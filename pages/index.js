@@ -314,7 +314,7 @@ if (activeTierIndex === 0 && score >= 2400) {
         if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
         
         cx = Math.max(50, Math.min(3350, p.x + dx))
-        cy = Math.max(50, Math.min(1725, p.y + dy))
+        cy = Math.max(50, Math.min(1700, p.y + dy))
 
         return { x: cx, y: cy }
       })
