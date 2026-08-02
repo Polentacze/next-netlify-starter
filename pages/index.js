@@ -498,7 +498,7 @@ if (activeTierIndex === 0 && score >= 2400) {
             </button>
           )}
           
-          <div className="infinite-ocean-world" style={{ transform: 'translate(' + (400 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
+          <div className="infinite-ocean-world" style={{ transform: 'translate(' + (480 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
             {propsList.kelp.map((k, idx) => {
               const anchorAdjustment = k.type === 'coral' ? 12 : 42;
