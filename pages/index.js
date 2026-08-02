@@ -49,7 +49,7 @@ const [knightiaNpcs, setKnightiaNpcs] = useState([
   const reefNpcs = Array.from({ length: 2 }, (_, i) => ({
     id: `chaychanus-${i}`,
     x: 2750 + Math.random() * 100, // Clustered near X: 2800
-    y: 1650 + Math.random() * 50,  // Floating above/around the reef rock
+    y: 1450 + Math.random() * 50,  // Floating above/around the reef rock
     angle: Math.random() * 360,
     speed: 1.5 + Math.random(),
     scale: 35 // Adjust size to match Knightia
@@ -129,8 +129,7 @@ setChaychanusNpcs(prevNpcs => {
 
     // Keep them tethered around the Reef Rock territory (X: 2600 to 3000)
     if (newX < 2600 || newX > 3000) newAngle = (newAngle + 180) % 360;
-    if (newY < 1600 || newY > 1730) newAngle = (newAngle + 180) % 360;
-
+if (newY < 1400 || newY > 1550) newAngle = (newAngle + 180) % 360;
     return { ...npc, x: newX, y: newY, angle: newAngle };
   });
 });
