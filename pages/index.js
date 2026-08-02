@@ -179,12 +179,12 @@ const cleanTags = (str) => {
   useEffect(() => { 
     if (!isPlaying) return 
     const pellets = [] 
-    for (let c = 0; c < 8; c++) { 
-      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+    for (let c = 0; c < 8; c++) {
+      const cx = Math.floor(Math.random() * 3000) + 200, cy = Math.floor(Math.random() * 2600) + 200
       for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" }) 
     } 
     for (let c = 0; c < 4; c++) { 
-      const cx = Math.floor(Math.random() * 2600) + 200, cy = Math.floor(Math.random() * 1400) + 200 
+      const cx = Math.floor(Math.random() * 3000) + 200, cy = Math.floor(Math.random() * 2600) + 200
       for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
     } 
     setFoodPellets(pellets) 
@@ -328,8 +328,8 @@ if (activeTierIndex === 0 && score >= 2400) {
 
         // 2. Only spawn if the local area is practically starved (fewer than 2 dots left)
         if (localFood.length < 2) {
-          const spawnGroupX = Math.max(200, Math.min(2800, cx + (Math.random() * 600 - 300)));
-          const spawnGroupY = Math.max(200, Math.min(1500, cy + (Math.random() * 500 - 250)));
+          const spawnGroupX = Math.max(200, Math.min(3200, cx + (Math.random() * 600 - 300)));
+          const spawnGroupY = Math.max(200, Math.min(2800, cy + (Math.random() * 500 - 250)));
           
           // 🎲 Roll the dice for spawn size: 60% chance for a single/double dot, 40% chance for a tiny clump
           const spawnChance = Math.random();
@@ -356,8 +356,8 @@ if (activeTierIndex === 0 && score >= 2400) {
 
         // 3. Low absolute map threshold (only tops up global space if completely stripped)
         if (active.length < 15) {
-          const gx = Math.floor(Math.random() * 2500) + 250;
-          const gy = Math.floor(Math.random() * 1300) + 200;
+          const gx = Math.floor(Math.random() * 2950) + 200;
+          const gy = Math.floor(Math.random() * 2600) + 200;
           active.push({
             id: "global_safety_" + Date.now() + "_" + Math.random(),
             x: gx,
