@@ -68,7 +68,7 @@ form button {
 
 .gravel-seafloor-bed {
   position: absolute;
-  top: 1750px; /* <--- Pushes the brown line down slightly */
+  top: 1735px; /* <--- Pushes the brown line down slightly */
   left: 0px;
   width: 3400px;
   height: 1150px;
