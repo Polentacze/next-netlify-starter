@@ -313,8 +313,8 @@ if (activeTierIndex === 0 && score >= 2400) {
         const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
         if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
         
-        cx = Math.max(50, Math.min(2950, p.x + dx))
-        cy = Math.max(50, Math.min(1725, p.y + dy))
+        cx = Math.max(50, Math.min(3350, p.x + dx))
+        cy = Math.max(50, Math.min(2950, p.y + dy))
         
         return { x: cx, y: cy }
       })
