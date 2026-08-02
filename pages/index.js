@@ -26,6 +26,7 @@ export default function Home() {
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
   const [clamMeats, setClamMeats] = useState([])
   const [isClanOpen, setIsClanOpen] = useState(false)
+  const [chaychanusNpcs, setChaychanusNpcs] = useState([]);
   
 const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 1, spawnX: 400, spawnY: 800, x: 400, y: 800, angle: 0, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
@@ -35,6 +36,24 @@ const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 5, spawnX: 460, spawnY: 790, x: 460, y: 790, angle: 45, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
   { id: 6, spawnX: 390, spawnY: 830, x: 390, y: 830, angle: 135, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
 ]);
+
+  useEffect(() => {
+  if (!isPlaying) return;
+
+  // Existing Knightia setup...
+
+  // Setup 2 Chaychanus NPCs near the Reef Rock (X: 2800)
+  const reefNpcs = Array.from({ length: 2 }, (_, i) => ({
+    id: `chaychanus-${i}`,
+    x: 2750 + Math.random() * 100, // Clustered near X: 2800
+    y: 1650 + Math.random() * 50,  // Floating above/around the reef rock
+    angle: Math.random() * 360,
+    speed: 1.5 + Math.random(),
+    scale: 35 // Adjust size to match Knightia
+  }));
+
+  setChaychanusNpcs(reefNpcs);
+}, [isPlaying]);
 
 // --- KNIGHTIA MOVEMENT & COLLISION TICK ---
 useEffect(() => {
@@ -97,6 +116,21 @@ useEffect(() => {
     }
     return ""
   })      
+
+  setChaychanusNpcs(prevNpcs =>
+  prevNpcs.map(npc => {
+    // Reuses the exact same swim movement as Knightia
+    let newX = npc.x + Math.cos((npc.angle * Math.PI) / 180) * npc.speed;
+    let newY = npc.y + Math.sin((npc.angle * Math.PI) / 180) * npc.speed;
+    let newAngle = npc.angle;
+
+    // Keep them tethered around the Reef Rock territory (X: 2600 to 3000)
+    if (newX < 2600 || newX > 3000) newAngle = (newAngle + 180) % 360;
+    if (newY < 1600 || newY > 1730) newAngle = (newAngle + 180) % 360;
+
+    return { ...npc, x: newX, y: newY, angle: newAngle };
+  })
+);
   
   const [clanInputTemp, setClanInputTemp] = useState("") 
 const evoTiers = [
@@ -538,6 +572,27 @@ if (activeTierIndex === 0 && score >= 2400) {
       pointerEvents: 'none',
       zIndex: 5,
       backgroundColor: 'transparent', 
+      background: 'none',
+      transition: 'transform 0.1s ease-out'
+    }}
+  />
+))}
+
+                    {/* CHAYCHANUS GONZALEZORUM REEF NPCS */}
+{chaychanusNpcs.map(npc => (
+  <img
+    key={npc.id}
+    src="/chaychanus-gonzalezorum.png"
+    alt="Chaychanus NPC"
+    style={{
+      position: 'absolute',
+      left: `${npc.x}px`,
+      top: `${npc.y}px`,
+      width: `${npc.scale}px`,
+      transform: `translate(-50%, -50%) rotate(${npc.angle + 90}deg)`,
+      pointerEvents: 'none',
+      zIndex: 5,
+      backgroundColor: 'transparent',
       background: 'none',
       transition: 'transform 0.1s ease-out'
     }}
