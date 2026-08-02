@@ -544,7 +544,20 @@ if (activeTierIndex === 0 && score >= 2400) {
   />
 ))}
 
-{propsList.trex && <img src="/trex-head.png" alt="trexhead" className="scrolling-trex-prop" style={{ top: `${propsList.trex.y}px`, left: `${propsList.trex.x}px`, width: `${propsList.trex.w}px` }} onError={(e) => { e.target.style.display = 'none' }} />}
+{propsList.trex && (
+  <img 
+    src="/trex-head.png" 
+    alt="trexhead" 
+    className="scrolling-trex-prop" 
+    style={{ 
+      position: 'absolute',
+      top: `${propsList.trex.y}px`, 
+      left: `${propsList.trex.x}px`, 
+      width: `${propsList.trex.w}px` 
+    }} 
+    onError={(e) => { e.target.style.display = 'none'; }} 
+  />
+)}
 {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
 {propsList.reefRock && (
   <img 
