@@ -204,7 +204,7 @@ setPropsList({
   volcano: { x: 900, y: 1765, w: 110 },
   bigRock: { x: 2100, y: 1755, w: 160 },
   bigClam: { x: 1500, y: 1740, w: 170 },
-  reefRock: { x: 2800, y: 1750, w: 160 } 
+  reefRock: { x: 2800, y: 1750, w: 320 } 
 })
   }, [isPlaying]) 
 
@@ -553,7 +553,7 @@ if (activeTierIndex === 0 && score >= 2400) {
     className="scrolling-rock-prop" 
     style={{ 
       position: 'absolute',
-      top: propsList.reefRock.y, 
+      top: propsList.reefRock.y + 25,
       left: propsList.reefRock.x, 
       width: propsList.reefRock.w 
     }} 
