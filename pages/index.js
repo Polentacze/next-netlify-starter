@@ -12,7 +12,12 @@ export default function Home() {
   const viewRef = useRef(null)
   const [score, setScore] = useState(0)
   const [foodPellets, setFoodPellets] = useState([])
-  const [propsList, setPropsList] = useState({ kelp: [], volcano: null, bigRock: null })
+  const [propsList, setPropsList] = useState({ 
+  kelp: [], 
+  volcano: null, 
+  bigRock: null, 
+  reefRock: { x: 3100, y: 2800 }
+})
   const [boostBars, setBoostBars] = useState(3)
   const [foodEatenCount, setFoodEatenCount] = useState(0)
   const [isBoosting, setIsBoosting] = useState(false)
@@ -540,6 +545,7 @@ if (activeTierIndex === 0 && score >= 2400) {
 
             {propsList.volcano && <img src="/volcano.png" alt="volcano" className="scrolling-volcano-prop" style={{ top: propsList.volcano.y, left: propsList.volcano.x, width: propsList.volcano.w }} onError={(e) => { e.target.style.display = 'none' }} />}
             {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
+            {propsList.reefRock && <img src="/reef-rock.png" alt="reef rock" className="scrolling-reef-rock-prop" style={{ top: propsList.reefRock.y, left: propsList.reefRock.x }} />}
             {propsList.bigClam && <img src="/big-clam.png" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
             
