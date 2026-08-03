@@ -28,12 +28,12 @@ export default function Home() {
   const [isClanOpen, setIsClanOpen] = useState(false)
   
 const [knightiaNpcs, setKnightiaNpcs] = useState([
-  { id: 1, spawnX: 400, spawnY: 800, x: 400, y: 800, angle: 0, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
-  { id: 2, spawnX: 450, spawnY: 820, x: 450, y: 820, angle: 90, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
-  { id: 3, spawnX: 380, spawnY: 780, x: 380, y: 780, angle: 180, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
-  { id: 4, spawnX: 420, spawnY: 840, x: 420, y: 840, angle: 270, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
-  { id: 5, spawnX: 460, spawnY: 790, x: 460, y: 790, angle: 45, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
-  { id: 6, spawnX: 390, spawnY: 830, x: 390, y: 830, angle: 135, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 1, spawnX: 1400, spawnY: 800, x: 1400, y: 800, angle: 0,   speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 2, spawnX: 1450, spawnY: 820, x: 1450, y: 820, angle: 90,  speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 3, spawnX: 1380, spawnY: 780, x: 1380, y: 780, angle: 180, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 4, spawnX: 1420, spawnY: 840, x: 1420, y: 840, angle: 270, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 5, spawnX: 1460, spawnY: 790, x: 1460, y: 790, angle: 45,  speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 6, spawnX: 1390, spawnY: 830, x: 1390, y: 830, angle: 135, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
 ]);
 
 // --- KNIGHTIA MOVEMENT & COLLISION TICK ---
