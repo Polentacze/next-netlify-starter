@@ -447,7 +447,10 @@ if (isBoosting) {
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
           {pendingEvolutionIndex !== null && (
-            <div className="evolution-prompt-clickable-hud-box" onClick={(e) => { e.stopPropagation(); setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Evovled into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]) }}>
+  className="evolution-prompt-clickable-hud-box" 
+  style={{ background: 'transparent' }} 
+  onClick={(e) => { e.stopPropagation(); setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Evovled into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]); }}
+>
               <img src="/new-animal-evolu.png" style={{ width: '100%' }} alt="frame" />
               <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="avatar" />
               <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
