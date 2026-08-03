@@ -263,7 +263,7 @@ if (activeTierIndex === 0 && score >= 2400) {
     return () => clearInterval(meatTimer)
   }, [isPlaying])
 
-// ⏱️ PRIMARY GAME ENGINE LOOP EFFECT HOOK
+//  PRIMARY GAME ENGINE LOOP EFFECT
   useEffect(() => {
     if (!isPlaying) return
 
@@ -277,7 +277,7 @@ if (activeTierIndex === 0 && score >= 2400) {
       if (document.activeElement.tagName === "INPUT") return
 
       if (e.key.toLowerCase() === 'e') {
-        // 🦕 TIER 1 (Stethacanthus Speed Surge)
+        //  TIER  (Stethacanthus Speed Surge)
         if (activeTierIndex === 1) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
@@ -286,7 +286,7 @@ if (activeTierIndex === 0 && score >= 2400) {
           return
         }
 
-        // 🦈 TIER 2 (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
+        //  TIER  (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
         if (activeTierIndex === 2) {
           if (boostBars < 1 || isAbilityActive) return
           setIsAbilityActive(true)
@@ -309,13 +309,16 @@ if (activeTierIndex === 0 && score >= 2400) {
         
         let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
 
-        if (isBoosting) {
-          if (activeTierIndex === 2) {
-            spd = 18
-          } else {
-            spd = isAbilityActive ? 14 : 12
-          }
-        }
+
+if (isBoosting) {
+  if (activeTierIndex === 1) {
+    
+    spd = isAbilityActive ? 14 : 12
+  } else {
+    
+    spd = isAbilityActive ? 23 : 18
+  }
+}
 
         const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
         if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
@@ -599,10 +602,10 @@ if (activeTierIndex === 0 && score >= 2400) {
   />
 )}
 
-{/* 🛡️ Dunkleosteus Ability Layer (Index 2) */}
+{/*  Dunkleosteus Ability Layer (Index 2) */}
 {isAbilityActive && activeTierIndex === 2 && (
   <img 
-    src="/dunk-ability.png" 
+    src="/cephal-ability.png" 
     alt="Armored Guard Active" 
     style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', backgroundColor: 'transparent', background: 'transparent', pointerEvents: 'none' }} 
     onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
