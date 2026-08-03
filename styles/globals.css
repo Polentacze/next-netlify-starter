@@ -76,7 +76,3 @@ form button {
 }
 
 .scrolling-trex-prop{position:absolute;transform:translate(-50%, -100%);z-index:28;pointer-events:none;background:transparent!important}
-
-.player {
-  transition: transform 0.1s ease-out;
-}
