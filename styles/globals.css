@@ -99,3 +99,16 @@ form button {
   background: transparent !important;
   background-color: transparent !important;
 }
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/* Page background only */
+body, html {
+  font-family: Montserrat, sans-serif !important;
+  background-color: transparent !important; /* applies to the full page background */
+  color: #FFFFFF;
+}
