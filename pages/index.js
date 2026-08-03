@@ -198,7 +198,7 @@ setPropsList({
   kelp: [
     { x: 600, y: 1740, h: 230, type: 'kelp' },
     { x: 1200, y: 1740, h: 85, type: 'coral' },
-    { x: 1800, y: 1740, h: 85, type: 'coral' },
+    { x: 1800, y: 1740, h: 85, type: 'cyan-anemone' }, // <-- Changed type here
     { x: 2400, y: 1740, h: 230, type: 'kelp' }
   ],
   trex: { x: 900, y: 1765, w: 110 },
@@ -507,29 +507,36 @@ if (isBoosting) {
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (480 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
-            {propsList.kelp.map((k, idx) => {
-              const anchorAdjustment = k.type === 'coral' ? 12 : 42;
-              const finalTopY = k.y + anchorAdjustment;
-              return (
-                <img 
-                  key={idx} 
-                  src={k.type === 'coral' ? "/brain-coral.png" : "/kelp.png"} 
-                  alt="prop" 
-                  style={{ 
-                    position: 'absolute', 
-                    top: finalTopY, 
-                    left: k.x, 
-                    height: k.type === 'coral' ? 'auto' : k.h, 
-                    width: k.type === 'coral' ? `${k.h}px` : '38px', 
-                    transform: 'translate(-50%, -100%)',
-                    zIndex: k.type === 'coral' ? 26 : 25,
-                    pointerEvents: 'none',
-                    background: 'transparent'
-                  }} 
-                  onError={(e) => { e.currentTarget.style.display = 'none' }} 
-                />
-              );
-            })}
+ {propsList.kelp.map((k, idx) => {
+  const anchorAdjustment = (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
+  const finalTopY = k.y + anchorAdjustment;
+  return (
+    <img
+      key={idx}
+      src={
+        k.type === 'coral'
+          ? "/brain-coral.png"
+          : k.type === 'cyan-anemone'
+          ? "/cyan-anemone.png"
+          : "/kelp.png"
+      }
+      alt="prop"
+      style={{
+        position: 'absolute',
+        top: finalTopY,
+        left: k.x,
+        height: (k.type === 'coral' || k.type === 'cyan-anemone') ? 'auto' : k.h,
+        width: (k.type === 'coral' || k.type === 'cyan-anemone') ? `${k.h}px` : '38px',
+        zIndex: (k.type === 'coral' || k.type === 'cyan-anemone') ? 26 : 25,
+        transform: 'translate(-50%, -100%)',
+        pointerEvents: 'none',
+        background: 'transparent'
+      }}
+      onError={(e) => { e.currentTarget.style.display = 'none' }}
+    />
+  );
+})}
+
 {/* KNIGHTIA NPCS */}
 {knightiaNpcs.map(npc => (
   <img
