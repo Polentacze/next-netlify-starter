@@ -449,13 +449,26 @@ if (activeTierIndex === 0 && score >= 2400) {
     style={{ background: 'transparent' }}
     onClick={(e) => { e.stopPropagation(); setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Evovled into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]); }}
   >
-    <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
-    <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistooio.png" }} />
-    <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', color: '#00FF1A', fontWeight: 'bold' }}>
-      CLICK TO EVOLVE
-    </span>
-  </div>
-)}
+<img 
+  src="/animal-evo.png" 
+  style={{ width: '100%', background: 'transparent' }} 
+  alt="frame" 
+/>
+
+{/* Line 453 */}
+<img 
+  src={evoTiers[pendingEvolutionIndex].file} 
+  className="evolution-preview-avatar-inside-hud" 
+  style={{ background: 'transparent' }} 
+  onError={(e) => { e.target.src = "/prehistooio.png" }} 
+/>
+
+{/* Line 454 */}
+<span 
+  style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', color: '#00FF1A', fontWeight: 'bold', background: 'transparent' }}
+>
+  CLICK TO EVOLVE
+</span>
 
           <div className="hud-boost-ammunition-deck">
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
