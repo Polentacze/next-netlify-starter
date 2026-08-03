@@ -305,7 +305,7 @@ if (activeTierIndex === 0 && score >= 2400) {
         const dist = Math.sqrt(mousePos.current.x ** 2 + mousePos.current.y ** 2)
         
         let maxSpeed = 4.8
-        if (isAbilityActive && activeTierIndex !== 2) maxSpeed = 9.6 
+        if (isAbilityActive && activeTierIndex !== 2) maxSpeed = 7.0 
         
         let spd = dist > 25 ? Math.min(dist * 0.035, maxSpeed) : 0
 
@@ -313,7 +313,7 @@ if (activeTierIndex === 0 && score >= 2400) {
           if (activeTierIndex === 2) {
             spd = 18
           } else {
-            spd = isAbilityActive ? 24 : 18
+            spd = isAbilityActive ? 14 : 12
           }
         }
 
@@ -586,13 +586,13 @@ if (activeTierIndex === 0 && score >= 2400) {
 
             <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: evoTiers[activeTierIndex]?.scale + 'px', pointerEvents: 'none', background: 'transparent', backgroundColor: 'transparent' }}>
               <span style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: '1px solid ' + (detectTextColor(username) !== '#FFFFFF' ? detectTextColor(username) : '#00FF1A'), color: detectTextColor(username), whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
-              <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0.07s linear', background: 'transparent', backgroundColor: 'transparent' }}>
+              <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0s linear', background: 'transparent', backgroundColor: 'transparent' }}>
 <img src={username && username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
 
 {/* 🦕 Stethacanthus Ability Layer (Index 1) */}
 {isAbilityActive && activeTierIndex === 1 && (
   <img 
-    src="/steth-ability.png" 
+    src="/sacabam-ability.png" 
     alt="Speed Surge Active" 
     style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} 
     onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
