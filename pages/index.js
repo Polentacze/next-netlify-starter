@@ -450,7 +450,7 @@ if (activeTierIndex === 0 && score >= 2400) {
     onClick={(e) => { e.stopPropagation(); setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Evovled into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]); }}
   >
 <img 
-  src="/animal-evo.png" 
+  src="/new-animal-evo.png" 
   style={{ 
     width: '100%', 
     background: 'none !important', 
