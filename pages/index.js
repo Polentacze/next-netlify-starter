@@ -451,7 +451,12 @@ if (activeTierIndex === 0 && score >= 2400) {
   >
 <img 
   src="/animal-evo.png" 
-  style={{ width: '100%', backgroundColor: 'transparent', background: 'none' }} 
+  style={{ 
+    width: '100%', 
+    background: 'none !important', 
+    backgroundColor: 'transparent !important',
+    boxShadow: '0 0 15px #00f0ff, 0 0 30px #00f0ff' /* Keeps your cyan glow! */
+  }} 
   alt="frame" 
 />
 
