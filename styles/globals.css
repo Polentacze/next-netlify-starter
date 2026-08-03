@@ -7,7 +7,7 @@ body,
   padding: 0;
   margin: 0;
   font-family: 'Montserrat', sans-serif !important;
-  background-color: #104E8B;
+  background-color: transparent !important;
   color: #FFFFFF;
 }
 
@@ -76,3 +76,26 @@ form button {
 }
 
 .scrolling-trex-prop{position:absolute;transform:translate(-50%, -100%);z-index:28;pointer-events:none;background:transparent!important}
+
+.evolution-prompt-clickable-hud-box {
+  background: transparent !important;
+  background-color: transparent !important;
+  transform: scale(1.4); /* Makes the whole element bigger */
+  cursor: pointer;
+  
+  
+  box-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff !important; 
+  border-radius: 8px; /* Smooths the glowing border corners */
+}
+
+/* 2. Keep the PNG image transparent so water shows through */
+.evolution-prompt-clickable-hud-box img {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* 3. Keep the text background transparent */
+.evolution-prompt-clickable-hud-box span {
+  background: transparent !important;
+  background-color: transparent !important;
+}
