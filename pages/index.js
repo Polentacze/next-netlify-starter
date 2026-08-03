@@ -451,7 +451,7 @@ if (activeTierIndex === 0 && score >= 2400) {
   >
 <img 
   src="/animal-evo.png" 
-  style={{ width: '200', backgroundColor: 'transparent', background: 'none' }} 
+  style={{ width: '200%', backgroundColor: 'transparent', background: 'none' }} 
   alt="frame" 
 />
 
