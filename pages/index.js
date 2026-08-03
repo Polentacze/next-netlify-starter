@@ -589,10 +589,10 @@ if (activeTierIndex === 0 && score >= 2400) {
               <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0s linear', background: 'transparent', backgroundColor: 'transparent' }}>
 <img src={username && username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
 
-{/* 🦕 Stethacanthus Ability Layer (Index 1) */}
+{/*  Stethacanthus Ability Layer (Index 1) */}
 {isAbilityActive && activeTierIndex === 1 && (
   <img 
-    src="/sacabam-ability.png" 
+    src="/sacabambas-ability.png" 
     alt="Speed Surge Active" 
     style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', background: 'transparent', pointerEvents: 'none' }} 
     onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
