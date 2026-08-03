@@ -446,7 +446,8 @@ if (isBoosting) {
 </div>
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
-          {pendingEvolutionIndex !== null && (
+        {pendingEvolutionIndex !== null && (
+            <div
   className="evolution-prompt-clickable-hud-box" 
   style={{ background: 'transparent' }} 
   onClick={(e) => { e.stopPropagation(); setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Evovled into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]); }}
