@@ -443,37 +443,13 @@ if (activeTierIndex === 0 && score >= 2400) {
 </div>
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
-{pendingEvolutionIndex !== null && (
-  <div 
-    className="evolution-prompt-clickable-hud-box" 
-    style={{ background: 'transparent' }}
-    onClick={(e) => { e.stopPropagation(); setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Evovled into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]); }}
-  >
-<img 
-  src="/new-animal-evo.png" 
-  style={{ 
-    width: '100%', 
-    background: 'none !important', 
-    backgroundColor: 'transparent !important',
-    boxShadow: '0 0 15px #00f0ff, 0 0 30px #00f0ff' /* Keeps your cyan glow! */
-  }} 
-  alt="frame" 
-/>
-
-{/* Line 453 */}
-<img 
-  src={evoTiers[pendingEvolutionIndex].file} 
-  className="evolution-preview-avatar-inside-hud" 
-  style={{ background: 'transparent' }} 
-  onError={(e) => { e.target.src = "/prehistooio.png" }} 
-/>
-
-{/* Line 454 */}
-<span 
-  style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', color: '#00FF1A', fontWeight: 'bold', background: 'transparent' }}
->
-  CLICK TO EVOLVE
-</span>
+          {pendingEvolutionIndex !== null && (
+            <div className="evolution-prompt-clickable-hud-box" onClick={(e) => { e.stopPropagation(); setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Evovled into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]) }}>
+              <img src="/animal-evo.png" style={{ width: '100%' }} alt="frame" />
+              <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="avatar" />
+              <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
+            </div>
+          )}
 
           <div className="hud-boost-ammunition-deck">
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
