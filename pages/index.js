@@ -20,13 +20,11 @@ export default function Home() {
   reefRock: null 
 })
 const getMaxBoosts = (animalIndex) => {
-  // Pikaia (0) and Sacabambaspis (1) -> 1 boost
+  // If activeTierIndex isn't loaded yet, default to 1 (or 3)
+  if (animalIndex === undefined || animalIndex === null) return 1; 
+
   if (animalIndex === 0 || animalIndex === 1) return 1;
-  
-  // Cephalaspis (2) and Stethacanthus (3) -> 2 boosts
   if (animalIndex === 2 || animalIndex === 3) return 2;
-  
-  // Everyone else (Dunkle, Helico, Squali, etc.) -> 3 boosts
   return 3;
 };
   const [foodEatenCount, setFoodEatenCount] = useState(0)
@@ -472,8 +470,7 @@ if (isBoosting) {
 
           <div className="hud-boost-ammunition-deck">
   {Array.from({ length: getMaxBoosts(activeTierIndex) }).map((_, i) => {
-    const barNumber = i + 1;
-    const isFilled = boostBars >= barNumber;
+    const isFilled = boostBars >= (i + 1);
     return (
       <div
         key={i}
