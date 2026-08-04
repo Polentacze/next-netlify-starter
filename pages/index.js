@@ -140,13 +140,15 @@ const detectTextColor = (targetString) => {
     if (cleanStr.includes("(CYAN)")) return "#00ffff" 
     if (cleanStr.includes("(PURPLE)")) return "#a855f7" 
     if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
+    if (cleanStr.includes("(BLACK)")) return "#000000" 
+
     return "#FFFFFF" 
   } 
 // 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
   let result = str
-  const targets = ["(RED)", "(BLUE)", "(GREEN)", "(CYAN)", "(PURPLE)", "(GREY)", "(GRAY)", "(ORANGE)"]
+  const targets = ["(RED)", "(BLUE)", "(GREEN)", "(CYAN)", "(PURPLE)", "(GREY)", "(GRAY)", "(ORANGE)", "(BLACK)"]
   
   for (let i = 0; i < targets.length; i++) {
     let upper = result.toUpperCase()
@@ -641,7 +643,7 @@ if (isBoosting) {
     alt="Buzzsaw jaw"
     style={{
       position: 'absolute',
-      top: '-45px', // Adjusted to align near the mouth
+      top: '-55px', // Adjusted to align near the mouth
       left: '50%',
       transform: 'translateX(-50%)',
       width: '140px', // Bumped up from 60px
