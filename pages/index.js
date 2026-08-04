@@ -295,6 +295,14 @@ if (activeTierIndex === 0 && score >= 2400) {
           setTimeout(() => { setIsAbilityActive(false) }, 6000)
           return
         }
+        
+// TIER (Helicoprion Buzzsaw)
+if (activeTierIndex === 5) {
+  if (boostBars < 1 || isAbilityActive) return;
+  setIsAbilityActive(true);
+  setBoostBars((prev) => Math.max(0, prev - 1));
+  setTimeout(() => { setIsAbilityActive(false) }, 5000); // adjust duration as needed
+  return; 
       }
     }
 
