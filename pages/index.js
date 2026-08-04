@@ -28,6 +28,7 @@ const getMaxBoosts = (animalIndex) => {
   return 3;
 };
   const [foodEatenCount, setFoodEatenCount] = useState(0)
+  const [boostBars, setBoostBars] = useState(1);
   const [isBoosting, setIsBoosting] = useState(false)
   const [isAbilityActive, setIsAbilityActive] = useState(false)
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
