@@ -287,6 +287,26 @@ if (activeTierIndex === 0 && score >= 2400) {
           return
         }
 
+    // TIER (Helicoprion Buzzsaw)
+if (activeTierIndex === 5) {
+  // Debug log to confirm keypress and tier detection in Console
+  console.log("Helicoprion E pressed! Current boosts:", boostBars);
+
+  if (boostBars < 1 || isAbilityActive) {
+    console.log("Ability blocked: Not enough boosts or already active.");
+    return;
+  }
+
+  setIsAbilityActive(true);
+  setBoostBars((prev) => Math.max(0, prev - 1));
+
+  setTimeout(() => {
+    setIsAbilityActive(false);
+  }, 5000); // Ability lasts 5 seconds
+
+  return;
+}
+
         //  TIER  (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
         if (activeTierIndex === 2) {
           if (boostBars < 1 || isAbilityActive) return
@@ -295,14 +315,6 @@ if (activeTierIndex === 0 && score >= 2400) {
           setTimeout(() => { setIsAbilityActive(false) }, 6000)
           return
         }
-        
-// TIER (Helicoprion Buzzsaw)
-if (activeTierIndex === 5) {
-  if (boostBars < 1 || isAbilityActive) return;
-  setIsAbilityActive(true);
-  setBoostBars((prev) => Math.max(0, prev - 1));
-  setTimeout(() => { setIsAbilityActive(false) }, 5000); // adjust duration as needed
-  return; 
       }
     }
 
@@ -622,13 +634,23 @@ if (isBoosting) {
   />
 )}
 
-        {/*  helicoprion Ability Layer (Index 5) */}
+{/* Helicoprion Ability Layer (Index 5) */}
 {isAbilityActive && activeTierIndex === 5 && (
-  <img 
-    src="/helicoprion-ability.png" 
-    alt="Buzzsaw jaw" 
-    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', backgroundColor: 'transparent', background: 'transparent', pointerEvents: 'none' }} 
-    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+  <img
+    src="/helicoprion-ability.png"
+    alt="Buzzsaw jaw"
+    style={{
+      position: 'absolute',
+      top: '-65px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: '60px',
+      height: 'auto',
+      backgroundColor: 'transparent',
+      background: 'transparent',
+      pointerEvents: 'none'
+    }}
+    onError={(e) => { e.target.src = "/prehistoric-skeleton.png"; }}
   />
 )}
 
