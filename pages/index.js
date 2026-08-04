@@ -19,16 +19,8 @@ export default function Home() {
   bigClam: null, 
   reefRock: null 
 })
-const getMaxBoosts = (animalIndex) => {
-  // If activeTierIndex isn't loaded yet, default to 1 (or 3)
-  if (animalIndex === undefined || animalIndex === null) return 1; 
-
-  if (animalIndex === 0 || animalIndex === 1) return 1;
-  if (animalIndex === 2 || animalIndex === 3) return 2;
-  return 3;
-};
+  const [boostBars, setBoostBars] = useState(3)
   const [foodEatenCount, setFoodEatenCount] = useState(0)
-  const [boostBars, setBoostBars] = useState(1);
   const [isBoosting, setIsBoosting] = useState(false)
   const [isAbilityActive, setIsAbilityActive] = useState(false)
   const [abilityBoostsUsed, setAbilityBoostsUsed] = useState(0)
@@ -393,9 +385,7 @@ if (isBoosting) {
             setFoodEatenCount((pr) => {
               const nxt = pr + 1;
               if (nxt >= 5) {
-                useEffect(() => {
-  setBoostBars((prev) => Math.min(prev, getMaxBoosts(activeTierIndex)));
-}, [activeTierIndex]);
+                setBoostBars((b) => Math.min(3, b + 1));
                 return 0;
               }
               return nxt;
@@ -470,20 +460,10 @@ if (isBoosting) {
           )}
 
           <div className="hud-boost-ammunition-deck">
-  {Array.from({ length: getMaxBoosts(activeTierIndex) }).map((_, i) => {
-    const isFilled = boostBars >= (i + 1);
-    return (
-      <div
-        key={i}
-        className="individual-energy-slice"
-        style={{
-          backgroundColor: isFilled ? '#00FF1A' : 'rgba(255,255,255,0.12)',
-          boxShadow: isFilled ? '0 0 8px #00FF1A' : 'none'
-        }}
-      />
-    );
-  })
-</div>
+            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
+            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 2 ? '0 0 8px #00FF1A' : 'none' }} />
+            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 3 ? '0 0 8px #00FF1A' : 'none' }} />
+          </div>
 
 {/* 💬 DYNAMIC HUD CHAT SYSTEM */}
           {isChatOpen ? (
