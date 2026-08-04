@@ -19,7 +19,16 @@ export default function Home() {
   bigClam: null, 
   reefRock: null 
 })
-  const [boostBars, setBoostBars] = useState(3)
+const getMaxBoosts = (animalIndex) => {
+  // Pikaia (0) and Sacabambaspis (1) -> 1 boost
+  if (animalIndex === 0 || animalIndex === 1) return 1;
+  
+  // Cephalaspis (2) and Stethacanthus (3) -> 2 boosts
+  if (animalIndex === 2 || animalIndex === 3) return 2;
+  
+  // Everyone else (Dunkle, Helico, Squali, etc.) -> 3 boosts
+  return 3;
+};
   const [foodEatenCount, setFoodEatenCount] = useState(0)
   const [isBoosting, setIsBoosting] = useState(false)
   const [isAbilityActive, setIsAbilityActive] = useState(false)
@@ -385,7 +394,9 @@ if (isBoosting) {
             setFoodEatenCount((pr) => {
               const nxt = pr + 1;
               if (nxt >= 5) {
-                setBoostBars((b) => Math.min(3, b + 1));
+                useEffect(() => {
+  setBoostBars((prev) => Math.min(prev, getMaxBoosts(activeTierIndex)));
+}, [activeTierIndex]);
                 return 0;
               }
               return nxt;
@@ -460,10 +471,21 @@ if (isBoosting) {
           )}
 
           <div className="hud-boost-ammunition-deck">
-            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
-            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 2 ? '0 0 8px #00FF1A' : 'none' }} />
-            <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 3 ? '0 0 8px #00FF1A' : 'none' }} />
-          </div>
+  {Array.from({ length: getMaxBoosts(activeTierIndex) }).map((_, i) => {
+    const barNumber = i + 1;
+    const isFilled = boostBars >= barNumber;
+    return (
+      <div
+        key={i}
+        className="individual-energy-slice"
+        style={{
+          backgroundColor: isFilled ? '#00FF1A' : 'rgba(255,255,255,0.12)',
+          boxShadow: isFilled ? '0 0 8px #00FF1A' : 'none'
+        }}
+      />
+    );
+  })}
+</div>
 
 {/* 💬 DYNAMIC HUD CHAT SYSTEM */}
           {isChatOpen ? (
