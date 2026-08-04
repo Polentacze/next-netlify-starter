@@ -466,7 +466,7 @@ if (isBoosting) {
   <strong style={{ fontSize: '0.8rem', letterSpacing: '0.5px' }}>TROPICAL SEA v1.0</strong><br />
   <span style={{ fontSize: '0.95rem', color: '#00FF1A', fontWeight: 'bold' }}>XP: {score}</span><br />
   <span style={{ fontSize: '0.7rem', color: '#FFD000', textTransform: 'uppercase', opacity: 0.9 }}>SPECIES: {username && username.replace(/\s+/g, '').toUpperCase().includes("(GHOUL)") ? "UNKNOWN" : (evoTiers[activeTierIndex]?.name || "Unknown").toUpperCase()}</span>
-  <span style={{ fontSize: '0.7rem', color: '#00E5FF', textTransform: 'uppercase', opacity: 0.9 }}>BIOME: CORAL BASIN</span><br />      
+  <span style={{ fontSize: '0.7rem', color: '#00E5FF', textTransform: 'uppercase', opacity: 0.9, display: 'block' }}>BIOME: CORAL BASIN</span>
 </div>
           <button className="leave-btn" style={{ right: '20px' }} onClick={() => { setIsPlaying(false); setScore(0); setActiveTierIndex(0); setPendingEvolutionIndex(null); setIsAbilityActive(false); }}>Leave Map</button>
 
