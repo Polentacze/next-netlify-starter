@@ -614,6 +614,16 @@ if (isBoosting) {
   />
 )}
 
+        {/*  helicoprion Ability Layer (Index 5) */}
+{isAbilityActive && activeTierIndex === 5 && (
+  <img 
+    src="/helicoprion-ability.png" 
+    alt="Buzzsaw jaw" 
+    style={{ position: 'absolute', top: '-65px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: 'auto', backgroundColor: 'transparent', background: 'transparent', pointerEvents: 'none' }} 
+    onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} 
+  />
+)}
+
 {/*  cephalaspis Ability Layer (Index 2) */}
 {isAbilityActive && activeTierIndex === 2 && (
   <img 
