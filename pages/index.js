@@ -35,6 +35,14 @@ const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 5, spawnX: 1460, spawnY: 790, x: 1460, y: 790, angle: 45,  speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
   { id: 6, spawnX: 1390, spawnY: 830, x: 1390, y: 830, angle: 135, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
   { id: 7, spawnX: 1430, spawnY: 810, x: 1430, y: 810, angle: 210, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+
+  { id: 8, spawnX: 3000, spawnY: 2500, x: 3000, y: 2500, angle: 0, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 9, spawnX: 3050, spawnY: 2520, x: 3050, y: 2520, angle: 90, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 10, spawnX: 2980, spawnY: 2480, x: 2980, y: 2480, angle: 180, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 11, spawnX: 3020, spawnY: 2540, x: 3020, y: 2540, angle: 270, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 12, spawnX: 3060, spawnY: 2490, x: 3060, y: 2490, angle: 45, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 13, spawnX: 2990, spawnY: 2530, x: 2990, y: 2530, angle: 135, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
+  { id: 14, spawnX: 3030, spawnY: 2510, x: 3030, y: 2510, angle: 210, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
 ]);
 
 // --- KNIGHTIA MOVEMENT & COLLISION TICK ---
