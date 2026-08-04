@@ -641,10 +641,10 @@ if (isBoosting) {
     alt="Buzzsaw jaw"
     style={{
       position: 'absolute',
-      top: '-65px',
+      top: '-45px', // Adjusted to align near the mouth
       left: '50%',
       transform: 'translateX(-50%)',
-      width: '60px',
+      width: '140px', // Bumped up from 60px
       height: 'auto',
       backgroundColor: 'transparent',
       background: 'transparent',
