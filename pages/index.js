@@ -481,7 +481,7 @@ if (isBoosting) {
         }}
       />
     );
-  })}
+  })
 </div>
 
 {/* 💬 DYNAMIC HUD CHAT SYSTEM */}
