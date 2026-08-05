@@ -538,13 +538,15 @@ if (isBoosting) {
   return (
     <img
       key={idx}
-      src={
-        k.type === 'coral'
-          ? "/brain-coral.png"
-          : k.type === 'cyan-anemone'
-          ? "/cyan-anemone.png"
-          : "/kelp.png"
-      }
+src={
+  k.type === 'coral'
+    ? "/brain-coral.png"
+    : k.type === 'cyan-anemone'
+    ? "/cyan-anemone.png"
+    : k.type === 'pink-branch-coral'
+    ? "/pink-branch-coral.png"
+    : "/kelp.png"
+}
       alt="prop"
       style={{
         position: 'absolute',
