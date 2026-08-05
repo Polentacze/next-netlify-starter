@@ -597,6 +597,21 @@ if (isBoosting) {
     }} 
   />
 )}
+
+                                                                                                                        
+<img
+  src="/pink-branch-coral.png"
+  alt="Pink Branch Coral"
+  style={{
+    position: 'absolute',
+    left: '4200px',
+    bottom: '0px', // or top coordinate depending on your floor anchoring
+    width: '120px',
+    height: 'auto',
+    pointerEvents: 'none',
+    zIndex: 2
+  }}
+/>
             {propsList.bigClam && <img src="/big-clam.png" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
             
