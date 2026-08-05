@@ -532,28 +532,34 @@ if (isBoosting) {
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (480 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
- {propsList.kelp.map((k, idx) => {
-  const anchorAdjustment = (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
+{propsList.kelp.map((k, idx) => {
+  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'pink-branch-coral';
+  const anchorAdjustment = isCoral ? 12 : 42;
   const finalTopY = k.y + anchorAdjustment;
+
   return (
     <img
       key={idx}
-src={
-  k.type === 'coral'
-    ? "/brain-coral.png"
-    : k.type === 'cyan-anemone'
-    ? "/cyan-anemone.png"
-    : k.type === 'pink-branch-coral'
-    ? "/pink-branch-coral.png"
-    : "/kelp.png"
-}
+      src={
+        k.type === 'coral'
+          ? "/brain-coral.png"
+          : k.type === 'cyan-anemone'
+          ? "/cyan-anemone.png"
+          : k.type === 'pink-branch-coral'
+          ? "/pink-branch-coral.png"
+          : "/kelp.png"
+      }
       alt="prop"
       style={{
         position: 'absolute',
         top: finalTopY,
         left: k.x,
-        height: (k.type === 'coral' || k.type === 'cyan-anemone') ? 'auto' : k.h,
-        width: (k.type === 'coral' || k.type === 'cyan-anemone') ? `${k.h}px` : '38px',
+        height: isCoral ? 'auto' : k.h,
+        width: k.type === 'pink-branch-coral' ? '100px' : 'auto', // Optional width control
+      }}
+    />
+  );
+})}
         zIndex: (k.type === 'coral' || k.type === 'cyan-anemone') ? 26 : 25,
         transform: 'translate(-50%, -100%)',
         pointerEvents: 'none',
