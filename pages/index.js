@@ -560,7 +560,7 @@ if (isBoosting) {
     />
   );
 })}
-        zIndex: (k.type === 'coral' || k.type === 'cyan-anemone') ? 26 : 25,
+zIndex: isCoral ? 26 : 25,
         transform: 'translate(-50%, -100%)',
         pointerEvents: 'none',
         background: 'transparent'
