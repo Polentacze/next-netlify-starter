@@ -200,7 +200,7 @@ const cleanTags = (str) => {
 setPropsList({
   kelp: [
     { x: 600, y: 1740, h: 230, type: 'kelp' },
-    { x: 1050, y: 1730, h: 85, type: 'white-brain-coral' }, // ADDED HERE INSIDE ARRAY
+    { x: 1050, y: 1740, h: 85, type: 'white-brain-coral' }, // ADDED HERE INSIDE ARRAY
     { x: 1200, y: 1740, h: 85, type: 'coral' },
     { x: 1800, y: 1740, h: 85, type: 'cyan-anemone' },
     { x: 2400, y: 1740, h: 230, type: 'kelp' }
@@ -540,7 +540,7 @@ if (isBoosting) {
   // All coral types now share the standard 12px anchor adjustment
   const anchorAdjustment = isCoral ? 12 : 42;
 
-  const finalTopY = (k.y || 1730) + anchorAdjustment;
+  const finalTopY = (k.y || 1740) + anchorAdjustment;
   const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type || 'kelp'}.png`;
 
   return (
