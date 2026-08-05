@@ -532,13 +532,18 @@ if (isBoosting) {
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (480 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
-{propsList.kelp.map((k, idx) => {
-const anchorAdjustment = 
-  k.type === 'white-brain-coral' ? 24 : 
-  (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
+{propsList.kelp && propsList.kelp.map((k, idx) => {
+  if (!k) return null;
 
-  const finalTopY = k.y + anchorAdjustment;
-  const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type}.png`;
+  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral';
+  
+  // Increase white-brain-coral offset to push its base down into the sand
+  const anchorAdjustment = 
+    k.type === 'white-brain-coral' ? 35 : 
+    (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
+
+  const finalTopY = (k.y || 1740) + anchorAdjustment;
+  const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type || 'kelp'}.png`;
 
   return (
     <img
@@ -547,9 +552,9 @@ const anchorAdjustment =
       alt="prop"
       style={{
         position: 'absolute',
-        top: finalTopY,
-        left: k.x,
-        height: k.type === 'cyan-anemone' ? 'auto' : k.h,
+        top: `${finalTopY}px`,
+        left: `${k.x}px`,
+        height: k.type === 'cyan-anemone' ? 'auto' : (k.h ? `${k.h}px` : '85px'),
         width: k.type === 'cyan-anemone' ? `${k.h}px` : (isCoral ? 'auto' : '38px'),
         zIndex: isCoral ? 26 : 25,
         transform: 'translate(-50%, -100%)',
@@ -557,7 +562,6 @@ const anchorAdjustment =
         background: 'transparent',
       }}
       onError={(e) => {
-        console.error("Failed to load image at:", imageSrc);
         e.currentTarget.style.display = 'none';
       }}
     />
