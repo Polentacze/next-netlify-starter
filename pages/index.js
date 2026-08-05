@@ -533,9 +533,9 @@ if (isBoosting) {
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (480 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
 {propsList.kelp && propsList.kelp.map((k, idx) => {
-  if (!k) return null;
-
-  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral';
+const anchorAdjustment = 
+    k.type === 'white-brain-coral' ? 12 : 
+    (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
   
   // Increase white-brain-coral offset to push its base down into the sand
   const anchorAdjustment = 
