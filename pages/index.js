@@ -200,7 +200,7 @@ const cleanTags = (str) => {
 setPropsList({
   kelp: [
     { x: 600, y: 1740, h: 230, type: 'kelp' },
-    { x: 1050, y: 1740, h: 85, type: 'white-brain-coral' }, // ADDED HERE INSIDE ARRAY
+    { x: 1050, y: 1710, h: 85, type: 'white-brain-coral' }, // ADDED HERE INSIDE ARRAY
     { x: 1200, y: 1740, h: 85, type: 'coral' },
     { x: 1800, y: 1740, h: 85, type: 'cyan-anemone' },
     { x: 2400, y: 1740, h: 230, type: 'kelp' }
@@ -533,14 +533,12 @@ if (isBoosting) {
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (480 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
 {propsList.kelp && propsList.kelp.map((k, idx) => {
-const anchorAdjustment = 
-    k.type === 'white-brain-coral' ? 12 : 
-    (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
+  if (!k) return null;
+
+  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral';
   
-  // Increase white-brain-coral offset to push its base down into the sand
-  const anchorAdjustment = 
-    k.type === 'white-brain-coral' ? 35 : 
-    (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
+  // All coral types now share the standard 12px anchor adjustment
+  const anchorAdjustment = isCoral ? 12 : 42;
 
   const finalTopY = (k.y || 1740) + anchorAdjustment;
   const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type || 'kelp'}.png`;
