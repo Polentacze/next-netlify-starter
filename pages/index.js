@@ -533,9 +533,9 @@ if (isBoosting) {
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (480 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
 {propsList.kelp.map((k, idx) => {
-  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral';
-  // 12 aligns it flush with the sand just like brain-coral and cyan-anemone
-  const anchorAdjustment = isCoral ? 12 : 42;
+const anchorAdjustment = 
+  k.type === 'white-brain-coral' ? 24 : 
+  (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
 
   const finalTopY = k.y + anchorAdjustment;
   const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type}.png`;
