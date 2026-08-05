@@ -534,6 +534,7 @@ if (isBoosting) {
             <div className="gravel-seafloor-bed" />
 {propsList.kelp.map((k, idx) => {
   const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral';
+  // Anchoring offset: keep 12 for all corals so they sit flush on the sand bed
   const anchorAdjustment = isCoral ? 12 : 42;
   const finalTopY = k.y + anchorAdjustment;
   const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type}.png`;
@@ -547,8 +548,9 @@ if (isBoosting) {
         position: 'absolute',
         top: finalTopY,
         left: k.x,
-        height: isCoral ? '85px' : k.h,
-        width: 'auto',
+        // Restores original height logic: Cyan Anemone scales dynamically, everything else uses k.h
+        height: k.type === 'cyan-anemone' ? 'auto' : k.h,
+        width: k.type === 'cyan-anemone' ? `${k.h}px` : (isCoral ? 'auto' : '38px'),
         zIndex: isCoral ? 26 : 25,
         transform: 'translate(-50%, -100%)',
         pointerEvents: 'none',
