@@ -104,7 +104,7 @@ const evoTiers = [
   { name: "Pikaia", minScore: 0, scale: 75, file: "/pikaia.png" },                                      // Index 0 (Starts at 0 points)
   { name: "Sacabambaspis", minScore: 2400, scale: 78, file: "/sacabambaspis.png" },                     // Index 1 (Unlocked at 2400)
   { name: "Cephalaspis", minScore: 4200, scale: 110, file: "/cephalaspis.png" },                        // Index 2 (Unlocked at 4200)
-  { name: "Stethacanthus altonensis", minScore: 6600, scale: 115, file: "/Stethacanthus.png" }, // Index 3 (Unlocked at 6600)
+  { name: "Stethacanthus", minScore: 6600, scale: 115, file: "/Stethacanthus-Altonensis.png" }, // Index 3 (Unlocked at 6600)
   { name: "Dunkleosteus", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       // Index 4 (Unlocked at 9900)
   { name: "Helicoprion", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" },                     // Index 5 (Unlocked at 21000)
   { name: "Squalicorax", minScore: 30000, scale: 173, file: "/Squalicorax-Pristodontus.png" }            // Index 6 (Unlocked at 30000)
