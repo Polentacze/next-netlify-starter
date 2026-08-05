@@ -534,9 +534,8 @@ if (isBoosting) {
             <div className="gravel-seafloor-bed" />
 {propsList.kelp.map((k, idx) => {
   const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral';
-  const anchorAdjustment = 
-    k.type === 'white-brain-coral' ? 70 : 
-    (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
+  // 12 aligns it flush with the sand just like brain-coral and cyan-anemone
+  const anchorAdjustment = isCoral ? 12 : 42;
 
   const finalTopY = k.y + anchorAdjustment;
   const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type}.png`;
@@ -557,7 +556,10 @@ if (isBoosting) {
         pointerEvents: 'none',
         background: 'transparent',
       }}
-      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+      onError={(e) => {
+        console.error("Failed to load image at:", imageSrc);
+        e.currentTarget.style.display = 'none';
+      }}
     />
   );
 })}
