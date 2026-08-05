@@ -554,8 +554,8 @@ if (isBoosting) {
         position: 'absolute',
         top: finalTopY,
         left: k.x,
-        height: isCoral ? 'auto' : k.h,
-        width: k.type === 'pink-branch-coral' ? '100px' : 'auto', // Optional width control
+     height: k.type === 'pink-branch-coral' ? '85px' : (isCoral ? 'auto' : k.h),
+width: k.type === 'pink-branch-coral' ? 'auto' : (isCoral ? '100px' : 'auto'),
       }}
     />
   );
