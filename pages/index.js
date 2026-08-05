@@ -199,11 +199,12 @@ const cleanTags = (str) => {
     setFoodPellets(pellets) 
 setPropsList({
   kelp: [
-    { x: 600, y: 1740, h: 230, type: 'kelp' },
-    { x: 1200, y: 1740, h: 85, type: 'coral' },
-    { x: 1800, y: 1740, h: 85, type: 'cyan-anemone' }, // <-- Changed type here
-    { x: 2400, y: 1740, h: 230, type: 'kelp' }
-  ],
+  { x: 600, y: 1740, h: 230, type: 'kelp' },
+  { x: 1050, y: 1740, h: 85, type: 'pink-branch-coral' }, // ADD THIS
+  { x: 1200, y: 1740, h: 85, type: 'coral' },
+  { x: 1800, y: 1740, h: 85, type: 'cyan-anemone' },
+  { x: 2400, y: 1740, h: 230, type: 'kelp' }
+],
   trex: { x: 900, y: 1765, w: 110 },
   bigRock: { x: 2100, y: 1755, w: 160 },
   bigClam: { x: 1500, y: 1740, w: 170 },
@@ -598,20 +599,19 @@ if (isBoosting) {
   />
 )}
 
-                                                                                                                        
-<img
-  src="/pink-branch-coral.png"
-  alt="Pink Branch Coral"
-  style={{
-    position: 'absolute',
-    left: '4200px',
-    bottom: '0px', // or top coordinate depending on your floor anchoring
-    width: '120px',
-    height: 'auto',
-    pointerEvents: 'none',
-    zIndex: 2
-  }}
-/>
+{propsList.pinkBranchCoral && (
+  <img
+    src="/pink-branch-coral.png"
+    alt="Pink Branch Coral"
+    style={{
+      position: 'absolute',
+      left: `${propsList.pinkBranchCoral.x}px`,
+      top: `${propsList.pinkBranchCoral.y}px`,
+      width: `${propsList.pinkBranchCoral.w}px`,
+      pointerEvents: 'none'
+    }}
+  />
+)}
             {propsList.bigClam && <img src="/big-clam.png" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
             
