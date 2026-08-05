@@ -533,12 +533,13 @@ if (isBoosting) {
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (480 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
 {propsList.kelp.map((k, idx) => {
-const anchorAdjustment = 
-  k.type === 'white-brain-coral' ? 70 : 
-  (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
+  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral';
+  const anchorAdjustment = 
+    k.type === 'white-brain-coral' ? 70 : 
+    (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
 
-const finalTopY = k.y + anchorAdjustment;
-const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type}.png`;
+  const finalTopY = k.y + anchorAdjustment;
+  const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type}.png`;
 
   return (
     <img
@@ -549,15 +550,14 @@ const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type}.png`;
         position: 'absolute',
         top: finalTopY,
         left: k.x,
-        // Restores original height logic: Cyan Anemone scales dynamically, everything else uses k.h
         height: k.type === 'cyan-anemone' ? 'auto' : k.h,
         width: k.type === 'cyan-anemone' ? `${k.h}px` : (isCoral ? 'auto' : '38px'),
         zIndex: isCoral ? 26 : 25,
         transform: 'translate(-50%, -100%)',
         pointerEvents: 'none',
-        background: 'transparent'
+        background: 'transparent',
       }}
-      onError={(e) => { e.currentTarget.style.display = 'none' }}
+      onError={(e) => { e.currentTarget.style.display = 'none'; }}
     />
   );
 })}
