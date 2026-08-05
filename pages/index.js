@@ -532,27 +532,24 @@ if (isBoosting) {
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (480 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
- {propsList.kelp.map((k, idx) => {
-  const anchorAdjustment = (k.type === 'coral' || k.type === 'cyan-anemone') ? 12 : 42;
+{propsList.kelp.map((k, idx) => {
+  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral';
+  const anchorAdjustment = isCoral ? 12 : 42;
   const finalTopY = k.y + anchorAdjustment;
+  const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type}.png`;
+
   return (
     <img
       key={idx}
-      src={
-        k.type === 'coral'
-          ? "/brain-coral.png"
-          : k.type === 'cyan-anemone'
-          ? "/cyan-anemone.png"
-          : "/kelp.png"
-      }
+      src={imageSrc}
       alt="prop"
       style={{
         position: 'absolute',
         top: finalTopY,
         left: k.x,
-        height: (k.type === 'coral' || k.type === 'cyan-anemone') ? 'auto' : k.h,
-        width: (k.type === 'coral' || k.type === 'cyan-anemone') ? `${k.h}px` : '38px',
-        zIndex: (k.type === 'coral' || k.type === 'cyan-anemone') ? 26 : 25,
+        height: isCoral ? '85px' : k.h,
+        width: 'auto',
+        zIndex: isCoral ? 26 : 25,
         transform: 'translate(-50%, -100%)',
         pointerEvents: 'none',
         background: 'transparent'
