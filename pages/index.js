@@ -617,7 +617,7 @@ if (isBoosting) {
           : k.type === 'cyan-anemone'
           ? "/cyan-anemone.png"
           : k.type === 'white-brain-coral'
-          ? "/white-brain-coral2.png"
+          ? "/white-brain-coral3.png"
           : "/kelp.png"
       }
       alt="prop"
