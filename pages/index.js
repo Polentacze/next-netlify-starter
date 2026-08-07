@@ -200,7 +200,7 @@ const cleanTags = (str) => {
 setPropsList({
   kelp: [
     { x: 600, y: 1740, h: 230, type: 'kelp' },
-    { x: 1050, y: 1737, h: 85, type: 'white-brain-coral' }, // ADDED HERE INSIDE ARRAY
+    { x: 1050, y: 1740, h: 85, type: 'white-brain-coral' }, // ADDED HERE INSIDE ARRAY
     { x: 1200, y: 1740, h: 85, type: 'coral' },
     { x: 1800, y: 1740, h: 85, type: 'cyan-anemone' },
     { x: 2400, y: 1740, h: 230, type: 'kelp' }
@@ -617,7 +617,7 @@ if (isBoosting) {
           : k.type === 'cyan-anemone'
           ? "/cyan-anemone.png"
           : k.type === 'white-brain-coral'
-          ? "/white-brain-coral3.png"
+          ? "/white-brain-coral4.png"
           : "/kelp.png"
       }
       alt="prop"
