@@ -535,7 +535,7 @@ if (isBoosting) {
 {propsList.kelp && propsList.kelp.map((k, idx) => {
   if (!k) return null;
 
-  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral';
+  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral' ? 30 :
   
   // All coral types now share the standard 12px anchor adjustment
   const anchorAdjustment = isCoral ? 12 : 42;
