@@ -202,7 +202,6 @@ setPropsList({
     { x: 600, y: 1740, h: 230, type: 'kelp' },
     { x: 1050, y: 1740, h: 85, type: 'white-brain-coral' }, // ADDED HERE INSIDE ARRAY
     { x: 1200, y: 1740, h: 85, type: 'coral' },
-    { x: 2250, y: 1740, h: 85, type: 'starfish-rock-purple' },
     { x: 1800, y: 1740, h: 85, type: 'cyan-anemone' },
     { x: 2400, y: 1740, h: 230, type: 'kelp' }
   ],
@@ -569,16 +568,6 @@ const finalTopY = (k.y || 1740) + anchorAdjustment;
   );
 })}
 
-const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral' || k.type === 'starfish-rock-purple';
-
-// Offset for proper ground alignment
-const anchorAdjustment = 
-  k.type === 'white-brain-coral' ? 35 : 
-  (isCoral ? 12 : 42);
-
-const finalTopY = (k.y || 1740) + anchorAdjustment;
-const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type || 'kelp'}.png`;
-
 {/* KNIGHTIA NPCS */}
 {knightiaNpcs.map(npc => (
   <img
@@ -600,34 +589,47 @@ const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type || 'kelp'}
   />
 ))}
 
+            {propsList.trex && <img src="/trex-head.png" alt="trexhead" className="scrolling-trex-prop" style={{ top: propsList.trex.y, left: propsList.trex.x, width: propsList.trex.w }} onError={(e) => { e.target.style.display = 'none' }} />}
+            {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
+{propsList.reefRock && (
+  <img 
+    src="/reef-rock.png" 
+    alt="reef-rock" 
+    className="scrolling-rock-prop" 
+    style={{ 
+      position: 'absolute',
+      top: propsList.reefRock.y + 25,
+      left: propsList.reefRock.x, 
+      width: propsList.reefRock.w 
+    }} 
+  />
+)}
+
 {propsList.kelp.map((k, idx) => {
-const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral' || k.type === 'starfish-rock-purple';
-
-  const anchorAdjustment = 
-    k.type === 'white-brain-coral' ? 35 : 
-    (isCoral ? 12 : 42);
-
-  const finalTopY = (k.y || 1740) + anchorAdjustment;
-  const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type || 'kelp'}.png`;
+  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral';
+  const anchorAdjustment = isCoral ? 12 : 42;
+  const finalTopY = k.y + anchorAdjustment;
 
   return (
     <img
       key={idx}
-      src={imageSrc}
+      src={
+        k.type === 'coral'
+          ? "/brain-coral.png"
+          : k.type === 'cyan-anemone'
+          ? "/cyan-anemone.png"
+          : k.type === 'white-brain-coral'
+          ? "/white-brain-coral4.png"
+          : "/kelp.png"
+      }
       alt="prop"
       style={{
         position: 'absolute',
-        top: `${finalTopY}px`,
-        left: `${k.x}px`,
-        height: k.type === 'cyan-anemone' ? 'auto' : (k.h ? `${k.h}px` : '85px'),
-        width: k.type === 'cyan-anemone' ? `${k.h}px` : (isCoral ? 'auto' : '38px'),
+        top: finalTopY,
+        left: k.x,
+        height: isCoral ? '85px' : k.h,
+        width: isCoral ? 'auto' : 'auto',
         zIndex: isCoral ? 26 : 25,
-        transform: 'translate(-50%, -100%)',
-        pointerEvents: 'none',
-        background: 'transparent',
-      }}
-      onError={(e) => {
-        e.currentTarget.style.display = 'none';
       }}
     />
   );
