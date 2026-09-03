@@ -200,9 +200,10 @@ const cleanTags = (str) => {
 setPropsList({
   kelp: [
     { x: 600, y: 1740, h: 230, type: 'kelp' },
-    { x: 1050, y: 1740, h: 85, type: 'white-brain-coral' }, // ADDED HERE INSIDE ARRAY
+    { x: 1050, y: 1740, h: 85, type: 'white-brain-coral' },
     { x: 1200, y: 1740, h: 85, type: 'coral' },
     { x: 1800, y: 1740, h: 85, type: 'cyan-anemone' },
+    { x: 2250, y: 1740, h: 85, type: 'starfish-rock-purple' },
     { x: 2400, y: 1740, h: 230, type: 'kelp' }
   ],
   trex: { x: 900, y: 1765, w: 110 },
@@ -532,17 +533,20 @@ if (isBoosting) {
           
           <div className="infinite-ocean-world" style={{ transform: 'translate(' + (480 - playerPosition.x) + 'px, ' + (300 - playerPosition.y) + 'px)' }}>
             <div className="gravel-seafloor-bed" />
+            
 {propsList.kelp && propsList.kelp.map((k, idx) => {
   if (!k) return null;
 
-const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral';
+  // 1. Identify prop categories
+  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral' || k.type === 'starfish-rock-purple';
 
-// Add 35 to push white-brain-coral down into the sand, 12 for other corals, 42 for kelp
-const anchorAdjustment = 
-  k.type === 'white-brain-coral' ? 35 : 
-  (isCoral ? 12 : 42);
+  // 2. Set specific vertical ground offsets
+  const anchorAdjustment = 
+    k.type === 'white-brain-coral' ? 35 : 
+    (isCoral ? 12 : 42);
 
-const finalTopY = (k.y || 1740) + anchorAdjustment;
+  // 3. Compute position and image path dynamically
+  const finalTopY = (k.y || 1740) + anchorAdjustment;
   const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type || 'kelp'}.png`;
 
   return (
