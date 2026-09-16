@@ -336,13 +336,7 @@ if (activeTierIndex === 5) {
 
 
 if (isBoosting) {
-  if (activeTierIndex === 1) {
-    
-    spd = isAbilityActive ? 14 : 12
-  } else {
-    
-    spd = isAbilityActive ? 23 : 18
-  }
+    spd = isAbilityActive ? 23 : 18;
 }
 
         const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
