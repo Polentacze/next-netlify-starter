@@ -101,7 +101,7 @@ useEffect(() => {
   
   const [clanInputTemp, setClanInputTemp] = useState("") 
 const evoTiers = [
-  { name: "Pikaia Gracliens", minScore: 0, scale: 75, file: "/pikaia.png" },                                      // Index 0 (Starts at 0 points)
+  { name: "Pikaia Gracliens (Next up: Sacabambaspis 2.4k)", minScore: 0, scale: 75, file: "/pikaia.png" },                                      // Index 0 (Starts at 0 points)
   { name: "Sacabambaspis Janvieri", minScore: 2400, scale: 78, file: "/sacabambaspis.png" },                     // Index 1 (Unlocked at 2400)
   { name: "Cephalaspis Lyelli", minScore: 4200, scale: 110, file: "/cephalaspis.png" },                        // Index 2 (Unlocked at 4200)
   { name: "Stethacanthus Altonensis", minScore: 6600, scale: 115, file: "/Stethacanthus-Altonensis.png" }, // Index 3 (Unlocked at 6600)
