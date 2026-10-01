@@ -727,7 +727,7 @@ if (isBoosting) {
       e.currentTarget.src = "/prehistoric-skeleton.png";
     }}
   />
-})}
+)}
         
 <img
   src="/trilobite.png?v=8"
