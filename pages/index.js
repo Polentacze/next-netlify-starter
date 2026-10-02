@@ -278,16 +278,18 @@ if (activeTierIndex === 0 && score >= 2400) {
       mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) } 
     } 
 
-//  First function: Detects key press (Down)
 const handleKeyDown = (e) => {
   if (document.activeElement.tagName === "INPUT") return;
 
   if (e.key.toLowerCase() === 'e' || e.code === 'Space') {
     if (e.code === 'Space') e.preventDefault();
 
+    // enough boost available
+    if (boostBars < 1) return;
+
     // TIER 1 (Stethacanthus Speed Surge)
     if (activeTierIndex === 1) {
-      if (boostBars < 1 || isAbilityActive) return;
+      if (isAbilityActive) return;
       setIsAbilityActive(true);
       setBoostBars((prev) => Math.max(0, prev - 1));
       setTimeout(() => { setIsAbilityActive(false); }, 5000);
@@ -296,7 +298,7 @@ const handleKeyDown = (e) => {
 
     // TIER 5 (Helicoprion Buzzsaw)
     if (activeTierIndex === 5) {
-      if (boostBars < 1 || isAbilityActive) return;
+      if (isAbilityActive) return;
       setIsAbilityActive(true);
       setBoostBars((prev) => Math.max(0, prev - 1));
       setTimeout(() => { setIsAbilityActive(false); }, 5000);
@@ -305,15 +307,18 @@ const handleKeyDown = (e) => {
 
     // TIER 2 (Dunkleosteus)
     if (activeTierIndex === 2) {
-      if (boostBars < 1 || isAbilityActive) return;
+      if (isAbilityActive) return;
       setIsAbilityActive(true);
       setBoostBars((prev) => Math.max(0, prev - 1));
       setTimeout(() => { setIsAbilityActive(false); }, 6000);
       return;
     }
 
-    // boosting movement speed
-    setIsBoosting(true);
+    // continuous boost (Tier 0 / normal boost)
+    if (!isBoosting) {
+      setIsBoosting(true);
+      setBoostBars((prev) => Math.max(0, prev - 1)); // deducts 1 bar when boosting starts
+    }
   }
 };
 
