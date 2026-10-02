@@ -707,28 +707,6 @@ if (isBoosting) {
         </div>
       ) : (
         <>
-
-{/* squalicorax Ability Layer (Index 2) */}
-{isAbilityActive && activeTierIndex === 6 && (
-  <img
-    src="/squali-ability.png"
-    alt="Squalicorax Ability"
-    style={{
-      position: 'absolute',
-      top: '-65px',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      width: '60px',
-      height: 'auto',
-      backgroundColor: 'transparent',
-      background: 'transparent',
-    }}
-    onError={(e) => {
-      e.currentTarget.src = "/prehistoric-skeleton.png";
-    }}
-  />
-)}
-        
 <img
   src="/trilobite.png?v=8"
   className="lobby-critter-one"
