@@ -281,7 +281,8 @@ if (activeTierIndex === 0 && score >= 2400) {
     const handleKeyDown = (e) => {
       if (document.activeElement.tagName === "INPUT") return
 
-      if (e.key.toLowerCase() === 'e') {
+      if (e.key.toLowerCase() === 'e' || e.code === 'Space') {
+  if (e.code === 'Space') e.preventDefault();
         //  TIER  (Stethacanthus Speed Surge)
         if (activeTierIndex === 1) {
           if (boostBars < 1 || isAbilityActive) return
