@@ -125,7 +125,7 @@ const detectTextColor = (targetString) => {
   //  NEW VIBRANT ORANGE RULE
   if (cleanStr.includes("(ORANGE)")) return '#FF8B28';
     
-    //  STATE-VERIFIED CLAN CHECK: Only triggers gold if a crew is registered and matches exactly!
+    //  STATE-VERIFIED CLAN CHECK Only triggers gold if a crew is registered and matches exactly
     if (activeClan) {
       const matchTag = `[${activeClan.toUpperCase()}]`
       if (cleanStr.includes(matchTag)) {
@@ -144,7 +144,7 @@ const detectTextColor = (targetString) => {
 
     return "#FFFFFF" 
   } 
-// 🧼 CHAT & NAME TEXT REPLACEMENT LOOP: Keeps text clean and safe
+// 🧼 CHAT & NAME TEXT REPLACEMENT LOOP Keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
   let result = str
@@ -160,7 +160,7 @@ const cleanTags = (str) => {
     }
   }
 
-  // 🎯 CRITICAL FIX: This line MUST be here to send the cleaned text back to the game!
+  // 🎯 CRITICAL FIX This line MUST be here to send the cleaned text back to the game
   return result
 }
 
@@ -278,50 +278,51 @@ if (activeTierIndex === 0 && score >= 2400) {
       mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) } 
     } 
 
-    const handleKeyDown = (e) => {
-      if (document.activeElement.tagName === "INPUT") return
+//  First function: Detects key press (Down)
+const handleKeyDown = (e) => {
+  if (document.activeElement.tagName === "INPUT") return;
 
-      if (e.key.toLowerCase() === 'e' || e.code === 'Space') {
-  if (e.code === 'Space') e.preventDefault();
-        //  TIER  (Stethacanthus Speed Surge)
-        if (activeTierIndex === 1) {
-          if (boostBars < 1 || isAbilityActive) return
-          setIsAbilityActive(true)
-          setBoostBars((prev) => Math.max(0, prev - 1))
-          setTimeout(() => { setIsAbilityActive(false) }, 5000)
-          return
-        }
+  if (e.key.toLowerCase() === 'e' || e.code === 'Space') {
+    if (e.code === 'Space') e.preventDefault();
 
-    // TIER (Helicoprion Buzzsaw)
-if (activeTierIndex === 5) {
-  // Debug log to confirm keypress and tier detection in Console
-  console.log("Helicoprion E pressed! Current boosts:", boostBars);
-
-  if (boostBars < 1 || isAbilityActive) {
-    console.log("Ability blocked: Not enough boosts or already active.");
-    return;
-  }
-
-  setIsAbilityActive(true);
-  setBoostBars((prev) => Math.max(0, prev - 1));
-
-  setTimeout(() => {
-    setIsAbilityActive(false);
-  }, 5000); // Ability lasts 5 seconds
-
-  return;
-}
-
-        //  TIER  (Dunkleosteus - Index 2 - No Speed Increase, 6 Seconds)
-        if (activeTierIndex === 2) {
-          if (boostBars < 1 || isAbilityActive) return
-          setIsAbilityActive(true)
-          setBoostBars((prev) => Math.max(0, prev - 1))
-          setTimeout(() => { setIsAbilityActive(false) }, 6000)
-          return
-        }
-      }
+    // TIER 1 (Stethacanthus Speed Surge)
+    if (activeTierIndex === 1) {
+      if (boostBars < 1 || isAbilityActive) return;
+      setIsAbilityActive(true);
+      setBoostBars((prev) => Math.max(0, prev - 1));
+      setTimeout(() => { setIsAbilityActive(false); }, 5000);
+      return;
     }
+
+    // TIER 5 (Helicoprion Buzzsaw)
+    if (activeTierIndex === 5) {
+      if (boostBars < 1 || isAbilityActive) return;
+      setIsAbilityActive(true);
+      setBoostBars((prev) => Math.max(0, prev - 1));
+      setTimeout(() => { setIsAbilityActive(false); }, 5000);
+      return;
+    }
+
+    // TIER 2 (Dunkleosteus)
+    if (activeTierIndex === 2) {
+      if (boostBars < 1 || isAbilityActive) return;
+      setIsAbilityActive(true);
+      setBoostBars((prev) => Math.max(0, prev - 1));
+      setTimeout(() => { setIsAbilityActive(false); }, 6000);
+      return;
+    }
+
+    // boosting movement speed
+    setIsBoosting(true);
+  }
+};
+
+// second function: Detects key release (Up)
+const handleKeyUp = (e) => {
+  if (e.key.toLowerCase() === 'e' || e.code === 'Space') {
+    setIsBoosting(false);
+  }
+};
 
     const tick = setInterval(() => {
       let cx = playerPosition.x, cy = playerPosition.y
@@ -435,14 +436,16 @@ if (isBoosting) {
 
     }, 1000 / 60)
 
-    window.addEventListener('mousemove', mm)
-    window.addEventListener('keydown', handleKeyDown)
+window.addEventListener('mousemove', mm);
+window.addEventListener('keydown', handleKeyDown);
+window.addEventListener('keyup', handleKeyUp); 
 
-    return () => {
-      window.removeEventListener('mousemove', mm)
-      window.removeEventListener('keydown', handleKeyDown)
-      clearInterval(tick)
-    }
+return () => {
+  window.removeEventListener('mousemove', mm);
+  window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('keyup', handleKeyUp); 
+  clearInterval(tick);
+};
   }, [isPlaying, playerPosition, isBoosting, isAbilityActive, activeTierIndex, boostBars])
   return (
     <div style={{ textAlign: 'center', padding: '2rem', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundImage: "url('/ocean-background-2.png')", backgroundSize: 'cover', backgroundPosition: 'bottom center', backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed', position: 'relative', overflowX: 'hidden', userSelect: 'none' }}>
