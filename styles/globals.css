@@ -76,3 +76,11 @@ form button {
 }
 
 .scrolling-trex-prop{position:absolute;transform:translate(-50%, -100%);z-index:28;pointer-events:none;background:transparent!important}
+
+.wiki-img {
+  background: transparent !important; /* Removes the rectangular background box */
+  border: none !important;             /* Removes any unwanted border */
+  box-shadow: none !important;         /* Removes rectangular drop shadow */
+  padding: 0 !important;              /* Removes extra spacing around the PNG */
+  cursor: pointer;
+}
