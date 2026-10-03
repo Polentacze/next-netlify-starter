@@ -107,7 +107,7 @@ const evoTiers = [
   { name: "Stethacanthus Altonensis (Next up: Dunkleosteus 9.9k)", minScore: 6600, scale: 115, file: "/Stethacanthus-Altonensis.png" }, // Index 3 (Unlocked at 6600)
   { name: "Dunkleosteus Terrelli (Next up: Helicoprion 21k)", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       // Index 4 (Unlocked at 9900)
   { name: "Helicoprion Bessonowi (Next up: Squalicorax 30k)", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" },                     // Index 5 (Unlocked at 21000)
-  { name: "Squalicorax Pristodontus", minScore: 30000, scale: 173, file: "/Squalicorax-Pristodontus.png" }            // Index 6 (Unlocked at 30000)
+  { name: "Squalicorax Pristodontus", minScore: 30000, scale: 173, file: "/crow-shark-salmon.png" }            // Index 6 (Unlocked at 30000)
 ]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
