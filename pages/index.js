@@ -757,7 +757,7 @@ return () => {
       New update!
     </h3>
     <p style={{ color: '#00FF1A', margin: 0, fontSize: '0.9rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-      - Banner and Evolutions
+      - QOL and New abilites and features
     </p>
   </div>
 </div>
