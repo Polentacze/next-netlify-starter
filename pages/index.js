@@ -225,19 +225,19 @@ setPropsList({
       return; //  Force exits the hook early so no evolutionary level-ups can ever process
     }
 
-    // Standard progression checkpoints for normal fish tiers
+// Standard progression checkpoints for normal fish tiers
 if (activeTierIndex === 0 && score >= 2400) {
-  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) // Pikaia (0) -> Sacabambaspis (1)
-} else if (activeTierIndex === 1 && score >= 4200) {
-  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) // Sacabambaspis (1) -> Cephalaspis (2)
-} else if (activeTierIndex === 2 && score >= 6600) {
-  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3) // Cephalaspis (2) -> Stethacanthus altonensis (3)
-} else if (activeTierIndex === 3 && score >= 9900) {
-  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4) // Stethacanthus (3) -> Dunkleosteus (4)
-} else if (activeTierIndex === 4 && score >= 21000) {
-  if (pendingEvolutionIndex !== 5) setPendingEvolutionIndex(5) // Dunkleosteus (4) -> Helicoprion (5)
-} else if (activeTierIndex === 5 && score >= 30000) {
-  if (pendingEvolutionIndex !== 6) setPendingEvolutionIndex(6) // Helicoprion (5) -> Squalicorax (6)
+  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1); // Pikaia (0) -> Choice between Sacabambaspis (1) & Pteraspis (2)
+} else if ((activeTierIndex === 1 || activeTierIndex === 2) && score >= 4200) {
+  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3); // Sacabambaspis (1) or Pteraspis (2) -> Cephalaspis (3)
+} else if (activeTierIndex === 3 && score >= 6600) {
+  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4); // Cephalaspis (3) -> Stethacanthus (4)
+} else if (activeTierIndex === 4 && score >= 9900) {
+  if (pendingEvolutionIndex !== 5) setPendingEvolutionIndex(5); // Stethacanthus (4) -> Dunkleosteus (5)
+} else if (activeTierIndex === 5 && score >= 21000) {
+  if (pendingEvolutionIndex !== 6) setPendingEvolutionIndex(6); // Dunkleosteus (5) -> Helicoprion (6)
+} else if (activeTierIndex === 6 && score >= 30000) {
+  if (pendingEvolutionIndex !== 7) setPendingEvolutionIndex(7); // Helicoprion (6) -> Squalicorax (7)
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
