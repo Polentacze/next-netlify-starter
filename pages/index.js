@@ -484,28 +484,41 @@ return () => {
 >
 {/* evolution selection deck */}
 {pendingEvolutionIndex !== null && (
-  <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', alignItems: 'center' }}>
-    
-    {/* option 1 Pteraspis (Left) */}
+  <div 
+    className="evolution-prompt-clickable-hud-box"
+    style={{ 
+      background: 'transparent',
+      display: 'flex', 
+      gap: '16px', 
+      justifyContent: 'center', 
+      alignItems: 'center' 
+    }}
+  >
+    {/* OPTION 1: pteraspis (Shows when evolving to Tier 1) */}
     {pendingEvolutionIndex === 1 && (
       <div 
         onClick={(e) => {
           e.stopPropagation();
-          setActiveTierIndex(2); // apex index for Pteraspis
+          setActiveTierIndex(2); // Tier Index 2 = Pteraspis
           setPendingEvolutionIndex(null);
           setChatMessages(p => [...p, { user: "System", text: `Evolved into ${evoTiers[2].name}!`, colorCode: "#00FF1A" }]);
         }}
         style={{ cursor: 'pointer', position: 'relative', width: '120px' }}
       >
         <img src="/new-animal-evolu.png" style={{ width: '100%' }} alt="frame" />
-        <img src={evoTiers[2].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png"; }} alt="Pteraspis" />
+        <img 
+          src={evoTiers[2].file} 
+          className="evolution-preview-avatar-inside-hud" 
+          onError={(e) => { e.target.src = "/prehistoric-skeleton.png"; }} 
+          alt="Pteraspis" 
+        />
         <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>
           PTERASPIS
         </span>
       </div>
     )}
 
-    {/* option 2: sacabambaspis (Right) */}
+    {/* OPTION 2: default evolution target (sacabambaspis or next tier) */}
     <div 
       onClick={(e) => {
         e.stopPropagation();
@@ -516,15 +529,18 @@ return () => {
       style={{ cursor: 'pointer', position: 'relative', width: '120px' }}
     >
       <img src="/new-animal-evolu.png" style={{ width: '100%' }} alt="frame" />
-      <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png"; }} alt="avatar" />
+      <img 
+        src={evoTiers[pendingEvolutionIndex].file} 
+        className="evolution-preview-avatar-inside-hud" 
+        onError={(e) => { e.target.src = "/prehistoric-skeleton.png"; }} 
+        alt="avatar" 
+      />
       <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>
         {evoTiers[pendingEvolutionIndex].name.split(' ')[0].toUpperCase()}
       </span>
     </div>
-
   </div>
 )}
-
           <div className="hud-boost-ammunition-deck">
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 2 ? '0 0 8px #00FF1A' : 'none' }} />
