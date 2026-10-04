@@ -101,13 +101,14 @@ useEffect(() => {
   
   const [clanInputTemp, setClanInputTemp] = useState("") 
 const evoTiers = [
-  { name: "Pikaia Gracliens (Next up: Sacabambaspis 2.4k)", minScore: 0, scale: 75, file: "/pikaia.png" },                                      // Index 0 (Starts at 0 points)
-  { name: "Sacabambaspis Janvieri (Next up: Cephalaspis 4.2k)", minScore: 2400, scale: 78, file: "/sacabambaspis.png" },                     // Index 1 (Unlocked at 2400)
-  { name: "Cephalaspis Lyelli (Next up: Stethacanthus 6.6k)", minScore: 4200, scale: 110, file: "/cephalaspis.png" },                        // Index 2 (Unlocked at 4200)
-  { name: "Stethacanthus Altonensis (Next up: Dunkleosteus 9.9k)", minScore: 6600, scale: 115, file: "/Stethacanthus-Altonensis.png" }, // Index 3 (Unlocked at 6600)
-  { name: "Dunkleosteus Terrelli (Next up: Helicoprion 21k)", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       // Index 4 (Unlocked at 9900)
-  { name: "Helicoprion Bessonowi (Next up: Squalicorax 30k)", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" },                     // Index 5 (Unlocked at 21000)
-  { name: "Squalicorax Pristodontus", minScore: 30000, scale: 179, file: "/crow-shark-pris.png" }            // Index 6 (Unlocked at 30000) (size is techincally 173 but the file looked too small so it is now 179)
+  { name: "𝐏𝐢𝐤𝐚𝐢𝐚 𝐆𝐫𝐚𝐜𝐥𝐢𝐞𝐧𝐬 (Next up: Apex 2 2.4k)", minScore: 0, scale: 75, file: "/pikaia.png" },                                      // Index 0 (Starts at 0 points)
+  { name: "𝐒𝐚𝐜𝐚𝐛𝐚𝐦𝐛𝐚𝐬𝐩𝐢𝐬 𝐉𝐚𝐧𝐯𝐢𝐞𝐫𝐢 (Next up: Apex 3, 4.2k)", minScore: 2400, scale: 78, file: "/sacabambaspis.png" },                     // Index 1 (Unlocked at 2400)
+  { name: "𝐏𝐭𝐫𝐞𝐚𝐬𝐩𝐢𝐬 𝐑𝐨𝐬𝐭𝐫𝐚𝐭𝐚 (Next up: Apex 3, 4.2k)", minScore: 2400, scale: 78, file: "/pteraspis.png" },                    // Index 2 (Alternative Tier 1 option)
+  { name: "𝐂𝐞𝐥𝐩𝐡𝐚𝐥𝐚𝐬𝐩𝐢𝐬 𝐋𝐲𝐞𝐥𝐥𝐢 (Next up: Stethacanthus 6.6k)", minScore: 4200, scale: 110, file: "/cephalaspis.png" },                        // Index 2 (Unlocked at 4200)
+  { name: "𝐒𝐭𝐞𝐭𝐡𝐚𝐜𝐚𝐧𝐭𝐡𝐮𝐬 𝐀𝐥𝐭𝐨𝐧𝐞𝐧𝐬𝐢𝐬 (Next up: Dunkleosteus 9.9k)", minScore: 6600, scale: 115, file: "/Stethacanthus-Altonensis.png" }, // Index 3 (Unlocked at 6600)
+  { name: "𝐃𝐮𝐧𝐤𝐥𝐞𝐨𝐬𝐞𝐭𝐮𝐬 𝐓𝐞𝐫𝐫𝐞𝐥𝐥𝐢 (Next up: Helicoprion 21k)", minScore: 9900, scale: 150, file: "/dunkleosteus.png" },                       // Index 4 (Unlocked at 9900)
+  { name: "𝐇𝐞𝐥𝐢𝐜𝐨𝐩𝐫𝐢𝐨𝐧 𝐁𝐞𝐬𝐬𝐨𝐧𝐨𝐰𝐢 (Next up: Squalicorax 30k)", minScore: 21000, scale: 170, file: "/helicoprion-bes.png" },                     // Index 5 (Unlocked at 21000)
+  { name: "𝐒𝐪𝐮𝐚𝐥𝐢𝐜𝐨𝐫𝐚𝐱 𝐏𝐫𝐢𝐬𝐭𝐨𝐝𝐨𝐧𝐭𝐮𝐬", minScore: 30000, scale: 179, file: "/crow-shark-pris.png" }            // Index 6 (Unlocked at 30000) (size is techincally 173 but the file looked too small so it is now 179)
 ]
   const [activeTierIndex, setActiveTierIndex] = useState(0)
 const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
