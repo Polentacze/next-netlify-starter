@@ -695,7 +695,7 @@ return () => {
     />
   );
 })}
-            {propsList.bigClam && <img src="/big-clam.png" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
+            {propsList.bigClam && <img src="/big-clam-2.png" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
             
             {clamMeats.map((m) => !m.isEaten && (
