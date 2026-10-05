@@ -278,17 +278,26 @@ if (activeTierIndex === 0 && score >= 2400) {
       const rect = viewRef.current.getBoundingClientRect() 
       mousePos.current = { x: e.clientX - rect.left - (rect.width / 2), y: e.clientY - rect.top - (rect.height / 2) } 
     } 
+const triggerBoost = () => {
+  if (isBoosting || boostBars < 1) return;
+
+  setIsBoosting(true);
+  setBoostBars((prev) => Math.max(0, prev - 1));
+
+  setTimeout(() => {
+    setIsBoosting(false);
+  }, 600);
+};
 
 const handleKeyDown = (e) => {
-  if (document.activeElement.tagName === "INPUT") return;
+  if (e.repeat) return; // ignores key repeat events when holding down keys
 
   if (e.key.toLowerCase() === 'e' || e.code === 'Space') {
     if (e.code === 'Space') e.preventDefault();
 
-    // enough boost available
     if (boostBars < 1) return;
 
-    // TIER 1 (Stethacanthus Speed Surge)
+    // tIER 1 ability (speed Surge)
     if (activeTierIndex === 1) {
       if (isAbilityActive) return;
       setIsAbilityActive(true);
@@ -297,16 +306,7 @@ const handleKeyDown = (e) => {
       return;
     }
 
-    // TIER 5 (Helicoprion Buzzsaw)
-    if (activeTierIndex === 5) {
-      if (isAbilityActive) return;
-      setIsAbilityActive(true);
-      setBoostBars((prev) => Math.max(0, prev - 1));
-      setTimeout(() => { setIsAbilityActive(false); }, 5000);
-      return;
-    }
-
-    // TIER 2 (Dunkleosteus)
+    // TIER 2 ability (dunkleosteus)
     if (activeTierIndex === 2) {
       if (isAbilityActive) return;
       setIsAbilityActive(true);
@@ -315,19 +315,22 @@ const handleKeyDown = (e) => {
       return;
     }
 
-    // continuous boost (Tier 0 / normal boost)
-    if (!isBoosting) {
-      setIsBoosting(true);
-      setBoostBars((prev) => Math.max(0, prev - 1)); // deducts 1 bar when boosting starts
+    // tier 5 Ability (helicoprion buzzsaw)
+    if (activeTierIndex === 5) {
+      if (isAbilityActive) return;
+      setIsAbilityActive(true);
+      setBoostBars((prev) => Math.max(0, prev - 1));
+      setTimeout(() => { setIsAbilityActive(false); }, 5000);
+      return;
     }
+
+    // normal boost for tier 1 / animals without special active timers
+    triggerBoost();
   }
 };
 
-// second function: Detects key release (Up)
 const handleKeyUp = (e) => {
-  if (e.key.toLowerCase() === 'e' || e.code === 'Space') {
-    setIsBoosting(false);
-  }
+  // key release no longer overrides boost timers
 };
 
     const tick = setInterval(() => {
@@ -355,7 +358,7 @@ if (isBoosting) {
         return { x: cx, y: cy }
       })
 
-// 🍏 Hardcore Scarce Food Respawning (Tiny clumps & solitary dots)
+// hardcore scarce food Respawning (Tiny clumps & solitary dots)
       setFoodPellets((current) => {
         let active = current.filter(f => !f.isEaten);
         
