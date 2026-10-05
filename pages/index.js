@@ -225,19 +225,19 @@ setPropsList({
       return; //  Force exits the hook early so no evolutionary level-ups can ever process
     }
 
-// Standard progression checkpoints for normal fish tiers
+    // Standard progression checkpoints for normal fish tiers
 if (activeTierIndex === 0 && score >= 2400) {
-  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1); // Pikaia (0) -> Choice between Sacabambaspis (1) & Pteraspis (2)
-} else if ((activeTierIndex === 1 || activeTierIndex === 2) && score >= 4200) {
-  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3); // Sacabambaspis (1) or Pteraspis (2) -> Cephalaspis (3)
-} else if (activeTierIndex === 3 && score >= 6600) {
-  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4); // Cephalaspis (3) -> Stethacanthus (4)
-} else if (activeTierIndex === 4 && score >= 9900) {
-  if (pendingEvolutionIndex !== 5) setPendingEvolutionIndex(5); // Stethacanthus (4) -> Dunkleosteus (5)
-} else if (activeTierIndex === 5 && score >= 21000) {
-  if (pendingEvolutionIndex !== 6) setPendingEvolutionIndex(6); // Dunkleosteus (5) -> Helicoprion (6)
-} else if (activeTierIndex === 6 && score >= 30000) {
-  if (pendingEvolutionIndex !== 7) setPendingEvolutionIndex(7); // Helicoprion (6) -> Squalicorax (7)
+  if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) // Pikaia (0) -> Sacabambaspis (1)
+} else if (activeTierIndex === 1 && score >= 4200) {
+  if (pendingEvolutionIndex !== 2) setPendingEvolutionIndex(2) // Sacabambaspis (1) -> Cephalaspis (2)
+} else if (activeTierIndex === 2 && score >= 6600) {
+  if (pendingEvolutionIndex !== 3) setPendingEvolutionIndex(3) // Cephalaspis (2) -> Stethacanthus altonensis (3)
+} else if (activeTierIndex === 3 && score >= 9900) {
+  if (pendingEvolutionIndex !== 4) setPendingEvolutionIndex(4) // Stethacanthus (3) -> Dunkleosteus (4)
+} else if (activeTierIndex === 4 && score >= 21000) {
+  if (pendingEvolutionIndex !== 5) setPendingEvolutionIndex(5) // Dunkleosteus (4) -> Helicoprion (5)
+} else if (activeTierIndex === 5 && score >= 30000) {
+  if (pendingEvolutionIndex !== 6) setPendingEvolutionIndex(6) // Helicoprion (5) -> Squalicorax (6)
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
@@ -482,65 +482,12 @@ return () => {
   style={{ background: 'transparent' }} 
   onClick={(e) => { e.stopPropagation(); setActiveTierIndex(pendingEvolutionIndex); setPendingEvolutionIndex(null); setChatMessages(p => [...p, { user: "System", text: `🧬 Evovled into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]); }}
 >
-{/* evolution selection deck */}
-{pendingEvolutionIndex !== null && (
-  <div 
-    className="evolution-prompt-clickable-hud-box"
-    style={{ 
-      background: 'transparent',
-      display: 'flex', 
-      gap: '16px', 
-      justifyContent: 'center', 
-      alignItems: 'center' 
-    }}
-  >
-    {/* OPTION 1: pteraspis (Shows when evolving to Tier 1) */}
-    {pendingEvolutionIndex === 1 && (
-      <div 
-        onClick={(e) => {
-          e.stopPropagation();
-          setActiveTierIndex(2); // Tier Index 2 = Pteraspis
-          setPendingEvolutionIndex(null);
-          setChatMessages(p => [...p, { user: "System", text: `Evolved into ${evoTiers[2].name}!`, colorCode: "#00FF1A" }]);
-        }}
-        style={{ cursor: 'pointer', position: 'relative', width: '120px' }}
-      >
-        <img src="/new-animal-evolu.png" style={{ width: '100%' }} alt="frame" />
-        <img 
-          src={evoTiers[2].file} 
-          className="evolution-preview-avatar-inside-hud" 
-          onError={(e) => { e.target.src = "/prehistoric-skeleton.png"; }} 
-          alt="Pteraspis" 
-        />
-        <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>
-          PTERASPIS
-        </span>
-      </div>
-    )}
+              <img src="/new-animal-evolu.png" style={{ width: '100%' }} alt="frame" />
+              <img src={evoTiers[pendingEvolutionIndex].file} className="evolution-preview-avatar-inside-hud" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} alt="avatar" />
+              <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>CLICK TO EVOLVE</span>
+            </div>
+          )}
 
-    {/* OPTION 2: default evolution target (sacabambaspis or next tier) */}
-    <div 
-      onClick={(e) => {
-        e.stopPropagation();
-        setActiveTierIndex(pendingEvolutionIndex);
-        setPendingEvolutionIndex(null);
-        setChatMessages(p => [...p, { user: "System", text: `Evolved into ${evoTiers[pendingEvolutionIndex].name}!`, colorCode: "#00FF1A" }]);
-      }}
-      style={{ cursor: 'pointer', position: 'relative', width: '120px' }}
-    >
-      <img src="/new-animal-evolu.png" style={{ width: '100%' }} alt="frame" />
-      <img 
-        src={evoTiers[pendingEvolutionIndex].file} 
-        className="evolution-preview-avatar-inside-hud" 
-        onError={(e) => { e.target.src = "/prehistoric-skeleton.png"; }} 
-        alt="avatar" 
-      />
-      <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontFamily: 'sans-serif', fontSize: '0.55rem', fontWeight: 'bold', color: '#00FF1A', whiteSpace: 'nowrap' }}>
-        {evoTiers[pendingEvolutionIndex].name.split(' ')[0].toUpperCase()}
-      </span>
-    </div>
-  </div>
-)}
           <div className="hud-boost-ammunition-deck">
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 1 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 1 ? '0 0 8px #00FF1A' : 'none' }} />
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 2 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 2 ? '0 0 8px #00FF1A' : 'none' }} />
@@ -695,7 +642,7 @@ return () => {
     />
   );
 })}
-            {propsList.bigClam && <img src="/big-clam-2.png" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
+            {propsList.bigClam && <img src="/big-clam-2.png?v=2" alt="clam" style={{ position: 'absolute', top: propsList.bigClam.y + 12, left: propsList.bigClam.x, width: propsList.bigClam.w, transform: 'translate(-50%, -100%)', zIndex: 26, pointerEvents: 'none', background: 'transparent' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />}
             {foodPellets.map((p) => !p.isEaten && <img key={p.id} src={p.src || "/food.png"} alt="food" className="custom-food-sprite-pellet" style={{ top: p.y, left: p.x }} onError={(e) => { e.target.src = "/food.png" }} />)}
             
             {clamMeats.map((m) => !m.isEaten && (
