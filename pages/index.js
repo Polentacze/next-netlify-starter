@@ -37,7 +37,7 @@ const [knightiaNpcs, setKnightiaNpcs] = useState([
   { id: 7, spawnX: 1430, spawnY: 810, x: 1430, y: 810, angle: 210, speed: 9, scale: 38, hp: 50, maxHp: 50, lastHit: 0 },
 ]);
 
-// --- KNIGHTIA MOVEMENT & COLLISION TICK ---
+// --- KNIGHTIA MOVEMENT & COLLISION ---
 useEffect(() => {
   if (!isPlaying) return;
 
@@ -46,9 +46,9 @@ useEffect(() => {
       prevNpcs.map(npc => {
         let newAngle = npc.angle;
 
-        // Reduce direction change chance to 3% per tick (much smoother, natural swims)
+        //  direction change chance to 3% per tick (much smoother, natural swims)
         if (Math.random() < 0.03) {
-          // Smooth rotation: nudge angle by -45, 0, or +45 degrees instead of snapping randomly
+          // rotation: nudge angle by -45, 0, or +45 degrees instead of snapping randomly
           const turns = [-45, 0, 45];
           const turnChoice = turns[Math.floor(Math.random() * turns.length)];
           newAngle = (npc.angle + turnChoice + 360) % 360;
@@ -70,7 +70,7 @@ useEffect(() => {
           nextY = npc.y + Math.sin(returnRad) * npc.speed;
         }
 
-        // Hitbox collision against player
+        // hitbox collision against player (knightia)
         setPlayerPosition(prevPlayer => {
           const distToPlayer = Math.hypot(prevPlayer.x - nextX, prevPlayer.y - nextY);
           if (distToPlayer < 25) {
@@ -91,7 +91,7 @@ useEffect(() => {
   return () => clearInterval(interval);
 }, [isPlaying]);
   
-  //  LOCALSTORAGE BLUEPRINT: Automatically fetches their permanently saved clan name on load!
+  //  automatically fetches permanently saved clan on load
   const [activeClan, setActiveClan] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('prehistooio_clan') || ""
@@ -123,10 +123,10 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
 const detectTextColor = (targetString) => {
   const cleanStr = (targetString || "").toUpperCase()
 
-  //  NEW VIBRANT ORANGE RULE
+  //  orangeeee color
   if (cleanStr.includes("(ORANGE)")) return '#FF8B28';
     
-    //  STATE-VERIFIED CLAN CHECK Only triggers gold if a crew is registered and matches exactly
+    //  (clan checker) only triggers gold if a crew is registered and matches
     if (activeClan) {
       const matchTag = `[${activeClan.toUpperCase()}]`
       if (cleanStr.includes(matchTag)) {
@@ -134,7 +134,7 @@ const detectTextColor = (targetString) => {
       }
     }
 
-    // Standard cosmetic modifiers fallback
+    // standard modifiers fallback
     if (cleanStr.includes("(RED)")) return "#ff4d4d" 
     if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
     if (cleanStr.includes("(GREEN)")) return "#00FF1A" 
@@ -145,7 +145,7 @@ const detectTextColor = (targetString) => {
 
     return "#FFFFFF" 
   } 
-// 🧼 CHAT & NAME TEXT REPLACEMENT LOOP Keeps text clean and safe
+//  CHAT & NAME TEXT REPLACEMENT keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
   let result = str
@@ -161,7 +161,7 @@ const cleanTags = (str) => {
     }
   }
 
-  // 🎯 CRITICAL FIX This line MUST be here to send the cleaned text back to the game
+  // this line is here to send the cleaned text back to the game
   return result
 }
 
@@ -169,7 +169,7 @@ const cleanTags = (str) => {
     e.preventDefault() 
     if (!chatInput.trim()) return 
     
-    // 🏷️ Dynamically matches colors to whoever sent it
+    //  dynamically matches colors to whoever sent it
     let messageColor = detectTextColor(chatInput) 
     if (messageColor === "#FFFFFF") messageColor = detectTextColor(username) 
     
@@ -214,18 +214,18 @@ setPropsList({
 })
   }, [isPlaying]) 
 
-  // 🧬 BULLETPROOF EVOLUTION ENGINE: Now featuring Secret Tier Interceptors for the Ghoul!
+  // now featuring secret apex interceptors for the ghoul
   useEffect(() => { 
     if (!isPlaying) return 
     
-    //  UNDEAD ISOLATION GATING: If the player is a secret Ghoul, hard-lock their growth forever!
+    //  GATING: if the player is a secret ghoul hard-lock their growth forever
     const isSecretGhoul = (username || "").toUpperCase().replace(/\s/g, "").includes("(GHOUL)");
     if (isSecretGhoul) {
-      if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // Instantly clears out any accidental alerts
-      return; //  Force exits the hook early so no evolutionary level-ups can ever process
+      if (pendingEvolutionIndex !== null) setPendingEvolutionIndex(null); // instantly clears out any accidental alerts
+      return; //  force exits the hook early so no evolutionary level-ups can ever process
     }
 
-    // Standard progression checkpoints for normal fish tiers
+    // standard progression checkpoints for normal fish apexes
 if (activeTierIndex === 0 && score >= 2400) {
   if (pendingEvolutionIndex !== 1) setPendingEvolutionIndex(1) // Pikaia (0) -> Sacabambaspis (1)
 } else if (activeTierIndex === 1 && score >= 4200) {
@@ -241,7 +241,7 @@ if (activeTierIndex === 0 && score >= 2400) {
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
-  //  AUTOMATED CLAM MEAT DISPENSER: Ticks every 4 seconds to spawn up to 5 max items inside the clam shell
+  //  ticks every 4 seconds to spawn up to 5 max meat inside the clam shell
   useEffect(() => {
     if (!isPlaying) {
       setClamMeats([])
@@ -269,7 +269,7 @@ if (activeTierIndex === 0 && score >= 2400) {
     return () => clearInterval(meatTimer)
   }, [isPlaying])
 
-//  PRIMARY GAME ENGINE LOOP EFFECT
+//  PRIMARY GAME ENGINE LOOP CZE
   useEffect(() => {
     if (!isPlaying) return
 
@@ -297,7 +297,7 @@ const handleKeyDown = (e) => {
 
     if (boostBars < 1) return;
 
-    // tIER 1 ability (speed Surge)
+    // apex 1 ability (speed Surge)
     if (activeTierIndex === 1) {
       if (isAbilityActive) return;
       setIsAbilityActive(true);
@@ -306,7 +306,7 @@ const handleKeyDown = (e) => {
       return;
     }
 
-    // TIER 2 ability (dunkleosteus)
+    // apex 5 ability (dunkleosteus)
     if (activeTierIndex === 2) {
       if (isAbilityActive) return;
       setIsAbilityActive(true);
@@ -315,7 +315,7 @@ const handleKeyDown = (e) => {
       return;
     }
 
-    // tier 5 Ability (helicoprion buzzsaw)
+    // apex 6 Ability (helicoprion buzzsaw)
     if (activeTierIndex === 5) {
       if (isAbilityActive) return;
       setIsAbilityActive(true);
@@ -362,29 +362,29 @@ if (isBoosting) {
       setFoodPellets((current) => {
         let active = current.filter(f => !f.isEaten);
         
-        // 1. Scan your immediate area (within 400 pixels)
+        //  scan your immediate area (within 400 pixels)
         const localFood = active.filter(f => Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 400);
 
-        // 2. Only spawn if the local area is practically starved (fewer than 2 dots left)
+        //  only spawn if the local area is practically starved (fewer than 2 food left)
         if (localFood.length < 2) {
           const spawnGroupX = Math.max(200, Math.min(3200, cx + (Math.random() * 600 - 300)));
           const spawnGroupY = Math.max(200, Math.min(2800, cy + (Math.random() * 500 - 250)));
           
-          // 🎲 Roll the dice for spawn size: 60% chance for a single/double dot, 40% chance for a tiny clump
+          //  spawn size: 60% chance for a single/double dot 40% chance for a tiny clump
           const spawnChance = Math.random();
           let itemsToSpawn = 1; 
           
           if (spawnChance > 0.8) {
-            itemsToSpawn = 3; // Tiny clump maximum size
+            itemsToSpawn = 3; // tiny clump maximum size
           } else if (spawnChance > 0.4) {
-            itemsToSpawn = 2; // Double dot
+            itemsToSpawn = 2; // double dot
           }
 
           for (let i = 0; i < itemsToSpawn; i++) {
-            const isOcean = Math.random() > 0.7; // Lowered rare food chance too
+            const isOcean = Math.random() > 0.7; // Llwered rare food chance too
             active.push({
               id: "scarce_spawn_" + Date.now() + "_" + i + "_" + Math.random(),
-              x: spawnGroupX + (Math.random() * 60 - 30), // Tighter spreading space
+              x: spawnGroupX + (Math.random() * 60 - 30), // tighter spreading
               y: spawnGroupY + (Math.random() * 60 - 30),
               isEaten: false,
               value: isOcean ? 120 : 100,
@@ -393,7 +393,7 @@ if (isBoosting) {
           }
         }
 
-        // 3. Low absolute map threshold (only tops up global space if completely stripped)
+        // 3. low absolute map threshold (only tops up global space if completely stripped)
         if (active.length < 15) {
           const gx = Math.floor(Math.random() * 2950) + 200;
           const gy = Math.floor(Math.random() * 2600) + 200;
@@ -407,7 +407,7 @@ if (isBoosting) {
           });
         }
 
-        // 4. Hit/eating detector
+        //  hit/eating detector
         return active.map((f) => {
           if (Math.sqrt((cx - f.x) ** 2 + (cy - f.y) ** 2) < 30) {
             setScore((s) => s + f.value);
@@ -425,7 +425,7 @@ if (isBoosting) {
         });
       });
 
-      // 🥩 Clam Meat Loop
+      // clam meat loop
       setClamMeats((prev) => prev.map((m) => {
         if (m.isEaten) return m
         if (Math.sqrt((cx - m.x) ** 2 + (cy - m.y) ** 2) < 35) {
@@ -497,10 +497,10 @@ return () => {
             <div className="individual-energy-slice" style={{ backgroundColor: boostBars >= 3 ? '#00FF1A' : 'rgba(255,255,255,0.12)', boxShadow: boostBars >= 3 ? '0 0 8px #00FF1A' : 'none' }} />
           </div>
 
-{/* 💬 DYNAMIC HUD CHAT SYSTEM */}
+{/* dynamic hud chat system */}
           {isChatOpen ? (
             <div className="chat-container-hud" onClick={(e) => e.stopPropagation()}>
-              {/* Close Button on Top Left */}
+              {/* close button on top left */}
               <button 
                 onClick={() => setIsChatOpen(false)}
                 style={{ position: 'absolute', top: '5px', left: '5px', background: '#ff4d4d', color: 'white', border: 'none', borderRadius: '4px', fontSize: '0.65rem', padding: '2px 6px', cursor: 'pointer', fontWeight: 'bold', zIndex: 160 }}
@@ -544,15 +544,15 @@ return () => {
 {propsList.kelp && propsList.kelp.map((k, idx) => {
   if (!k) return null;
 
-  // 1. Identify prop categories
+  // identify prop category
   const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral' || k.type === 'starfish-rock-purple';
 
-  // 2. Set specific vertical ground offsets
+  // set specific vertical ground offsets
   const anchorAdjustment = 
     k.type === 'white-brain-coral' ? 35 : 
     (isCoral ? 12 : 42);
 
-  // 3. Compute position and image path dynamically
+  // position and image path 
   const finalTopY = (k.y || 1740) + anchorAdjustment;
   const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type || 'kelp'}.png`;
 
@@ -579,7 +579,7 @@ return () => {
   );
 })}
 
-{/* KNIGHTIA NPCS */}
+{/* KNIGHTIA NPCS (hatt you are the goat bro) */}
 {knightiaNpcs.map(npc => (
   <img
     key={npc.id}
@@ -675,7 +675,7 @@ return () => {
               <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0s linear', background: 'transparent', backgroundColor: 'transparent' }}>
 <img src={username && username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
 
-{/*  sacabambaspis Ability Layer (Index 1) */}
+{/*  sacabambaspis Ability Layer (Index 2) */}
 {isAbilityActive && activeTierIndex === 1 && (
   <img 
     src="/sacabambas-ability.png" 
@@ -685,17 +685,17 @@ return () => {
   />
 )}
 
-{/* Helicoprion Ability Layer (Index 5) */}
+{/* helicoprion Ability Layer (Index 6) */}
 {isAbilityActive && activeTierIndex === 5 && (
   <img
     src="/helicoprion-ability.png"
     alt="Buzzsaw jaw"
     style={{
       position: 'absolute',
-      top: '-55px', // Adjusted to align near the mouth
+      top: '-55px', // adjusted to align near the mouth
       left: '50%',
       transform: 'translateX(-50%)',
-      width: '140px', // Bumped up from 60px
+      width: '140px', // bumped up from 60px
       height: 'auto',
       backgroundColor: 'transparent',
       background: 'transparent',
@@ -705,7 +705,7 @@ return () => {
   />
 )}
 
-{/*  cephalaspis Ability Layer (Index 2) */}
+{/*  cephalaspis Ability Layer (Index 3) */}
 {isAbilityActive && activeTierIndex === 2 && (
   <img 
     src="/cephalas-ability.png" 
@@ -741,7 +741,7 @@ return () => {
             style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
             onClick={() => setIsClanOpen(true)} 
           />
-   {/* 🚀 FIXED MAIN MENU UPDATE BANNER */}
+   {/* FIXED MAIN MENU UPDATE BANNER W */}
 <div style={{ 
   display: 'flex', 
   justifyContent: 'center', 
@@ -766,7 +766,7 @@ return () => {
   </div>
 </div>
 
-{/* YOUR EXISTING WIKI BUTTON */}
+{/* EXISTING WIKI BUTTON */}
 <img src="/wiki-button.png" alt="Wiki" className="wiki-img" onClick={() => setIsWikiOpen(true)} />
 
           <div onClick={() => setIsWikiOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: isWikiOpen ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', zIndex: 105 }}>
@@ -826,11 +826,11 @@ return () => {
   style={{ 
     background: 'transparent', 
     boxShadow: 'none',
-    display: 'flex',          // 1. 
-    flexDirection: 'row',     // 2. 
-    alignItems: 'center',     // 3. 
-    justifyContent: 'center', // 4. 
-    gap: '12px'               // 5. 
+    display: 'flex',          //  
+    flexDirection: 'row',     //  
+    alignItems: 'center',     //  
+    justifyContent: 'center', //  
+    gap: '12px'               //  
   }} 
   onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}
 >
@@ -855,3 +855,5 @@ return () => {
     </div>
   )
 }
+
+// end of prehistoo code for now //
