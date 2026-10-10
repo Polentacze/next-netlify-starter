@@ -142,6 +142,10 @@ const detectTextColor = (targetString) => {
     if (cleanStr.includes("(PURPLE)")) return "#a855f7" 
     if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
     if (cleanStr.includes("(BLACK)")) return "#000000" 
+    if (cleanStr.includes("(TOPHATT)")) || cleanStr.includes("(CARPISTOCRAT)")) return "#00ee94" 
+    if (cleanStr.includes("(COEY)")) || cleanStr.includes("(GLICKLE)")) return "#d20050"
+    if (cleanStr.includes("(POLENTACZE)")) return "#009fff" 
+
 
     return "#FFFFFF" 
   } 
