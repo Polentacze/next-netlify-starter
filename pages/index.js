@@ -134,21 +134,17 @@ const detectTextColor = (targetString) => {
       }
     }
 
-const getColorFromName = (str) => {
-  const cleanStr = str.toUpperCase();
+    // standard modifiers fallback
+    if (cleanStr.includes("(RED)")) return "#ff4d4d" 
+    if (cleanStr.includes("(BLUE)")) return "#3b82f6" 
+    if (cleanStr.includes("(GREEN)")) return "#00FF1A" 
+    if (cleanStr.includes("(CYAN)")) return "#00ffff" 
+    if (cleanStr.includes("(PURPLE)")) return "#a855f7" 
+    if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af" 
+    if (cleanStr.includes("(BLACK)")) return "#000000" 
 
-  if (cleanStr.includes("(RED)")) return "#ff4d4d";
-  if (cleanStr.includes("(BLUE)")) return "#3b82f6";
-  if (cleanStr.includes("(GREEN)")) return "#00FF1A";
-  if (cleanStr.includes("(CYAN)")) return "#00ffff";
-  if (cleanStr.includes("(PURPLE)")) return "#a855f7";
-  if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af";
-  if (cleanStr.includes("(BLACK)")) return "#000000";
-  if (cleanStr.includes("(BROWN)")) return "#00ee94";
-
-  return "#FFFFFF";
-}
-  
+    return "#FFFFFF" 
+  } 
 //  CHAT & NAME TEXT REPLACEMENT keeps text clean and safe
 const cleanTags = (str) => {
   if (!str) return ""
