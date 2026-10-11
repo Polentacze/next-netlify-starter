@@ -144,11 +144,7 @@ const getColorFromName = (str) => {
   if (cleanStr.includes("(PURPLE)")) return "#a855f7";
   if (cleanStr.includes("(GREY)") || cleanStr.includes("(GRAY)")) return "#9ca3af";
   if (cleanStr.includes("(BLACK)")) return "#000000";
-  
-  // the goated trio tag colors
-  if (cleanStr.includes("(HATT)")) return "#00ee94";
-  if (cleanStr.includes("(GLI)")) return "#d20050";
-  if (cleanStr.includes("(POL)")) return "#009fff";
+  if (cleanStr.includes("(BROWN)")) return "#00ee94";
 
   return "#FFFFFF";
 }
