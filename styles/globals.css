@@ -86,7 +86,8 @@ form button {
 }
 
 .update-banner-box {
-  background: transparent !important;
+    background: transparent !important;
+    background-color: transparent !important;
   border: 2px solid #3b5998;
   border-radius: 16px;
   padding: 10px 20px;
