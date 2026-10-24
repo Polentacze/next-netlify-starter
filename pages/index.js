@@ -822,17 +822,18 @@ return () => {
             <img src="/prehistoric-skeleton.png" alt="Skeleton" style={{ width: '160px', marginBottom: '1.5rem', borderRadius: '12px' }} onError={(e) => { e.target.src = "/deep-prehistoo.png" }} />
             <p className="ocean-sub" style={{ fontSize: '1.4rem', fontWeight: '500', marginBottom: '0.5rem' }}>Fight your Prehistoric foes</p>
 <form 
-  className="launch-form" 
-  style={{ 
-    background: 'transparent', 
-    boxShadow: 'none',
-    display: 'flex',          //  
-    flexDirection: 'row',     //  
-    alignItems: 'center',     //  
-    justifyContent: 'center', //  
-    gap: '12px'               //  
-  }} 
+  className="launch-form"
   onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }}
+  style={{
+    background: 'transparent',
+    boxShadow: 'none',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '12px',
+    marginTop: '-25px' // This lifts both buttons up together!
+  }}
 >
   <div style={{ position: 'relative', width: '280px' }}>
     <img src="/input-box.png" alt="Input field" style={{ width: '100%' }} />
@@ -848,12 +849,6 @@ return () => {
   <button type="submit" className="play-btn" style={{ margin: 0, width: '160px' }}>
     <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
   </button>
-  <form onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }} style={{ display: 'flex', gap: '15px', justifyContent: 'center', alignItems: 'center', marginTop: '-25px' }}>
-          </main>
-        </>
-      )}
-    </div>
-  )
-}
+</form>
 
 // end of prehistoo code for now //
