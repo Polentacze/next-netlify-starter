@@ -749,7 +749,7 @@ return () => {
   width: '100%'
 }}>
   <div style={{
-    background: 'rgba(42, 67, 122, 0.95)', 
+    background: 'rgba(0, 0, 0, 0)', 
     border: '2px solid #3b5998', 
     borderRadius: '16px',
     padding: '10px 20px',
@@ -761,7 +761,7 @@ return () => {
       New update!
     </h3>
     <p style={{ color: '#00FF1A', margin: 0, fontSize: '0.9rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-      - QOL and New abilites and features
+      - Refreshed home screen
     </p>
   </div>
 </div>
