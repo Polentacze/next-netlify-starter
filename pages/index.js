@@ -238,6 +238,8 @@ if (activeTierIndex === 0 && score >= 2400) {
   if (pendingEvolutionIndex !== 5) setPendingEvolutionIndex(5) // Dunkleosteus (4) -> Helicoprion (5)
 } else if (activeTierIndex === 5 && score >= 30000) {
   if (pendingEvolutionIndex !== 6) setPendingEvolutionIndex(6) // Helicoprion (5) -> Squalicorax (6)
+ } else if (activeTierIndex === 6 && score >= 38500) {
+    if (pendingEvolutionIndex !== 7) setPendingEvolutionIndex(7); // Squalicorax (6) -> Cretodus (7)
 }
   }, [score, activeTierIndex, isPlaying, username, pendingEvolutionIndex]) //  Added username monitoring to track the secret name check!
 
