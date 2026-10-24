@@ -84,3 +84,13 @@ form button {
   padding: 0 !important;              /* Removes extra spacing around the PNG */
   cursor: pointer;
 }
+
+.update-banner-box {
+  background: transparent !important;
+  border: 2px solid #3b5998;
+  border-radius: 16px;
+  padding: 10px 20px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  width: 220px;
+}
