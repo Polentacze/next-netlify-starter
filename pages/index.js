@@ -749,7 +749,7 @@ return () => {
   width: '100%'
 }}>
   <div style={{
-    background: 'transparent !important', 
+    background: 'transparent', 
     border: '2px solid #3b5998', 
     borderRadius: '16px',
     padding: '10px 20px',
