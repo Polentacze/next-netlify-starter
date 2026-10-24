@@ -736,7 +736,7 @@ return () => {
 />
           <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
           <img 
-            src="/clan-button.png" 
+            src="/clan-button-two.png" 
             alt="Clan Button" 
             style={{ position: 'fixed', left: '25px', top: '22%', width: '240px', cursor: 'pointer', zIndex: 100 }} 
             onClick={() => setIsClanOpen(true)} 
