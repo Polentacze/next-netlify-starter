@@ -848,7 +848,7 @@ return () => {
   <button type="submit" className="play-btn" style={{ margin: 0, width: '160px' }}>
     <img src="/play-button.png" alt="Play Button" style={{ width: '100%' }} />
   </button>
-</form>
+  <form onSubmit={(e) => { e.preventDefault(); setIsPlaying(true); }} style={{ display: 'flex', gap: '15px', justifyContent: 'center', alignItems: 'center', marginTop: '-25px' }}>
           </main>
         </>
       )}
