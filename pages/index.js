@@ -734,7 +734,7 @@ return () => {
   alt="critter" 
   style={{ imageRendering: 'auto', width: '70px', height: 'auto' }}
 />
-          <img src="/leaderboard.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
+          <img src="/leaderboard-tophat.png" alt="Leaderboard" style={{ position: 'fixed', left: '25px', top: '50%', transform: 'translateY(-50%)', width: '240px', zIndex: 100 }} />
           <img 
             src="/clan-button-two.png" 
             alt="Clan Button" 
