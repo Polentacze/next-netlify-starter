@@ -606,7 +606,7 @@ return () => {
             {propsList.bigRock && <img src="/big-rock.png" alt="rock" className="scrolling-rock-prop" style={{ top: propsList.bigRock.y + 25, left: propsList.bigRock.x, width: propsList.bigRock.w }} onError={(e) => { e.target.style.display = 'none' }} />}
 {propsList.reefRock && (
   <img 
-    src="/reef-rock.png" 
+    src="/reef-rock-2.png" 
     alt="reef-rock" 
     className="scrolling-rock-prop" 
     style={{ 
