@@ -117,7 +117,17 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   const [chatMessages, setChatMessages] = useState([
     { user: "System", text: "Welcome to the Tropical sea, waters here are calm (Press E to activate animal ability)", colorCode: "#00FFFF" }
   ])
-  const slots = ["Otodus Megalodon was a colossal prehistoric mackrel shark that was the apex predator of it's cenozoic oceans. Being around 80ft long or 24m", "Dunkleosteus Terrelli was a huge armoured placoderm fish from the Devonian period that was an apex predator of the seas", "Sacabambaspis Janvieri was a primitive fish from the Ordovician using no jaws, rather it used sucktion.", "Pikaia Gracliens was one of the earliest cordates from the Cambrian Explosion (ancestor of reptiles mammals and more.)", "Cephalaspis Lyelli is a Armoured fish from the late Silurian to early Devonian specializing in having electrical sensory system to locate food.", "Helicoprion Bessonowi was not a shark, rather a type of ratfish. With a unique buzzsaw jaw used for slicing prey.", "Stethacanthus Altonensis also known as the Anvil shark. Getting that name from it's unique anvil protruding rom it's head", "Squalicorax Pristodontus is a giant mackrel shark from the Cretaceous (Western interior Seaway) being larger than the Great white of modern day. It battled with of the other predators of the Seaway including Mosasaurus, Tylosaurus, Xiphactinus and more"]
+  const slots = [
+  "Otodus Megalodon was a colossal prehistoric mackrel shark that was the apex predator of it's cenozoic oceans. Being around 80ft long or 24m", 
+  "Dunkleosteus Terrelli was a huge armoured placoderm fish from the Devonian period that was an apex predator of the seas", 
+  "Sacabambaspis Janvieri was a primitive fish from the Ordovician using no jaws, rather it used sucktion.", 
+  "Pikaia Gracliens was one of the earliest cordates from the Cambrian Explosion (ancestor of reptiles mammals and more.)", 
+  "Cephalaspis Lyelli is a Armoured fish from the late Silurian to early Devonian specializing in having electrical sensory system to locate food.", 
+  "Helicoprion Bessonowi was not a shark, rather a type of ratfish. With a unique buzzsaw jaw used for slicing prey.", 
+  "Stethacanthus Altonensis also known as the Anvil shark. Getting that name from it's unique anvil protruding rom it's head", 
+  "Squalicorax Pristodontus is a giant mackrel shark from the Cretaceous (Western interior Seaway) being larger than the Great white of modern day. It battled with of the other predators of the Seaway including Mosasaurus, Tylosaurus, Xiphactinus and more",
+  "Cretodus Crassidens was a tremendous prehistoric lamniform shark of the Late Cretaceous, featuring multiple robust, thick teeth adapted for crushing prey."
+]
   const slotPositions = [
   { t: "16%", l: "13.5%" }, 
   { t: "16%", l: "24.7%" }, 
@@ -127,7 +137,7 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   { t: "16%", l: "69.5%" }, 
   { t: "48%", l: "13.5%" }, 
   { t: "48%", l: "24.7%" }, 
-  { t: "48%", l: "35.9%" } //
+  { t: "48%", l: "35.9%" } 
 ]
 
 const detectTextColor = (targetString) => {
