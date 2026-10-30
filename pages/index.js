@@ -128,16 +128,17 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   "Squalicorax Pristodontus is a giant mackrel shark from the Cretaceous (Western interior Seaway) being larger than the Great white of modern day. It battled with of the other predators of the Seaway including Mosasaurus, Tylosaurus, Xiphactinus and more",
   "Cretodus Crassidens was a tremendous prehistoric lamniform shark of the Late Cretaceous, featuring multiple robust, thick teeth adapted for crushing prey."
 ]
-  const slotPositions = [
+const slotPositions = [
   { t: "16%", l: "13.5%" }, 
   { t: "16%", l: "24.7%" }, 
   { t: "16%", l: "35.9%" }, 
   { t: "16%", l: "47.1%" }, 
   { t: "16%", l: "58.3%" }, 
   { t: "16%", l: "69.5%" }, 
+  
   { t: "48%", l: "13.5%" }, 
   { t: "48%", l: "24.7%" }, 
-  { t: "48%", l: "35.9%" } 
+  { t: "48%", l: "35.9%" }
 ]
 
 const detectTextColor = (targetString) => {
