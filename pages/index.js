@@ -130,19 +130,17 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
 ]
 const slotPositions = [
   
-  { t: "16%", l: "12.5%" }, 
-  { t: "16%", l: "23.5%" }, 
-  { t: "16%", l: "34.5%" }, 
-  { t: "16%", l: "45.5%" }, 
-  { t: "16%", l: "56.5%" }, 
-  { t: "16%", l: "67.5%" }, 
+  { t: "16%", l: "10%" }, 
+  { t: "16%", l: "24%" }, 
+  { t: "16%", l: "38%" }, 
+  { t: "16%", l: "52%" }, 
+  { t: "16%", l: "66%" }, 
+  { t: "16%", l: "80%" }, 
   
-
-  { t: "48%", l: "12.5%" }, 
-  { t: "48%", l: "23.5%" }, 
-  { t: "48%", l: "34.5%" }
+  { t: "48%", l: "10%" }, 
+  { t: "48%", l: "24%" }, 
+  { t: "48%", l: "38%" }
 ]
-
 const detectTextColor = (targetString) => {
   const cleanStr = (targetString || "").toUpperCase()
 
