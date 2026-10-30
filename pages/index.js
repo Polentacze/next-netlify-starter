@@ -129,17 +129,17 @@ const [pendingEvolutionIndex, setPendingEvolutionIndex] = useState(null)
   "Cretodus Crassidens was a tremendous prehistoric lamniform shark of the Late Cretaceous, featuring multiple robust, thick teeth adapted for crushing prey."
 ]
 const slotPositions = [
+
+  { t: "11%", l: "4%" }, 
+  { t: "11%", l: "17.5%" }, 
+  { t: "11%", l: "31%" }, 
+  { t: "11%", l: "44.5%" }, 
+  { t: "11%", l: "58%" }, 
+  { t: "11%", l: "71.5%" }, 
   
-  { t: "16%", l: "10%" }, 
-  { t: "16%", l: "24%" }, 
-  { t: "16%", l: "38%" }, 
-  { t: "16%", l: "52%" }, 
-  { t: "16%", l: "66%" }, 
-  { t: "16%", l: "80%" }, 
-  
-  { t: "48%", l: "10%" }, 
-  { t: "48%", l: "24%" }, 
-  { t: "48%", l: "38%" }
+  { t: "41%", l: "4%" }, 
+  { t: "41%", l: "17.5%" }, 
+  { t: "41%", l: "31%" }
 ]
 const detectTextColor = (targetString) => {
   const cleanStr = (targetString || "").toUpperCase()
