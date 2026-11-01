@@ -225,6 +225,7 @@ setPropsList({
     { x: 600, y: 1740, h: 230, type: 'kelp' },
     { x: 1050, y: 1740, h: 85, type: 'white-brain-coral' },
     { x: 1200, y: 1740, h: 85, type: 'coral' },
+    { x: 1350, y: 1740, h: 85, type: 'golden-brain-coral' },
     { x: 1800, y: 1740, h: 85, type: 'cyan-anemone' },
     { x: 2250, y: 1740, h: 85, type: 'starfish-rock-purple' },
     { x: 2400, y: 1740, h: 230, type: 'kelp' }
@@ -569,12 +570,12 @@ return () => {
   if (!k) return null;
 
   // identify prop category
-  const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral' || k.type === 'starfish-rock-purple';
+const isCoral = k.type === 'coral' || k.type === 'cyan-anemone' || k.type === 'white-brain-coral' || k.type === 'golden-brain-coral' || k.type === 'starfish-rock-purple';
 
-  // set specific vertical ground offsets
-  const anchorAdjustment = 
-    k.type === 'white-brain-coral' ? 35 : 
-    (isCoral ? 12 : 42);
+// (similar to white-brain-coral)
+const anchorAdjustment = 
+  k.type === 'white-brain-coral' || k.type === 'golden-brain-coral' ? 35 :
+  (isCoral ? 12 : 42);
 
   // position and image path 
   const finalTopY = (k.y || 1740) + anchorAdjustment;
@@ -648,15 +649,17 @@ return () => {
   return (
     <img
       key={idx}
-      src={
-        k.type === 'coral'
-          ? "/brain-coral.png"
-          : k.type === 'cyan-anemone'
-          ? "/cyan-anemone.png"
-          : k.type === 'white-brain-coral'
-          ? "/white-brain-coral4.png"
-          : "/kelp.png"
-      }
+src={
+  k.type === 'coral'
+    ? "/brain-coral.png"
+    : k.type === 'cyan-anemone'
+    ? "/cyan-anemone.png"
+    : k.type === 'white-brain-coral'
+    ? "/white-brain-coral4.png"
+    : k.type === 'golden-brain-coral'
+    ? "/golden-brain-coral.png"
+    : "/kelp.png"
+}
       alt="prop"
       style={{
         position: 'absolute',
