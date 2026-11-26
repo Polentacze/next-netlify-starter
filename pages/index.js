@@ -148,13 +148,53 @@ const detectTextColor = (targetString) => {
   //  orangeeee color
   if (cleanStr.includes("(ORANGE)")) return '#FF8B28';
     
-    //  (clan checker) only triggers gold if a crew is registered and matches
+    //  (clan checker) only triggers gold if a king is registered and matches
     if (activeClan) {
       const matchTag = `[${activeClan.toUpperCase()}]`
       if (cleanStr.includes(matchTag)) {
-        return "#FFD700" //  Approved Golden Yellow
+        return "#FFD700" // goldenyYellow
       }
     }
+
+  const homeMusicRef = useRef(null);
+
+useEffect(() => {
+  if (!homeMusicRef.current) {
+    const audio = new Audio("/5934911399264256.wav");
+    audio.loop = true;
+    audio.volume = 0.35;
+    homeMusicRef.current = audio;
+  }
+
+  const audio = homeMusicRef.current;
+
+  if (!isPlaying) {
+    audio.play().catch(() => {});
+  } else {
+    audio.pause();
+    audio.currentTime = 0;
+  }
+
+  return () => {
+    audio.pause();
+  };
+}, [isPlaying]);
+
+  useEffect(() => {
+  if (isPlaying) return;
+
+  const unlockAudio = () => {
+    homeMusicRef.current?.play().catch(() => {});
+  };
+
+  window.addEventListener("pointerdown", unlockAudio, { once: true });
+  window.addEventListener("keydown", unlockAudio, { once: true });
+
+  return () => {
+    window.removeEventListener("pointerdown", unlockAudio);
+    window.removeEventListener("keydown", unlockAudio);
+  };
+}, [isPlaying]);
 
     // standard modifiers fallback
     if (cleanStr.includes("(RED)")) return "#ff4d4d" 
