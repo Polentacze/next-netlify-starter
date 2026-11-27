@@ -8,10 +8,23 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [playerPosition, setPlayerPosition] = useState({ x: 1500, y: 1000 })
   const [playerRotation, setPlayerRotation] = useState(0)
+  const [isSwimFrame, setIsSwimFrame] = useState(false);
+  
   const mousePos = useRef({ x: 0, y: 0 })
   const viewRef = useRef(null)
   const homeMusicRef = useRef(null);
+useEffect(() => {
+  if (!isPlaying) return;
+  const preload = new Image();
+  preload.src = "/sacabambaspis-swim.png";
 
+  const swimTimer = setInterval(() => {
+    setIsSwimFrame((prev) => !prev);
+  }, 500);
+
+  return () => clearInterval(swimTimer);
+}, [isPlaying]);
+  
 useEffect(() => {
   if (!homeMusicRef.current) {
     const audio = new Audio("/5934911399264256.wav");
@@ -739,7 +752,20 @@ src={
             <div style={{ position: 'absolute', top: playerPosition.y, left: playerPosition.x, transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', width: evoTiers[activeTierIndex]?.scale + 'px', pointerEvents: 'none', background: 'transparent', backgroundColor: 'transparent' }}>
               <span style={{ background: 'transparent', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: 'none' + (detectTextColor(username) !== '#FFFFFF' ? detectTextColor(username) : '#00FF1A'), color: detectTextColor(username), whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
               <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0s linear', background: 'transparent', backgroundColor: 'transparent' }}>
-<img src={username && username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)") ? "/ghoul.png" : evoTiers[activeTierIndex]?.file} alt="fish" className="player-fish-sprite" onError={(e) => { e.target.src = "/prehistoric-skeleton.png" }} />
+<img
+  src={
+    username && username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)")
+      ? "/ghoul.png"
+      : evoTiers[activeTierIndex]?.file === "/sacabambaspis.png" && isSwimFrame
+        ? "/sacabambaspis-swim.png"
+        : evoTiers[activeTierIndex]?.file
+  }
+  alt="fish"
+  className="player-fish-sprite"
+  onError={(e) => {
+    e.target.src = "/prehistoric-skeleton.png";
+  }}
+/>
 
 {/*  sacabambaspis Ability Layer (Index 2) */}
 {isAbilityActive && activeTierIndex === 1 && (
