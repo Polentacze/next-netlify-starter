@@ -280,7 +280,7 @@ setPropsList({
     { x: 1800, y: 1740, h: 85, type: 'cyan-anemone' },
     { x: 2250, y: 1740, h: 85, type: 'starfish-rock-purple' },
     { x: 2400, y: 1740, h: 230, type: 'kelp' }
-    { x: 3100, y: 1750, h: 85, type: 'kelp' }
+    { x: 3100, y: 1750, h: 85, type: 'pink-sponges' }
   ],
   trex: { x: 900, y: 1765, w: 110 },
   bigRock: { x: 2100, y: 1755, w: 160 },
