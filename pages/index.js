@@ -415,9 +415,10 @@ if (isBoosting) {
 
         const dx = Math.cos(rad) * spd, dy = Math.sin(rad) * spd
         if (spd > 0) setPlayerRotation(rad * (180 / Math.PI) + 90)
+        // invisible wall code (down here)
         
-        cx = Math.max(50, Math.min(3350, p.x + dx))
-        cy = Math.max(50, Math.min(1715, p.y + dy))
+   cx = Math.max(50, Math.min(3750, p.x + dx))
+   cy = Math.max(50, Math.min(1715, p.y + dy))
         return { x: cx, y: cy }
       })
 
