@@ -431,8 +431,8 @@ if (isBoosting) {
 
         //  only spawn if the local area is practically starved (fewer than 2 food left)
         if (localFood.length < 2) {
-          const spawnGroupX = Math.max(200, Math.min(3200, cx + (Math.random() * 600 - 300)));
-          const spawnGroupY = Math.max(200, Math.min(2800, cy + (Math.random() * 500 - 250)));
+        const spawnGroupX = Math.max(200, Math.min(3600, cx + (Math.random() * 600 - 300)));
+        const spawnGroupY = Math.max(200, Math.min(2800, cy + (Math.random() * 500 - 250)));
           
           //  spawn size: 60% chance for a single/double dot 40% chance for a tiny clump
           const spawnChance = Math.random();
