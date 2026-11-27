@@ -15,8 +15,12 @@ export default function Home() {
   const homeMusicRef = useRef(null);
 useEffect(() => {
   if (!isPlaying) return;
-  const preload = new Image();
-  preload.src = "/sacabambaspis-swim.png";
+
+  const preloadSacabambaspis = new Image();
+  preloadSacabambaspis.src = "/sacabambaspis-swim.png";
+
+  const preloadCephalaspis = new Image();
+  preloadCephalaspis.src = "/cephalaspis-swim.png";
 
   const swimTimer = setInterval(() => {
     setIsSwimFrame((prev) => !prev);
@@ -753,13 +757,15 @@ src={
               <span style={{ background: 'transparent', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'sans-serif', marginBottom: '8px', border: 'none' + (detectTextColor(username) !== '#FFFFFF' ? detectTextColor(username) : '#00FF1A'), color: detectTextColor(username), whiteSpace: 'nowrap' }}>{username || "Guest"}</span>
               <div style={{ width: '100%', position: 'relative', transform: 'rotate(' + playerRotation + 'deg)', transition: 'transform 0s linear', background: 'transparent', backgroundColor: 'transparent' }}>
 <img
-  src={
-    username && username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)")
-      ? "/ghoul.png"
-      : evoTiers[activeTierIndex]?.file === "/sacabambaspis.png" && isSwimFrame
-        ? "/sacabambaspis-swim.png"
+src={
+  username && username.toUpperCase().replace(/\s/g, "").includes("(GHOUL)")
+    ? "/ghoul.png"
+    : isSwimFrame && evoTiers[activeTierIndex]?.file === "/sacabambaspis.png"
+      ? "/sacabambaspis-swim.png"
+      : isSwimFrame && evoTiers[activeTierIndex]?.file === "/cephalaspis.png"
+        ? "/cephalaspis-swim.png"
         : evoTiers[activeTierIndex]?.file
-  }
+}
   alt="fish"
   className="player-fish-sprite"
   onError={(e) => {
