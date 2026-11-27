@@ -22,31 +22,30 @@ useEffect(() => {
 
   const audio = homeMusicRef.current;
 
-  if (!isPlaying) {
-    audio.play().catch(() => {});
-  } else {
+  if (isPlaying) {
     audio.pause();
     audio.currentTime = 0;
+    return;
   }
 
+  const startMusic = () => {
+    audio
+      .play()
+      .then(() => {
+        window.removeEventListener("pointerdown", startMusic);
+        window.removeEventListener("keydown", startMusic);
+      })
+      .catch(() => {});
+  };
+
+  startMusic();
+  window.addEventListener("pointerdown", startMusic);
+  window.addEventListener("keydown", startMusic);
+
   return () => {
+    window.removeEventListener("pointerdown", startMusic);
+    window.removeEventListener("keydown", startMusic);
     audio.pause();
-  };
-}, [isPlaying]);
-
-useEffect(() => {
-  if (isPlaying) return;
-
-  const unlockAudio = () => {
-    homeMusicRef.current?.play().catch(() => {});
-  };
-
-  window.addEventListener("pointerdown", unlockAudio, { once: true });
-  window.addEventListener("keydown", unlockAudio, { once: true });
-
-  return () => {
-    window.removeEventListener("pointerdown", unlockAudio);
-    window.removeEventListener("keydown", unlockAudio);
   };
 }, [isPlaying]);
   const [score, setScore] = useState(0)
