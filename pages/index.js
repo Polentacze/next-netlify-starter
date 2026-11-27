@@ -250,11 +250,11 @@ const cleanTags = (str) => {
     if (!isPlaying) return 
     const pellets = [] 
     for (let c = 0; c < 8; c++) {
-      const cx = Math.floor(Math.random() * 3000) + 200, cy = Math.floor(Math.random() * 2600) + 200
+      const cx = Math.floor(Math.random() * 3400) + 200, cy = Math.floor(Math.random() * 2600) + 200
       for (let i = 0; i < 6; i++) pellets.push({ id: "s_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 100, src: "/food.png" }) 
     } 
     for (let c = 0; c < 4; c++) { 
-      const cx = Math.floor(Math.random() * 3000) + 200, cy = Math.floor(Math.random() * 2600) + 200
+      const cx = Math.floor(Math.random() * 3400) + 200, cy = Math.floor(Math.random() * 2600) + 200
       for (let i = 0; i < 4; i++) pellets.push({ id: "p_" + c + "_" + i, x: cx + (Math.random() * 120 - 60), y: cy + (Math.random() * 120 - 60), isEaten: false, value: 120, src: "/ocean-food.png" }) 
     } 
     setFoodPellets(pellets) 
