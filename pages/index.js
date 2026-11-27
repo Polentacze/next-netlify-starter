@@ -10,6 +10,45 @@ export default function Home() {
   const [playerRotation, setPlayerRotation] = useState(0)
   const mousePos = useRef({ x: 0, y: 0 })
   const viewRef = useRef(null)
+  const homeMusicRef = useRef(null);
+
+useEffect(() => {
+  if (!homeMusicRef.current) {
+    const audio = new Audio("/5934911399264256.wav");
+    audio.loop = true;
+    audio.volume = 0.35;
+    homeMusicRef.current = audio;
+  }
+
+  const audio = homeMusicRef.current;
+
+  if (!isPlaying) {
+    audio.play().catch(() => {});
+  } else {
+    audio.pause();
+    audio.currentTime = 0;
+  }
+
+  return () => {
+    audio.pause();
+  };
+}, [isPlaying]);
+
+useEffect(() => {
+  if (isPlaying) return;
+
+  const unlockAudio = () => {
+    homeMusicRef.current?.play().catch(() => {});
+  };
+
+  window.addEventListener("pointerdown", unlockAudio, { once: true });
+  window.addEventListener("keydown", unlockAudio, { once: true });
+
+  return () => {
+    window.removeEventListener("pointerdown", unlockAudio);
+    window.removeEventListener("keydown", unlockAudio);
+  };
+}, [isPlaying]);
   const [score, setScore] = useState(0)
   const [foodPellets, setFoodPellets] = useState([])
   const [propsList, setPropsList] = useState({ 
