@@ -632,8 +632,13 @@ const anchorAdjustment =
 
   // position and image path 
   const finalTopY = (k.y || 1740) + anchorAdjustment;
-  const imageSrc = k.type === 'coral' ? '/brain-coral.png' : `/${k.type || 'kelp'}.png`;
-
+const imageSrc =
+  k.type === 'coral'
+    ? '/brain-coral.png'
+    : k.type === 'pink-sponges'
+      ? '/pink-sponges.png'
+      : `/${k.type || 'kelp'}.png`;
+  
   return (
     <img
       key={idx}
